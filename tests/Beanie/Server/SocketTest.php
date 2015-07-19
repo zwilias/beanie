@@ -3,9 +3,9 @@
 
 namespace Beanie\Server;
 
-require_once 'nativeFunctions.php';
+require_once __DIR__ . '/../../nativeFunctions.php';
 
-class SocketTest extends MockNativeTestCase
+class SocketTest extends \MockNativeTestCase
 {
     public function testConstruct_noArgs_createsSocketWithDefaults()
     {
