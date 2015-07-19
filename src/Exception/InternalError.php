@@ -8,10 +8,10 @@ use Beanie\Command;
 use Beanie\Exception;
 use Beanie\Server\Server;
 
-class NotFound extends Exception
+class InternalError extends Exception
 {
-    const DEFAULT_CODE = 404;
-    const DEFAULT_MESSAGE = 'Failed executing \'%s\' command on \'%s\': NOT_FOUND';
+    const DEFAULT_CODE = 500;
+    const DEFAULT_MESSAGE = 'Failed executing \'%s\' command on \'%s\': INTERNAL ERROR';
 
     public function __construct(Command $command, Server $server)
     {
