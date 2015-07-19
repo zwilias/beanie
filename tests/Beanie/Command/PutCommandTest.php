@@ -3,6 +3,7 @@
 
 namespace Beanie\Command;
 
+require_once 'WithServerMock_TestCase.php';
 
 use Beanie\Beanie;
 use Beanie\Command;
