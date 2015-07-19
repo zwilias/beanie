@@ -3,10 +3,11 @@
 
 namespace Beanie\Command;
 
+require_once 'WithServerMock_TestCase.php';
 
 use Beanie\Response;
 
-class AbstractCommandTest extends \PHPUnit_Framework_TestCase
+class AbstractCommandTest extends WithServerMock_TestCase
 {
     public function testParseLine_noKnownErrors_callsChild()
     {
@@ -89,17 +90,5 @@ class AbstractCommandTest extends \PHPUnit_Framework_TestCase
 
 
         $commandMock->parseResponse(Response::ERROR_OUT_OF_MEMORY, $this->_getServerMock());
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Server $serverMock
-     */
-    protected function _getServerMock()
-    {
-        return $this
-            ->getMockBuilder('\Beanie\Server\Server')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
     }
 }
