@@ -17,7 +17,7 @@ use Beanie\Server\Server;
 abstract class AbstractCommand implements Command, ResponseParser
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @throws BadFormatException
      * @throws InternalErrorException
      * @throws NotFoundException

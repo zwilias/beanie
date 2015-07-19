@@ -13,6 +13,8 @@ class Response
     const ERROR_BAD_FORMAT = 'BAD_FORMAT';
     const ERROR_NOT_FOUND = 'NOT_FOUND';
 
+    const ERROR_NOT_IGNORED = 'NOT_IGNORED';
+
     const RESPONSE_USING = 'USING';
     const RESPONSE_WATCHING = 'WATCHING';
 
