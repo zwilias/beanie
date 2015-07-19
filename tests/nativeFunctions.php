@@ -17,7 +17,8 @@ namespace {
                 $nativeFunctionMock = $this
                     ->getMockBuilder('stdClass')
                     ->setMethods(['socket_create', 'socket_last_error', 'socket_strerror'])
-                    ->getMock();
+                    ->getMock()
+                ;
             }
 
             return $nativeFunctionMock;
@@ -29,7 +30,8 @@ namespace {
                 ->expects($this->once())
                 ->method('socket_create')
                 ->with(AF_INET, SOCK_STREAM, SOL_TCP)
-                ->willReturn(true);
+                ->willReturn(true)
+            ;
         }
 
         protected function _socketCreateFail($errorCode, $errorMessage)
@@ -38,18 +40,21 @@ namespace {
                 ->expects($this->once())
                 ->method('socket_create')
                 ->with(AF_INET, SOCK_STREAM, SOL_TCP)
-                ->willReturn(false);
+                ->willReturn(false)
+            ;
 
             $this->_getNativeFunctionMock()
                 ->expects($this->once())
                 ->method('socket_last_error')
-                ->willReturn($errorCode);
+                ->willReturn($errorCode)
+            ;
 
             $this->_getNativeFunctionMock()
                 ->expects($this->once())
                 ->method('socket_strerror')
                 ->with($errorCode)
-                ->willReturn($errorMessage);
+                ->willReturn($errorMessage)
+            ;
         }
     }
 }
