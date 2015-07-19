@@ -8,10 +8,10 @@ use Beanie\Command;
 use Beanie\Exception;
 use Beanie\Server\Server;
 
-class InternalError extends Exception
+class BadFormatException extends Exception
 {
-    const DEFAULT_CODE = 500;
-    const DEFAULT_MESSAGE = 'Failed executing \'%s\' command on \'%s\': INTERNAL ERROR';
+    const DEFAULT_CODE = 400;
+    const DEFAULT_MESSAGE = 'Failed executing \'%s\' command on \'%s\': BAD_FORMAT';
 
     public function __construct(Command $command, Server $server)
     {
