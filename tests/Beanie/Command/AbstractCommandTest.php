@@ -66,16 +66,16 @@ class AbstractCommandTest extends WithServerMock_TestCase
 
 
     /**
-     * @expectedException \Beanie\Exception\NotFoundException
-     * @expectedExceptionCode 404
+     * @expectedException \Beanie\Exception\UnknownCommandException
+     * @expectedExceptionCode 405
      */
-    public function testParseLine_notFound_throwsNotFoundException()
+    public function testParseLine_unknownCommand_throwsNotFoundException()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|AbstractCommand $commandMock */
         $commandMock = $this->getMockForAbstractClass('\Beanie\Command\AbstractCommand');
 
 
-        $commandMock->parseResponse(Response::ERROR_NOT_FOUND, $this->_getServerMock());
+        $commandMock->parseResponse(Response::ERROR_UNKNOWN_COMMAND, $this->_getServerMock());
     }
 
 

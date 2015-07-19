@@ -46,6 +46,6 @@ class IgnoreCommandTest extends WithServerMock_TestCase
         $ignoreCommand = new IgnoreCommand(Beanie::DEFAULT_TUBE);
 
 
-        $ignoreCommand->parseResponse(Response::ERROR_NOT_IGNORED, $this->_getServerMock());
+        $ignoreCommand->parseResponse(Response::FAILURE_NOT_IGNORED, $this->_getServerMock());
     }
 }

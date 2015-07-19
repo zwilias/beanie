@@ -8,7 +8,7 @@ use Beanie\Command;
 use Beanie\Exception;
 use Beanie\Exception\BadFormatException;
 use Beanie\Exception\InternalErrorException;
-use Beanie\Exception\NotFoundException;
+use Beanie\Exception\UnknownCommandException;
 use Beanie\Exception\OutOfMemoryException;
 use Beanie\Response;
 use Beanie\ResponseParser;
@@ -20,8 +20,8 @@ abstract class AbstractCommand implements Command, ResponseParser
      * @inheritDoc
      * @throws BadFormatException
      * @throws InternalErrorException
-     * @throws NotFoundException
      * @throws OutOfMemoryException
+     * @throws UnknownCommandException
      */
     public function parseResponse($responseLine, Server $server)
     {
@@ -30,10 +30,10 @@ abstract class AbstractCommand implements Command, ResponseParser
                 throw new BadFormatException($this, $server);
             case Response::ERROR_INTERNAL_ERROR:
                 throw new InternalErrorException($this, $server);
-            case Response::ERROR_NOT_FOUND:
-                throw new NotFoundException($this, $server);
             case Response::ERROR_OUT_OF_MEMORY:
                 throw new OutOfMemoryException($this, $server);
+            case Response::ERROR_UNKNOWN_COMMAND:
+                throw new UnknownCommandException($this, $server);
             default:
                 return $this->_parseResponse($responseLine, $server);
         }

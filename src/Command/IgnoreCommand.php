@@ -17,7 +17,7 @@ class IgnoreCommand extends AbstractTubeCommand
      */
     public function parseResponse($responseLine, Server $server)
     {
-        if ($responseLine === Response::ERROR_NOT_IGNORED) {
+        if ($responseLine === Response::FAILURE_NOT_IGNORED) {
             throw new NotIgnoredException($this->_tubeName, $this, $server);
         }
 

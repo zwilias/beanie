@@ -46,7 +46,7 @@ abstract class AbstractTubeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return sprintf('%s %s', $this->_getCommandName(), $this->_tubeName);
     }
