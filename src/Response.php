@@ -14,6 +14,7 @@ class Response
     const ERROR_NOT_FOUND = 'NOT_FOUND';
 
     const RESPONSE_USING = 'USING';
+    const RESPONSE_WATCHING = 'WATCHING';
 
     /** @var string */
     protected $_name;
