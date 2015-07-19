@@ -5,39 +5,24 @@ namespace Beanie\Command;
 
 
 use Beanie\Command;
-use Beanie\Exception\UnexpectedResponseException;
 use Beanie\Response;
-use Beanie\Server\Server;
 
-class WatchCommand extends AbstractCommand
+class WatchCommand extends TubeCommand
 {
-    protected $_tubeName;
-
-    public function __construct($tubeName)
+    /**
+     * @inheritDoc
+     */
+    protected function _getExpectedResponseName()
     {
-        $this->_ensureValidName($tubeName);
-        $this->_tubeName = $tubeName;
+        return Response::RESPONSE_WATCHING;
     }
 
     /**
      * @inheritDoc
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function _getCommandName()
     {
-        list($responseName, $countTubes) = explode(' ', $responseLine, 2);
-
-        if ($responseName !== Response::RESPONSE_WATCHING) {
-            throw new UnexpectedResponseException($responseName, $this, $server);
-        }
-
-        return new Response(Response::RESPONSE_WATCHING, (int)$countTubes, $server);
+        return Command::COMMAND_WATCH;
     }
 
-    /**
-     * @inheritDoc
-     */
-    function getCommandLine()
-    {
-        return sprintf('%s %s', Command::COMMAND_WATCH, $this->_tubeName);
-    }
 }

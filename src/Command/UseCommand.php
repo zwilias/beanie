@@ -5,46 +5,23 @@ namespace Beanie\Command;
 
 
 use Beanie\Command;
-use Beanie\Exception\UnexpectedResponseException;
 use Beanie\Response;
-use Beanie\Server\Server;
 
-class UseCommand extends AbstractCommand
+class UseCommand extends TubeCommand
 {
-    /** @var string */
-    protected $_tubeName;
-
     /**
-     * @param $tubeName
-     * @throws \Beanie\Exception\InvalidNameException
+     * @inheritDoc
      */
-    public function __construct($tubeName)
+    protected function _getExpectedResponseName()
     {
-        $this->_ensureValidName($tubeName);
-
-        $this->_tubeName = $tubeName;
+        return Response::RESPONSE_USING;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function getCommandLine()
+    protected function _getCommandName()
     {
-        return sprintf('%s %s', Command::COMMAND_USE, $this->_tubeName);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @throws UnexpectedResponseException
-     */
-    protected function _parseResponse($responseLine, Server $server)
-    {
-        list($responseName, $tubeName) = explode(' ', $responseLine, 2);
-
-        if ($responseName !== Response::RESPONSE_USING) {
-            throw new UnexpectedResponseException($responseName, $this, $server);
-        }
-
-        return new Response($responseName, $tubeName, $server);
+        return Command::COMMAND_USE;
     }
 }
