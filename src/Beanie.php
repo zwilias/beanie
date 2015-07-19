@@ -10,5 +10,6 @@ class Beanie
     const DEFAULT_PRIORITY = 1024;
     const DEFAULT_DELAY = 0;
     const DEFAULT_TIME_TO_RUN = 60;
+    const DEFAULT_MAX_TO_KICK = 50;
 
 }
