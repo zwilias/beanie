@@ -1,0 +1,14 @@
+{
+    "name": "zwilias/beanie",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ilias",
+            "email": "ilias@idlemonkeys.net"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "4.7.*"
+    }
+}
