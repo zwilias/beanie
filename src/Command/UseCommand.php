@@ -7,7 +7,7 @@ namespace Beanie\Command;
 use Beanie\Command;
 use Beanie\Response;
 
-class UseCommand extends TubeCommand
+class UseCommand extends AbstractTubeCommand
 {
     /**
      * @inheritDoc

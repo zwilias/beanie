@@ -8,7 +8,7 @@ use Beanie\Exception\UnexpectedResponseException;
 use Beanie\Response;
 use Beanie\Server\Server;
 
-abstract class TubeCommand extends AbstractCommand
+abstract class AbstractTubeCommand extends AbstractCommand
 {
     protected $_tubeName;
 

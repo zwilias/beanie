@@ -5,11 +5,10 @@ namespace Beanie\Command;
 
 use Beanie\Beanie;
 use Beanie\Command;
-use Beanie\Response;
 
 require_once 'WithServerMock_TestCase.php';
 
-class TubeCommandTest extends WithServerMock_TestCase
+class AbstractTubeCommandTest extends WithServerMock_TestCase
 {
     /**
      * @dataProvider validNamesProvider
@@ -17,15 +16,15 @@ class TubeCommandTest extends WithServerMock_TestCase
      */
     public function testConstruct_validName_throwsNoExceptions($validName)
     {
-        /** @var TubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
+        /** @var AbstractTubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
         $tubeCommandMock = $this
-            ->getMockBuilder('Beanie\Command\TubeCommand')
+            ->getMockBuilder('Beanie\Command\AbstractTubeCommand')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
 
         $tubeCommandMock->__construct($validName);
-        $this->assertInstanceOf('Beanie\Command\TubeCommand', $tubeCommandMock);
+        $this->assertInstanceOf('Beanie\Command\AbstractTubeCommand', $tubeCommandMock);
     }
 
     /**
@@ -36,9 +35,9 @@ class TubeCommandTest extends WithServerMock_TestCase
      */
     public function testConstruct_invalidName_throwsInvalidNameException($invalidName)
     {
-        /** @var TubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
+        /** @var AbstractTubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
         $tubeCommandMock = $this
-            ->getMockBuilder('Beanie\Command\TubeCommand')
+            ->getMockBuilder('Beanie\Command\AbstractTubeCommand')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -51,9 +50,9 @@ class TubeCommandTest extends WithServerMock_TestCase
         $tubeName = Beanie::DEFAULT_TUBE;
         $expected = sprintf('%s %s', $testCommandName, $tubeName);
 
-        /** @var TubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
+        /** @var AbstractTubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
         $tubeCommandMock = $this
-            ->getMockBuilder('Beanie\Command\TubeCommand')
+            ->getMockBuilder('Beanie\Command\AbstractTubeCommand')
             ->setConstructorArgs([$tubeName])
             ->setMethods(['_getCommandName'])
             ->getMockForAbstractClass();
@@ -77,9 +76,9 @@ class TubeCommandTest extends WithServerMock_TestCase
 
         $responseLine = sprintf('%s %s', $testResponseName, $testResponseData);
 
-        /** @var TubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
+        /** @var AbstractTubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
         $tubeCommandMock = $this
-            ->getMockBuilder('Beanie\Command\TubeCommand')
+            ->getMockBuilder('Beanie\Command\AbstractTubeCommand')
             ->setConstructorArgs([Beanie::DEFAULT_TUBE])
             ->setMethods(['_getExpectedResponseName'])
             ->getMockForAbstractClass();
@@ -110,9 +109,9 @@ class TubeCommandTest extends WithServerMock_TestCase
 
         $responseLine = sprintf('%s %s', $testExpectedResponseName, $testResponseData);
 
-        /** @var TubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
+        /** @var AbstractTubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
         $tubeCommandMock = $this
-            ->getMockBuilder('Beanie\Command\TubeCommand')
+            ->getMockBuilder('Beanie\Command\AbstractTubeCommand')
             ->setConstructorArgs([Beanie::DEFAULT_TUBE])
             ->setMethods(['_getExpectedResponseName'])
             ->getMockForAbstractClass();
@@ -128,9 +127,9 @@ class TubeCommandTest extends WithServerMock_TestCase
 
     public function testHasData_noData()
     {
-        /** @var TubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
+        /** @var AbstractTubeCommand|\PHPUnit_Framework_MockObject_MockObject $tubeCommandMock */
         $tubeCommandMock = $this
-            ->getMockBuilder('Beanie\Command\TubeCommand')
+            ->getMockBuilder('Beanie\Command\AbstractTubeCommand')
             ->setConstructorArgs([Beanie::DEFAULT_TUBE])
             ->setMethods(['_getExpectedResponseName'])
             ->getMockForAbstractClass();
