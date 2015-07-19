@@ -18,6 +18,7 @@ class SocketTest extends \MockNativeTestCase
         $this->assertEquals(Server::DEFAULT_HOST, $socket->getHostname());
         $this->assertEquals(Server::DEFAULT_PORT, $socket->getPort());
         $this->assertFalse($socket->isConnected());
+        $this->assertNotNull($socket->getRaw());
     }
 
     public function testConstruct_withArgs_createsSocketWithArgs()
@@ -34,6 +35,7 @@ class SocketTest extends \MockNativeTestCase
         $this->assertEquals($hostName, $socket->getHostname());
         $this->assertEquals($port, $socket->getPort());
         $this->assertFalse($socket->isConnected());
+        $this->assertNotNull($socket->getRaw());
     }
 
     /**

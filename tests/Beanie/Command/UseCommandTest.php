@@ -73,6 +73,14 @@ class UseCommandTest extends WithServerMock_TestCase
         $useCommand->parseResponse($responseLine, $this->_getServerMock());
     }
 
+    public function testHasData_noData()
+    {
+        $useCommand = new UseCommand(Beanie::DEFAULT_TUBE);
+
+
+        $this->assertFalse($useCommand->hasData());
+    }
+
     public function validNamesProvider()
     {
         return [
