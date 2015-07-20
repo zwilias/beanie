@@ -61,7 +61,7 @@ abstract class AbstractCommand implements Command, ResponseParser
                 $name = sprintf('{object of type %s', get_class($name));
             }
 
-            throw new Exception\InvalidNameException("Invalid name: {$name}", 400);
+            throw new Exception\InvalidNameException("Invalid name: {$name}");
         }
     }
 
