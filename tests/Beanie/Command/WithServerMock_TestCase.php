@@ -7,7 +7,7 @@ namespace Beanie\Command;
 class WithServerMock_TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Server $serverMock
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Server
      */
     protected function _getServerMock()
     {
@@ -17,5 +17,21 @@ class WithServerMock_TestCase extends \PHPUnit_Framework_TestCase
             ->setMethods(['__toString', 'getData'])
             ->getMock()
         ;
+    }
+
+    /**
+     * @param string $data YAML data
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Server
+     */
+    protected function _getServerReturningYAMLData($data)
+    {
+        $serverMock = $this->_getServerMock();
+        $serverMock->expects($this->once())
+            ->method('getData')
+            ->with(strlen($data))
+            ->willReturn($data);
+
+        return $serverMock;
     }
 }

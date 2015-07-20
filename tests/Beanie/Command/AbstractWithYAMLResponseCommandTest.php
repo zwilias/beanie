@@ -20,19 +20,14 @@ class AbstractWithYAMLResponseCommandTest extends WithServerMock_TestCase
             'testing' => 4,
             'data' => 5
         ];
+        $testYAMLData = Yaml::dump($testDataRaw);
 
-        $testDataYaml = Yaml::dump($testDataRaw);
-
-        $serverMock = $this->_getServerMock();
-        $serverMock->expects($this->once())
-            ->method('getData')
-            ->with(strlen($testDataYaml))
-            ->willReturn($testDataYaml);
+        $serverMock = $this->_getServerReturningYAMLData($testYAMLData);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\AbstractWithYAMLResponseCommand $command */
         $command = $this->getMockBuilder('\Beanie\Command\AbstractWithYAMLResponseCommand')->getMockForAbstractClass();
 
-        $responseLine = sprintf('%s %s', Response::RESPONSE_OK, strlen($testDataYaml));
+        $responseLine = sprintf('%s %s', Response::RESPONSE_OK, strlen($testYAMLData));
 
 
         $response = $command->parseResponse($responseLine, $serverMock);
@@ -49,11 +44,7 @@ class AbstractWithYAMLResponseCommandTest extends WithServerMock_TestCase
         $gotException = false;
 
         $invalidYAML = "\tYAML can't contain tabs as indentation";
-        $serverMock = $this->_getServerMock();
-        $serverMock->expects($this->once())
-            ->method('getData')
-            ->with(strlen($invalidYAML))
-            ->willReturn($invalidYAML);
+        $serverMock = $this->_getServerReturningYAMLData($invalidYAML);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\AbstractWithYAMLResponseCommand $command */
         $command = $this->getMockBuilder('\Beanie\Command\AbstractWithYAMLResponseCommand')->getMockForAbstractClass();

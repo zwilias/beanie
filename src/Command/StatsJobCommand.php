@@ -37,7 +37,7 @@ class StatsJobCommand extends AbstractWithYAMLResponseCommand
     /**
      * @inheritDoc
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return sprintf('%s %s', Command::COMMAND_STATS_JOB, $this->_jobId);
     }
