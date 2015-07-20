@@ -21,7 +21,7 @@ class QuitCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return Command::COMMAND_QUIT;
     }

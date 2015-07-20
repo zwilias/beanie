@@ -22,7 +22,7 @@ class PeekCommand extends AbstractPeeKCommand
     /**
      * @inheritDoc
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return sprintf('%s %s', Command::COMMAND_PEEK, $this->_jobId);
     }

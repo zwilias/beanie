@@ -35,7 +35,7 @@ class KickCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return sprintf('%s %s', Command::COMMAND_KICK, $this->_maxToKick);
     }

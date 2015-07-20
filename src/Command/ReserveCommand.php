@@ -63,7 +63,7 @@ class ReserveCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         if ($this->_mode == self::MODE_RESERVE_WITH_TIMEOUT) {
             return sprintf('%s %s', Command::COMMAND_RESERVE_WITH_TIMEOUT, $this->_timeout);

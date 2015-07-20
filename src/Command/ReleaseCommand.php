@@ -48,7 +48,7 @@ class ReleaseCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return join(' ', [
             Command::COMMAND_RELEASE,

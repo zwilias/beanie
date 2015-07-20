@@ -43,7 +43,7 @@ class KickJobCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return sprintf('%s %s', Command::COMMAND_KICK_JOB, $this->_jobId);
     }

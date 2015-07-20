@@ -43,7 +43,7 @@ class DeleteCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return sprintf('%s %s', Command::COMMAND_DELETE, $this->_jobId);
     }

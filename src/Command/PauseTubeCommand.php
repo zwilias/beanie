@@ -49,7 +49,7 @@ class PauseTubeCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return join(' ', [
             Command::COMMAND_PAUSE_TUBE,

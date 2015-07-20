@@ -22,7 +22,7 @@ class ListTubeUsedCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return Command::COMMAND_LIST_TUBE_USED;
     }

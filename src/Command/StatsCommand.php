@@ -11,7 +11,7 @@ class StatsCommand extends AbstractWithYAMLResponseCommand
     /**
      * @inheritDoc
      */
-    function getCommandLine()
+    public function getCommandLine()
     {
         return Command::COMMAND_STATS;
     }
