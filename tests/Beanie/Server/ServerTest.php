@@ -3,9 +3,9 @@
 
 namespace Beanie\Server;
 
-require_once __DIR__ . '/../../nativeFunctions.php';
+require_once 'MockNative_TestCase.php';
 
-class ServerTest extends \MockNativeTestCase
+class ServerTest extends MockNative_TestCase
 {
     public function testConstruct_noArgs_usesDefaults()
     {

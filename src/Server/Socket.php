@@ -37,6 +37,30 @@ class Socket
         }
     }
 
+    public function write($data)
+    {
+        $this->_ensureConnected();
+        $dataLength = $leftToWrite = strlen($data);
+
+        do {
+            if (
+                ($written = socket_write(
+                    $this->_socket,
+                    substr($data, -$leftToWrite),
+                    $leftToWrite
+                )) === false
+            ) {
+                $errorCode = socket_last_error();
+                $errorMessage = socket_strerror($errorCode);
+                throw new SocketException($errorMessage, $errorCode);
+            }
+
+            $leftToWrite -= $written;
+        } while ($leftToWrite > 0);
+
+        return $dataLength;
+    }
+
     /**
      * @return boolean
      */
@@ -67,5 +91,21 @@ class Socket
     public function getRaw()
     {
         return $this->_socket;
+    }
+
+    public function connect()
+    {
+        if (($this->_connected = socket_connect($this->_socket, $this->_hostname, $this->_port)) === false) {
+            $errorCode = socket_last_error();
+            $errorMessage = socket_strerror($errorCode);
+            throw new SocketException($errorMessage, $errorCode);
+        }
+    }
+
+    protected function _ensureConnected()
+    {
+        if ($this->_connected !== true) {
+            throw new SocketException('Socket is not connected.');
+        }
     }
 }
