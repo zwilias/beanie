@@ -6,7 +6,7 @@ namespace Beanie;
 
 class Exception extends \Exception
 {
-    public static function wrap(Exception $exception, $message = null, $code = null)
+    public static function wrap(\Exception $exception, $message = null, $code = null)
     {
         return new self(
             isset($message) ? $message : $exception->getMessage(),
