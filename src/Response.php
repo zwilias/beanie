@@ -49,7 +49,7 @@ class Response
 
     /**
      * @param string $name
-     * @param string $data
+     * @param mixed $data
      * @param Server $server
      */
     public function __construct($name, $data, Server $server)

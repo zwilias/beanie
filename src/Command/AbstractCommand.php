@@ -44,7 +44,7 @@ abstract class AbstractCommand implements Command, ResponseParser
      * @param Server $server
      * @return Response
      */
-    protected abstract function _parseResponse($responseLine, Server $server);
+    abstract protected function _parseResponse($responseLine, Server $server);
 
     /**
      * @param string $name
@@ -65,11 +65,17 @@ abstract class AbstractCommand implements Command, ResponseParser
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function hasData()
     {
         return $this->getData() !== null;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getData()
     {
         return null;

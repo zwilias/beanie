@@ -7,4 +7,6 @@ php:
 
 before_script: mkdir -p build/logs
 install: composer install --no-interaction
-after_script: php vendor/bin/coveralls -v
+after_script:
+  - php vendor/bin/coveralls -v
+  - php vendor/bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml

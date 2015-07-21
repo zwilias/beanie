@@ -10,7 +10,7 @@ class Socket
 {
     /**
      * Longest possible response preface:
-     * USING <tubeName=max 200 byte>\r\n
+     * <code>USING <tubeName=max 200 byte>\r\n</code>
      */
     const MAX_SINGLE_RESPONSE_LENGTH = 208;
 
@@ -76,6 +76,15 @@ class Socket
     }
 
     /**
+     * Reads data from the connected socket in chunks of MAX_SINGLE_RESPONSE_LENGTH
+     *
+     * The MAX_SINGLE_RESPONSE_LENGTH should always capture at least the first line of a response, assuming the longest
+     * possible response is the USING <tubename>\r\n response, which could be up to 208 bytes in length, for any valid
+     * <tubename>. As a result, this function will, in reality, read some overflow of data for any response containing
+     * data. This data is saved in a read-buffer, which `readData()` will read from first.
+     *
+     * @see readData()
+     *
      * @return string
      * @throws SocketException When the connection drops during reading
      */
@@ -101,6 +110,11 @@ class Socket
     }
 
     /**
+     * Read exactly $bytes of data from the connected sockets
+     *
+     * If there is not enough data to read $bytes from the read-buffer created by a previous `readLine` call combined
+     * with the actual socket, this will block until data becomes available. Use with care.
+     *
      * @param int $bytes
      * @return string
      * @throws SocketException When the connection drops during reading
