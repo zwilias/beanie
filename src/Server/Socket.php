@@ -15,19 +15,19 @@ class Socket
     const MAX_SINGLE_RESPONSE_LENGTH = 208;
 
     /** @var bool */
-    protected $_connected = false;
+    protected $connected = false;
 
     /** @var string */
-    protected $_hostname;
+    protected $hostname;
 
     /** @var int */
-    protected $_port;
+    protected $port;
 
     /** @var resource */
-    protected $_socket;
+    protected $socket;
 
     /** @var string */
-    private $_readBuffer = '';
+    private $readBuffer = '';
 
     /**
      * @param string $hostname
@@ -36,10 +36,10 @@ class Socket
      */
     public function __construct($hostname = Server::DEFAULT_HOST, $port = Server::DEFAULT_PORT)
     {
-        $this->_hostname = (string) $hostname;
-        $this->_port = (int) $port;
+        $this->hostname = (string) $hostname;
+        $this->port = (int) $port;
 
-        if (($this->_socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
+        if (($this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);
             throw new SocketException($errorMessage, $errorCode);
@@ -53,13 +53,13 @@ class Socket
      */
     public function write($data)
     {
-        $this->_ensureConnected();
+        $this->ensureConnected();
         $dataLength = $leftToWrite = strlen($data);
 
         do {
             if (
                 ($written = socket_write(
-                    $this->_socket,
+                    $this->socket,
                     substr($data, -$leftToWrite),
                     $leftToWrite
                 )) === false
@@ -90,11 +90,11 @@ class Socket
      */
     public function readLine()
     {
-        $this->_ensureConnected();
+        $this->ensureConnected();
         $buffer = '';
 
         do {
-            if (($incoming = socket_read($this->_socket, self::MAX_SINGLE_RESPONSE_LENGTH)) === false) {
+            if (($incoming = socket_read($this->socket, self::MAX_SINGLE_RESPONSE_LENGTH)) === false) {
                 $errorCode = socket_last_error();
                 $errorMessage = socket_strerror($errorCode);
                 throw new SocketException($errorMessage, $errorCode);
@@ -105,7 +105,7 @@ class Socket
             $eolPosition = strpos($buffer, Server::EOL);
         } while ($eolPosition === false);
 
-        $this->_readBuffer = substr($buffer, $eolPosition + Server::EOL_LENGTH);
+        $this->readBuffer = substr($buffer, $eolPosition + Server::EOL_LENGTH);
         return substr($buffer, 0, $eolPosition + Server::EOL_LENGTH);
     }
 
@@ -121,14 +121,14 @@ class Socket
      */
     public function readData($bytes)
     {
-        $this->_ensureConnected();
+        $this->ensureConnected();
 
-        $read = strlen($this->_readBuffer);
-        $buffer = $this->_readBuffer;
-        $this->_readBuffer = '';
+        $read = strlen($this->readBuffer);
+        $buffer = $this->readBuffer;
+        $this->readBuffer = '';
 
         while ($read < $bytes) {
-            if (($incoming = socket_read($this->_socket, ($bytes - $read))) === false) {
+            if (($incoming = socket_read($this->socket, ($bytes - $read))) === false) {
                 $errorCode = socket_last_error();
                 $errorMessage = socket_strerror($errorCode);
                 throw new SocketException($errorMessage, $errorCode);
@@ -146,7 +146,7 @@ class Socket
      */
     public function isConnected()
     {
-        return $this->_connected;
+        return $this->connected;
     }
 
     /**
@@ -154,7 +154,7 @@ class Socket
      */
     public function getHostname()
     {
-        return $this->_hostname;
+        return $this->hostname;
     }
 
     /**
@@ -162,7 +162,7 @@ class Socket
      */
     public function getPort()
     {
-        return $this->_port;
+        return $this->port;
     }
 
     /**
@@ -170,7 +170,7 @@ class Socket
      */
     public function getRaw()
     {
-        return $this->_socket;
+        return $this->socket;
     }
 
     /**
@@ -178,7 +178,7 @@ class Socket
      */
     public function connect()
     {
-        if (($this->_connected = socket_connect($this->_socket, $this->_hostname, $this->_port)) === false) {
+        if (($this->connected = socket_connect($this->socket, $this->hostname, $this->port)) === false) {
             $errorCode = socket_last_error();
             $errorMessage = socket_strerror($errorCode);
             throw new SocketException($errorMessage, $errorCode);
@@ -188,9 +188,9 @@ class Socket
     /**
      * @throws SocketException Ensure the Socket is connected. If it is not, throws and exception
      */
-    protected function _ensureConnected()
+    protected function ensureConnected()
     {
-        if ($this->_connected !== true) {
+        if ($this->connected !== true) {
             throw new SocketException('Socket is not connected.');
         }
     }

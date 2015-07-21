@@ -13,7 +13,7 @@ class QuitCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         throw new UnexpectedResponseException($responseLine, $this, $server);
     }

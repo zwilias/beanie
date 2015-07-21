@@ -13,14 +13,14 @@ use Beanie\Server\Server;
 class TouchCommand extends AbstractCommand
 {
     /** @var int */
-    protected $_jobId;
+    protected $jobId;
 
     /**
      * @param int $jobId
      */
     public function __construct($jobId)
     {
-        $this->_jobId = (int) $jobId;
+        $this->jobId = (int) $jobId;
     }
 
     /**
@@ -28,7 +28,7 @@ class TouchCommand extends AbstractCommand
      * @throws NotFoundException
      * @throws UnexpectedResponseException
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         switch ($responseLine) {
             case Response::FAILURE_NOT_FOUND:
@@ -45,6 +45,6 @@ class TouchCommand extends AbstractCommand
      */
     public function getCommandLine()
     {
-        return sprintf('%s %s', Command::COMMAND_TOUCH, $this->_jobId);
+        return sprintf('%s %s', Command::COMMAND_TOUCH, $this->jobId);
     }
 }

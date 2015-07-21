@@ -15,19 +15,19 @@ class IgnoreCommand extends AbstractTubeCommand
      * @inheritDoc
      * @throws NotIgnoredException
      */
-    public function parseResponse($responseLine, Server $server)
+    public function parseResponseLine($responseLine, Server $server)
     {
         if ($responseLine === Response::FAILURE_NOT_IGNORED) {
-            throw new NotIgnoredException($this->_tubeName, $this, $server);
+            throw new NotIgnoredException($this->tubeName, $this, $server);
         }
 
-        return parent::parseResponse($responseLine, $server);
+        return parent::parseResponseLine($responseLine, $server);
     }
 
     /**
      * @inheritDoc
      */
-    protected function _getExpectedResponseName()
+    protected function getExpectedResponseName()
     {
         return Response::RESPONSE_WATCHING;
     }
@@ -35,7 +35,7 @@ class IgnoreCommand extends AbstractTubeCommand
     /**
      * @inheritDoc
      */
-    protected function _getCommandName()
+    protected function getCommandName()
     {
         return Command::COMMAND_IGNORE;
     }

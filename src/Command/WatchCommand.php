@@ -12,7 +12,7 @@ class WatchCommand extends AbstractTubeCommand
     /**
      * @inheritDoc
      */
-    protected function _getExpectedResponseName()
+    protected function getExpectedResponseName()
     {
         return Response::RESPONSE_WATCHING;
     }
@@ -20,7 +20,7 @@ class WatchCommand extends AbstractTubeCommand
     /**
      * @inheritDoc
      */
-    protected function _getCommandName()
+    protected function getCommandName()
     {
         return Command::COMMAND_WATCH;
     }

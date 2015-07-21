@@ -17,10 +17,10 @@ class ReserveCommand extends AbstractCommand
     const MODE_RESERVE_WITH_TIMEOUT = Command::COMMAND_RESERVE_WITH_TIMEOUT;
 
     /** @var string */
-    protected $_mode;
+    protected $mode;
 
     /** @var int */
-    protected $_timeout = 0;
+    protected $timeout = 0;
 
     /**
      * @param string $mode
@@ -34,8 +34,8 @@ class ReserveCommand extends AbstractCommand
             throw new Exception\InvalidArgumentException('Can\'t reserve with mode: \'' . $mode . '\'');
         }
 
-        $this->_mode = $mode;
-        $this->_timeout = $timeout;
+        $this->mode = $mode;
+        $this->timeout = $timeout;
     }
 
     /**
@@ -43,7 +43,7 @@ class ReserveCommand extends AbstractCommand
      * @throws \Beanie\Exception\DeadlineSoonException
      * @throws \Beanie\Exception\TimedOutException
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         switch ($responseLine) {
             case Response::FAILURE_DEADLINE_SOON:
@@ -65,8 +65,8 @@ class ReserveCommand extends AbstractCommand
      */
     public function getCommandLine()
     {
-        if ($this->_mode == self::MODE_RESERVE_WITH_TIMEOUT) {
-            return sprintf('%s %s', Command::COMMAND_RESERVE_WITH_TIMEOUT, $this->_timeout);
+        if ($this->mode == self::MODE_RESERVE_WITH_TIMEOUT) {
+            return sprintf('%s %s', Command::COMMAND_RESERVE_WITH_TIMEOUT, $this->timeout);
         } else {
             return Command::COMMAND_RESERVE;
         }

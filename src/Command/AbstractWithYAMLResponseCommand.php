@@ -16,7 +16,7 @@ abstract class AbstractWithYAMLResponseCommand extends AbstractCommand
      * @inheritdoc
      * @throws Exception
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         list(, $dataLength) = explode(' ', $responseLine, 2);
 

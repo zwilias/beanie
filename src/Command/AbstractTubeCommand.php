@@ -10,31 +10,31 @@ use Beanie\Server\Server;
 
 abstract class AbstractTubeCommand extends AbstractCommand
 {
-    protected $_tubeName;
+    protected $tubeName;
 
     public function __construct($tubeName)
     {
-        $this->_ensureValidName($tubeName);
-        $this->_tubeName = $tubeName;
+        $this->ensureValidName($tubeName);
+        $this->tubeName = $tubeName;
     }
 
     /**
      * @return string
      */
-    abstract protected function _getExpectedResponseName();
+    abstract protected function getExpectedResponseName();
 
     /**
      * @return string
      */
-    abstract protected function _getCommandName();
+    abstract protected function getCommandName();
 
     /**
      * @inheritDoc
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         list($responseName, $responseValue) = explode(' ', $responseLine, 2);
-        $expectedResponseName = $this->_getExpectedResponseName();
+        $expectedResponseName = $this->getExpectedResponseName();
 
         if ($responseName !== $expectedResponseName) {
             throw new UnexpectedResponseException($responseName, $this, $server);
@@ -48,7 +48,7 @@ abstract class AbstractTubeCommand extends AbstractCommand
      */
     public function getCommandLine()
     {
-        return sprintf('%s %s', $this->_getCommandName(), $this->_tubeName);
+        return sprintf('%s %s', $this->getCommandName(), $this->tubeName);
     }
 
 }

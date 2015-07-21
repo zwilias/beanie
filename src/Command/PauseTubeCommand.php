@@ -14,10 +14,10 @@ use Beanie\Server\Server;
 class PauseTubeCommand extends AbstractCommand
 {
     /** @var string */
-    protected $_tubeName;
+    protected $tubeName;
 
     /** @var int */
-    protected $_delay;
+    protected $delay;
 
     /**
      * @param string $tubeName
@@ -25,16 +25,16 @@ class PauseTubeCommand extends AbstractCommand
      */
     public function __construct($tubeName, $delay = Beanie::DEFAULT_DELAY)
     {
-        $this->_ensureValidName($tubeName);
+        $this->ensureValidName($tubeName);
 
-        $this->_tubeName = (string) $tubeName;
-        $this->_delay = (int) $delay;
+        $this->tubeName = (string) $tubeName;
+        $this->delay = (int) $delay;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         switch ($responseLine) {
             case Response::FAILURE_NOT_FOUND:
@@ -53,8 +53,8 @@ class PauseTubeCommand extends AbstractCommand
     {
         return join(' ', [
             Command::COMMAND_PAUSE_TUBE,
-            $this->_tubeName,
-            $this->_delay
+            $this->tubeName,
+            $this->delay
         ]);
     }
 }

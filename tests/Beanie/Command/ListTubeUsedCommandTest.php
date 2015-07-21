@@ -15,7 +15,7 @@ class ListTubeUsedCommandTest extends WithServerMock_TestCase
         $this->assertEquals(Command::COMMAND_LIST_TUBE_USED, (new ListTubeUsedCommand())->getCommandLine());
     }
 
-    public function testParseResponseLine_returnsResponse_withTubeUsed()
+    public function testParseResponse_returnsResponse_withTubeUsed()
     {
         $tubeUsed = 'some-tube-name';
         $responseLine = sprintf('%s %s', Response::RESPONSE_USING, $tubeUsed);

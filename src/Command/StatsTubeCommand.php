@@ -12,7 +12,7 @@ use Beanie\Server\Server;
 class StatsTubeCommand extends AbstractWithYAMLResponseCommand
 {
     /** @var string */
-    protected $_tubeName;
+    protected $tubeName;
 
     /**
      * @param string $tubeName
@@ -20,20 +20,20 @@ class StatsTubeCommand extends AbstractWithYAMLResponseCommand
      */
     public function __construct($tubeName)
     {
-        $this->_ensureValidName($tubeName);
-        $this->_tubeName = (string) $tubeName;
+        $this->ensureValidName($tubeName);
+        $this->tubeName = (string) $tubeName;
     }
 
     /**
      * @inheritDoc
      */
-    public function parseResponse($responseLine, Server $server)
+    public function parseResponseLine($responseLine, Server $server)
     {
         if ($responseLine == Response::FAILURE_NOT_FOUND) {
             throw new NotFoundException($this, $server);
         }
 
-        return parent::parseResponse($responseLine, $server);
+        return parent::parseResponseLine($responseLine, $server);
     }
 
 
@@ -42,6 +42,6 @@ class StatsTubeCommand extends AbstractWithYAMLResponseCommand
      */
     public function getCommandLine()
     {
-        return sprintf('%s %s', Command::COMMAND_STATS_TUBE, $this->_tubeName);
+        return sprintf('%s %s', Command::COMMAND_STATS_TUBE, $this->tubeName);
     }
 }

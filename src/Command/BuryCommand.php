@@ -14,10 +14,10 @@ use Beanie\Server\Server;
 class BuryCommand extends AbstractCommand
 {
     /** @var int */
-    protected $_jobId;
+    protected $jobId;
 
     /** @var int */
-    protected $_priority;
+    protected $priority;
 
     /**
      * @param int $jobId
@@ -25,8 +25,8 @@ class BuryCommand extends AbstractCommand
      */
     public function __construct($jobId, $priority = Beanie::DEFAULT_PRIORITY)
     {
-        $this->_jobId = (int) $jobId;
-        $this->_priority = (int) $priority;
+        $this->jobId = (int) $jobId;
+        $this->priority = (int) $priority;
     }
 
     /**
@@ -34,7 +34,7 @@ class BuryCommand extends AbstractCommand
      * @throws NotFoundException
      * @throws UnexpectedResponseException
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         switch ($responseLine) {
             case Response::FAILURE_NOT_FOUND:
@@ -53,8 +53,8 @@ class BuryCommand extends AbstractCommand
     {
         return join(' ', [
             Command::COMMAND_BURY,
-            $this->_jobId,
-            $this->_priority
+            $this->jobId,
+            $this->priority
         ]);
     }
 }

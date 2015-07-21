@@ -19,13 +19,13 @@ class AbstractCommandTest extends WithServerMock_TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject|AbstractCommand $commandMock */
         $commandMock = $this
             ->getMockBuilder('\Beanie\Command\AbstractCommand')
-            ->setMethods(['_parseResponse'])
+            ->setMethods(['parseResponseLine'])
             ->getMockForAbstractClass()
         ;
 
         $commandMock
             ->expects($this->once())
-            ->method('_parseResponse')
+            ->method('parseResponseLine')
             ->with($responseLine, $serverMock)
             ->willReturn($expectedResponse)
         ;

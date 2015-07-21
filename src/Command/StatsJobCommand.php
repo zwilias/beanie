@@ -12,26 +12,26 @@ use Beanie\Server\Server;
 class StatsJobCommand extends AbstractWithYAMLResponseCommand
 {
     /** @var int */
-    protected $_jobId;
+    protected $jobId;
 
     /**
      * @param int $jobId
      */
     public function __construct($jobId)
     {
-        $this->_jobId = (int) $jobId;
+        $this->jobId = (int) $jobId;
     }
 
     /**
      * @inheritDoc
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         if ($responseLine == Response::FAILURE_NOT_FOUND) {
             throw new NotFoundException($this, $server);
         }
 
-        return parent::_parseResponse($responseLine, $server);
+        return parent::parseResponseLine($responseLine, $server);
     }
 
     /**
@@ -39,6 +39,6 @@ class StatsJobCommand extends AbstractWithYAMLResponseCommand
      */
     public function getCommandLine()
     {
-        return sprintf('%s %s', Command::COMMAND_STATS_JOB, $this->_jobId);
+        return sprintf('%s %s', Command::COMMAND_STATS_JOB, $this->jobId);
     }
 }

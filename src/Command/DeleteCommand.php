@@ -15,20 +15,20 @@ class DeleteCommand extends AbstractCommand
     /**
      * @var int
      */
-    protected $_jobId;
+    protected $jobId;
 
     /**
      * @param int $jobId
      */
     public function __construct($jobId)
     {
-        $this->_jobId = (int) $jobId;
+        $this->jobId = (int) $jobId;
     }
 
     /**
      * @inheritDoc
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         switch ($responseLine) {
             case Response::FAILURE_NOT_FOUND:
@@ -45,6 +45,6 @@ class DeleteCommand extends AbstractCommand
      */
     public function getCommandLine()
     {
-        return sprintf('%s %s', Command::COMMAND_DELETE, $this->_jobId);
+        return sprintf('%s %s', Command::COMMAND_DELETE, $this->jobId);
     }
 }

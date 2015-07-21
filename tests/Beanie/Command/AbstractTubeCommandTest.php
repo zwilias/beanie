@@ -54,12 +54,12 @@ class AbstractTubeCommandTest extends WithServerMock_TestCase
         $tubeCommandMock = $this
             ->getMockBuilder('Beanie\Command\AbstractTubeCommand')
             ->setConstructorArgs([$tubeName])
-            ->setMethods(['_getCommandName'])
+            ->setMethods(['getCommandName'])
             ->getMockForAbstractClass();
 
         $tubeCommandMock
             ->expects($this->once())
-            ->method('_getCommandName')
+            ->method('getCommandName')
             ->willReturn($testCommandName);
 
 
@@ -80,12 +80,12 @@ class AbstractTubeCommandTest extends WithServerMock_TestCase
         $tubeCommandMock = $this
             ->getMockBuilder('Beanie\Command\AbstractTubeCommand')
             ->setConstructorArgs([Beanie::DEFAULT_TUBE])
-            ->setMethods(['_getExpectedResponseName'])
+            ->setMethods(['getExpectedResponseName'])
             ->getMockForAbstractClass();
 
         $tubeCommandMock
             ->expects($this->once())
-            ->method('_getExpectedResponseName')
+            ->method('getExpectedResponseName')
             ->willReturn($testResponseName);
 
 
@@ -113,12 +113,12 @@ class AbstractTubeCommandTest extends WithServerMock_TestCase
         $tubeCommandMock = $this
             ->getMockBuilder('Beanie\Command\AbstractTubeCommand')
             ->setConstructorArgs([Beanie::DEFAULT_TUBE])
-            ->setMethods(['_getExpectedResponseName'])
+            ->setMethods(['getExpectedResponseName'])
             ->getMockForAbstractClass();
 
         $tubeCommandMock
             ->expects($this->once())
-            ->method('_getExpectedResponseName')
+            ->method('getExpectedResponseName')
             ->willReturn($testActualResponseName);
 
 
@@ -131,7 +131,7 @@ class AbstractTubeCommandTest extends WithServerMock_TestCase
         $tubeCommandMock = $this
             ->getMockBuilder('Beanie\Command\AbstractTubeCommand')
             ->setConstructorArgs([Beanie::DEFAULT_TUBE])
-            ->setMethods(['_getExpectedResponseName'])
+            ->setMethods(['getExpectedResponseName'])
             ->getMockForAbstractClass();
 
 

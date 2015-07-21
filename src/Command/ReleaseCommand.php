@@ -14,25 +14,25 @@ use Beanie\Server\Server;
 class ReleaseCommand extends AbstractCommand
 {
     /** @var int */
-    protected $_jobId;
+    protected $jobId;
 
     /** @var int */
-    protected $_priority;
+    protected $priority;
 
     /** @var int */
-    protected $_delay;
+    protected $delay;
 
     public function __construct($jobId, $priority = Beanie::DEFAULT_PRIORITY, $delay = Beanie::DEFAULT_DELAY)
     {
-        $this->_jobId = (int) $jobId;
-        $this->_priority = (int) $priority;
-        $this->_delay = (int) $delay;
+        $this->jobId = (int) $jobId;
+        $this->priority = (int) $priority;
+        $this->delay = (int) $delay;
     }
 
     /**
      * @inheritDoc
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         switch ($responseLine) {
             case Response::FAILURE_NOT_FOUND:
@@ -52,9 +52,9 @@ class ReleaseCommand extends AbstractCommand
     {
         return join(' ', [
             Command::COMMAND_RELEASE,
-            $this->_jobId,
-            $this->_priority,
-            $this->_delay
+            $this->jobId,
+            $this->priority,
+            $this->delay
         ]);
     }
 }

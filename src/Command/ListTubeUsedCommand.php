@@ -13,7 +13,7 @@ class ListTubeUsedCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         list(, $tubeName) = explode(' ', $responseLine, 2);
         return new Response(Response::RESPONSE_USING, $tubeName, $server);

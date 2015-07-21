@@ -35,7 +35,7 @@ abstract class AbstractCommand implements Command, ResponseParser
             case Response::ERROR_UNKNOWN_COMMAND:
                 throw new UnknownCommandException($this, $server);
             default:
-                return $this->_parseResponse($responseLine, $server);
+                return $this->parseResponseLine($responseLine, $server);
         }
     }
 
@@ -44,13 +44,13 @@ abstract class AbstractCommand implements Command, ResponseParser
      * @param Server $server
      * @return Response
      */
-    abstract protected function _parseResponse($responseLine, Server $server);
+    abstract protected function parseResponseLine($responseLine, Server $server);
 
     /**
      * @param string $name
      * @throws Exception\InvalidNameException
      */
-    protected function _ensureValidName($name)
+    protected function ensureValidName($name)
     {
         if (!(
             is_string($name) &&

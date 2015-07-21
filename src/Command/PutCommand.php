@@ -15,16 +15,16 @@ use Beanie\Server\Server;
 class PutCommand extends AbstractCommand
 {
     /** @var int */
-    protected $_priority;
+    protected $priority;
 
     /** @var int */
-    protected $_delay;
+    protected $delay;
 
     /** @var int */
-    protected $_timeToRun;
+    protected $timeToRun;
 
     /** @var string */
-    protected $_data;
+    protected $data;
 
     public function __construct(
         $data,
@@ -32,10 +32,10 @@ class PutCommand extends AbstractCommand
         $delay = Beanie::DEFAULT_DELAY,
         $timeToRun = Beanie::DEFAULT_TIME_TO_RUN
     ) {
-        $this->_data = $data;
-        $this->_priority = (int) $priority;
-        $this->_delay = (int) $delay;
-        $this->_timeToRun = (int) $timeToRun;
+        $this->data = $data;
+        $this->priority = (int) $priority;
+        $this->delay = (int) $delay;
+        $this->timeToRun = (int) $timeToRun;
     }
 
     /**
@@ -44,7 +44,7 @@ class PutCommand extends AbstractCommand
      * @throws ExpectedCRLFException
      * @throws JobTooBigException
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         switch ($responseLine) {
             case Response::FAILURE_DRAINING:
@@ -67,9 +67,9 @@ class PutCommand extends AbstractCommand
     {
         return join(' ', [
             Command::COMMAND_PUT,
-            $this->_priority,
-            $this->_delay,
-            $this->_timeToRun,
+            $this->priority,
+            $this->delay,
+            $this->timeToRun,
             strlen($this->getData())
         ]);
     }
@@ -79,6 +79,6 @@ class PutCommand extends AbstractCommand
      */
     public function getData()
     {
-        return $this->_data;
+        return $this->data;
     }
 }

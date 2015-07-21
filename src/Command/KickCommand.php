@@ -12,20 +12,20 @@ use Beanie\Server\Server;
 class KickCommand extends AbstractCommand
 {
     /** @var int */
-    protected $_maxToKick;
+    protected $maxToKick;
 
     /**
      * @param int $maxToKick
      */
     public function __construct($maxToKick = Beanie::DEFAULT_MAX_TO_KICK)
     {
-        $this->_maxToKick = (int) $maxToKick;
+        $this->maxToKick = (int) $maxToKick;
     }
 
     /**
      * @inheritDoc
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         list(, $kicked) = explode(' ', $responseLine);
 
@@ -37,6 +37,6 @@ class KickCommand extends AbstractCommand
      */
     public function getCommandLine()
     {
-        return sprintf('%s %s', Command::COMMAND_KICK, $this->_maxToKick);
+        return sprintf('%s %s', Command::COMMAND_KICK, $this->maxToKick);
     }
 }

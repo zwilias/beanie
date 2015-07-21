@@ -14,7 +14,7 @@ abstract class AbstractPeekCommand extends AbstractCommand
      * @inheritDoc
      * @throws \Beanie\Exception\NotFoundException
      */
-    protected function _parseResponse($responseLine, Server $server)
+    protected function parseResponseLine($responseLine, Server $server)
     {
         if ($responseLine == Response::FAILURE_NOT_FOUND) {
             throw new NotFoundException($this, $server);

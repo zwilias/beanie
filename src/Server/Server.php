@@ -15,7 +15,7 @@ class Server
     const EOL_LENGTH = 2;
 
     /** @var Socket */
-    protected $_socket;
+    protected $socket;
 
     /**
      * @param string $hostName
@@ -24,7 +24,7 @@ class Server
      */
     public function __construct($hostName = self::DEFAULT_HOST, $port = self::DEFAULT_PORT)
     {
-        $this->_socket = new Socket($hostName, $port);
+        $this->socket = new Socket($hostName, $port);
     }
 
     /**
@@ -43,6 +43,6 @@ class Server
      */
     public function __toString()
     {
-        return sprintf('%s:%s', $this->_socket->getHostname(), $this->_socket->getPort());
+        return sprintf('%s:%s', $this->socket->getHostname(), $this->socket->getPort());
     }
 }

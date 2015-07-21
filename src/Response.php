@@ -39,13 +39,13 @@ class Response
     const RESPONSE_WATCHING = 'WATCHING';
 
     /** @var string */
-    protected $_name;
+    protected $name;
 
     /** @var mixed */
-    protected $_data;
+    protected $data;
 
     /** @var Server */
-    protected $_server;
+    protected $server;
 
     /**
      * @param string $name
@@ -54,9 +54,9 @@ class Response
      */
     public function __construct($name, $data, Server $server)
     {
-        $this->_name = $name;
-        $this->_data = $data;
-        $this->_server = $server;
+        $this->name = $name;
+        $this->data = $data;
+        $this->server = $server;
     }
 
     /**
@@ -64,7 +64,7 @@ class Response
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -72,7 +72,7 @@ class Response
      */
     public function getData()
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -80,6 +80,6 @@ class Response
      */
     public function getServer()
     {
-        return $this->_server;
+        return $this->server;
     }
 }
