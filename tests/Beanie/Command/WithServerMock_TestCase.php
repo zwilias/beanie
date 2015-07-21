@@ -14,7 +14,7 @@ class WithServerMock_TestCase extends \PHPUnit_Framework_TestCase
         return $this
             ->getMockBuilder('\Beanie\Server\Server')
             ->disableOriginalConstructor()
-            ->setMethods(['__toString', 'getData'])
+            ->setMethods(['__toString', 'readData'])
             ->getMock()
         ;
     }
@@ -28,7 +28,7 @@ class WithServerMock_TestCase extends \PHPUnit_Framework_TestCase
     {
         $serverMock = $this->_getServerMock();
         $serverMock->expects($this->once())
-            ->method('getData')
+            ->method('readData')
             ->with(strlen($data))
             ->willReturn($data);
 

@@ -28,14 +28,38 @@ class Server
     }
 
     /**
+     * @param Socket $socket
+     *
+     * @return $this
+     */
+    public function setSocket(Socket $socket)
+    {
+        $this->socket = $socket;
+        return $this;
+    }
+
+    public function readLine()
+    {
+        $this->ensureConnected();
+
+        $data = $this->socket->readLine(self::EOL);
+
+        return substr($data, 0, strlen($data) - self::EOL_LENGTH);
+    }
+
+    /**
      * @param int $bytes
      * @param int $extra
      *
      * @return string
      */
-    public function getData($bytes, $extra = self::EOL_LENGTH)
+    public function readData($bytes, $extra = self::EOL_LENGTH)
     {
-        // TODO: implement
+        $this->ensureConnected();
+
+        $data = $this->socket->readData($bytes + $extra);
+
+        return substr($data, 0, $bytes);
     }
 
     /**
@@ -44,5 +68,12 @@ class Server
     public function __toString()
     {
         return sprintf('%s:%s', $this->socket->getHostname(), $this->socket->getPort());
+    }
+
+    protected function ensureConnected()
+    {
+        if (!$this->socket->isConnected()) {
+            $this->socket->connect();
+        }
     }
 }

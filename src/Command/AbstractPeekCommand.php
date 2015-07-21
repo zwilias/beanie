@@ -24,7 +24,7 @@ abstract class AbstractPeekCommand extends AbstractCommand
 
         return new Response(Response::RESPONSE_FOUND, [
             'id' => $jobId,
-            'data' => $server->getData($dataLength)
+            'data' => $server->readData($dataLength)
         ], $server);
     }
 }

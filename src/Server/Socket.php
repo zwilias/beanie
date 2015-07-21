@@ -85,10 +85,11 @@ class Socket
      *
      * @see readData()
      *
+     * @param string $endOfLine
      * @return string
-     * @throws SocketException When the connection drops during reading
+     * @throws SocketException
      */
-    public function readLine()
+    public function readLine($endOfLine = Server::EOL)
     {
         $this->ensureConnected();
         $buffer = '';
@@ -102,11 +103,11 @@ class Socket
 
             $buffer .= $incoming;
 
-            $eolPosition = strpos($buffer, Server::EOL);
+            $eolPosition = strpos($buffer, $endOfLine);
         } while ($eolPosition === false);
 
-        $this->readBuffer = substr($buffer, $eolPosition + Server::EOL_LENGTH);
-        return substr($buffer, 0, $eolPosition + Server::EOL_LENGTH);
+        $this->readBuffer = substr($buffer, $eolPosition + strlen($endOfLine));
+        return substr($buffer, 0, $eolPosition + strlen($endOfLine));
     }
 
     /**

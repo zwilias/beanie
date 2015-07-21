@@ -20,7 +20,7 @@ abstract class AbstractWithYAMLResponseCommand extends AbstractCommand
     {
         list(, $dataLength) = explode(' ', $responseLine, 2);
 
-        $data = $server->getData($dataLength);
+        $data = $server->readData($dataLength);
 
         try {
             $parsedData = Yaml::parse($data);

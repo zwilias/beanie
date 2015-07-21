@@ -28,7 +28,7 @@ class AbstractPeekCommandTest extends WithServerMock_TestCase
 
         $serverMock = $this->_getServerMock();
         $serverMock->expects($this->once())
-            ->method('getData')
+            ->method('readData')
             ->with(strlen($data))
             ->willReturn($data);
 

@@ -56,7 +56,7 @@ class ReserveCommand extends AbstractCommand
         list(, $jobId, $dataLength) = explode(' ', $responseLine, 3);
         return new Response(Response::RESPONSE_RESERVED, [
             'id' => $jobId,
-            'data' => $server->getData($dataLength)
+            'data' => $server->readData($dataLength)
         ], $server);
     }
 
