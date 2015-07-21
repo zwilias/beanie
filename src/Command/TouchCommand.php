@@ -30,7 +30,7 @@ class TouchCommand extends AbstractCommand
      */
     protected function _parseResponse($responseLine, Server $server)
     {
-        switch($responseLine) {
+        switch ($responseLine) {
             case Response::FAILURE_NOT_FOUND:
                 throw new NotFoundException($this, $server);
             case Response::RESPONSE_TOUCHED:

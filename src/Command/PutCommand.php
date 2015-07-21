@@ -31,8 +31,7 @@ class PutCommand extends AbstractCommand
         $priority = Beanie::DEFAULT_PRIORITY,
         $delay = Beanie::DEFAULT_DELAY,
         $timeToRun = Beanie::DEFAULT_TIME_TO_RUN
-    )
-    {
+    ) {
         $this->_data = $data;
         $this->_priority = (int) $priority;
         $this->_delay = (int) $delay;
