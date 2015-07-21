@@ -36,8 +36,8 @@ class Socket
      */
     public function __construct($hostname = Server::DEFAULT_HOST, $port = Server::DEFAULT_PORT)
     {
-        $this->_hostname = (string)$hostname;
-        $this->_port = (int)$port;
+        $this->_hostname = (string) $hostname;
+        $this->_port = (int) $port;
 
         if (($this->_socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
             $errorCode = socket_last_error();

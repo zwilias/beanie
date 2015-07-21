@@ -34,9 +34,9 @@ class PutCommand extends AbstractCommand
     )
     {
         $this->_data = $data;
-        $this->_priority = (int)$priority;
-        $this->_delay = (int)$delay;
-        $this->_timeToRun = (int)$timeToRun;
+        $this->_priority = (int) $priority;
+        $this->_delay = (int) $delay;
+        $this->_timeToRun = (int) $timeToRun;
     }
 
     /**

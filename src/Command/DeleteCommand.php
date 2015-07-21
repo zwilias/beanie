@@ -22,7 +22,7 @@ class DeleteCommand extends AbstractCommand
      */
     public function __construct($jobId)
     {
-        $this->_jobId = (int)$jobId;
+        $this->_jobId = (int) $jobId;
     }
 
     /**

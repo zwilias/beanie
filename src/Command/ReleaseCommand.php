@@ -24,9 +24,9 @@ class ReleaseCommand extends AbstractCommand
 
     public function __construct($jobId, $priority = Beanie::DEFAULT_PRIORITY, $delay = Beanie::DEFAULT_DELAY)
     {
-        $this->_jobId = (int)$jobId;
-        $this->_priority = (int)$priority;
-        $this->_delay = (int)$delay;
+        $this->_jobId = (int) $jobId;
+        $this->_priority = (int) $priority;
+        $this->_delay = (int) $delay;
     }
 
     /**

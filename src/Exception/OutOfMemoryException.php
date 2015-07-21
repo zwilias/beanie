@@ -16,7 +16,7 @@ class OutOfMemoryException extends Exception
     public function __construct(Command $command, Server $server)
     {
         parent::__construct(
-            sprintf(self::DEFAULT_MESSAGE, get_class($command), (string)$server),
+            sprintf(self::DEFAULT_MESSAGE, get_class($command), (string) $server),
             self::DEFAULT_CODE
         );
     }

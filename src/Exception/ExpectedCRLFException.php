@@ -15,7 +15,7 @@ class ExpectedCRLFException extends Exception
     public function __construct(Server $server)
     {
         parent::__construct(
-            sprintf(self::DEFAULT_MESSAGE, (string)$server),
+            sprintf(self::DEFAULT_MESSAGE, (string) $server),
             self::DEFAULT_CODE
         );
     }

@@ -19,7 +19,7 @@ class KickCommand extends AbstractCommand
      */
     public function __construct($maxToKick = Beanie::DEFAULT_MAX_TO_KICK)
     {
-        $this->_maxToKick = (int)$maxToKick;
+        $this->_maxToKick = (int) $maxToKick;
     }
 
     /**

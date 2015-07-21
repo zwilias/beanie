@@ -25,8 +25,8 @@ class BuryCommand extends AbstractCommand
      */
     public function __construct($jobId, $priority = Beanie::DEFAULT_PRIORITY)
     {
-        $this->_jobId = (int)$jobId;
-        $this->_priority = (int)$priority;
+        $this->_jobId = (int) $jobId;
+        $this->_priority = (int) $priority;
     }
 
     /**

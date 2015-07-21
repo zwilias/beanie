@@ -16,7 +16,7 @@ class NotIgnoredException extends Exception
     public function __construct($tubeName, Command $command, Server $server)
     {
         parent::__construct(
-            sprintf(self::DEFAULT_MESSAGE, get_class($command), $tubeName, (string)$server),
+            sprintf(self::DEFAULT_MESSAGE, get_class($command), $tubeName, (string) $server),
             self::DEFAULT_CODE
         );
     }

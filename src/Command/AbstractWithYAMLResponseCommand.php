@@ -26,7 +26,7 @@ abstract class AbstractWithYAMLResponseCommand extends AbstractCommand
             $parsedData = Yaml::parse($data);
         } catch (ParseException $parseException) {
             throw Exception::wrap($parseException,
-                sprintf('Failed to parse response for \'%s\' on \'s\'', get_class($this), (string)$server)
+                sprintf('Failed to parse response for \'%s\' on \'s\'', get_class($this), (string) $server)
             );
         }
 

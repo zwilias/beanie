@@ -16,7 +16,7 @@ class UnexpectedResponseException extends Exception
     public function __construct($response, Command $command, Server $server)
     {
         parent::__construct(
-            sprintf(self::DEFAULT_MESSAGE, get_class($command), (string)$server, $response),
+            sprintf(self::DEFAULT_MESSAGE, get_class($command), (string) $server, $response),
             self::DEFAULT_CODE
         );
     }

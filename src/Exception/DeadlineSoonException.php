@@ -16,7 +16,7 @@ class DeadlineSoonException extends Exception
     public function __construct(Command $command, Server $server)
     {
         parent::__construct(
-            sprintf(self::DEFAULT_MESSAGE, (string)$server, get_class($command)),
+            sprintf(self::DEFAULT_MESSAGE, (string) $server, get_class($command)),
             self::DEFAULT_CODE
         );
     }
