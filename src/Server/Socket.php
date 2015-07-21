@@ -8,6 +8,12 @@ use Beanie\Exception\SocketException;
 
 class Socket
 {
+    /**
+     * Longest possible response preface:
+     * USING <tubeName=max 200 byte>\r\n
+     */
+    const MAX_SINGLE_RESPONSE_LENGTH = 208;
+
     /** @var bool */
     protected $_connected = false;
 
@@ -19,6 +25,9 @@ class Socket
 
     /** @var resource */
     protected $_socket;
+
+    /** @var string */
+    private $_readBuffer = '';
 
     /**
      * @param string $hostname
@@ -37,6 +46,11 @@ class Socket
         }
     }
 
+    /**
+     * @param string $data
+     * @return int bytes written
+     * @throws SocketException When the connection is dropped in the middle of writing.
+     */
     public function write($data)
     {
         $this->_ensureConnected();
@@ -59,6 +73,58 @@ class Socket
         } while ($leftToWrite > 0);
 
         return $dataLength;
+    }
+
+    /**
+     * @return string
+     * @throws SocketException When the connection drops during reading
+     */
+    public function readLine()
+    {
+        $this->_ensureConnected();
+        $buffer = '';
+
+        do {
+            if (($incoming = socket_read($this->_socket, self::MAX_SINGLE_RESPONSE_LENGTH)) === false) {
+                $errorCode = socket_last_error();
+                $errorMessage = socket_strerror($errorCode);
+                throw new SocketException($errorMessage, $errorCode);
+            }
+
+            $buffer .= $incoming;
+
+            $eolPosition = strpos($buffer, Server::EOL);
+        } while ($eolPosition === false);
+
+        $this->_readBuffer = substr($buffer, $eolPosition + Server::EOL_LENGTH);
+        return substr($buffer, 0, $eolPosition + Server::EOL_LENGTH);
+    }
+
+    /**
+     * @param int $bytes
+     * @return string
+     * @throws SocketException When the connection drops during reading
+     */
+    public function readData($bytes)
+    {
+        $this->_ensureConnected();
+
+        $read = strlen($this->_readBuffer);
+        $buffer = $this->_readBuffer;
+        $this->_readBuffer = '';
+
+        while ($read < $bytes) {
+            if (($incoming = socket_read($this->_socket, ($bytes - $read))) === false) {
+                $errorCode = socket_last_error();
+                $errorMessage = socket_strerror($errorCode);
+                throw new SocketException($errorMessage, $errorCode);
+            }
+
+            $buffer .= $incoming;
+            $read += strlen($incoming);
+        }
+
+        return substr($buffer, 0, $bytes);
     }
 
     /**
@@ -93,6 +159,9 @@ class Socket
         return $this->_socket;
     }
 
+    /**
+     * @throws SocketException When connecting fails
+     */
     public function connect()
     {
         if (($this->_connected = socket_connect($this->_socket, $this->_hostname, $this->_port)) === false) {
@@ -102,6 +171,9 @@ class Socket
         }
     }
 
+    /**
+     * @throws SocketException Ensure the Socket is connected. If it is not, throws and exception
+     */
     protected function _ensureConnected()
     {
         if ($this->_connected !== true) {

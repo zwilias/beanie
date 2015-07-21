@@ -179,4 +179,239 @@ class SocketTest extends MockNative_TestCase
 
         $this->assertEquals(strlen(join('', $data)), $written);
     }
+
+    /**
+     * @expectedException \Beanie\Exception\SocketException
+     * @expectedExceptionMessage Socket is not connected.
+     */
+    public function testReadLine_notConnected_throwsSocketException()
+    {
+        $this->_socketCreateSuccess();
+
+
+        $socket = new Socket();
+
+
+        $socket->readLine();
+    }
+
+    public function testReadLine_connectedReadsLine()
+    {
+        $testLine = 'test data' . Server::EOL;
+
+        $this->_socketCreateSuccess();
+        $this->_socketConnectSuccess();
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->once())
+            ->method('socket_read')
+            ->with($this->anything(), Socket::MAX_SINGLE_RESPONSE_LENGTH)
+            ->willReturn($testLine)
+        ;
+
+
+        $socket = new Socket();
+        $socket->connect();
+        $response = $socket->readLine();
+
+
+        $this->assertEquals($testLine, $response);
+    }
+
+    /**
+     * @expectedException \Beanie\Exception\SocketException
+     * @expectedExceptionCode 888
+     * @expectedExceptionMessage test error
+     */
+    public function testReadLine_failsWhileReading_throwsSocketException()
+    {
+        $this->_socketCreateSuccess();
+        $this->_socketConnectSuccess();
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->once())
+            ->method('socket_read')
+            ->with($this->anything(), Socket::MAX_SINGLE_RESPONSE_LENGTH)
+            ->willReturn(false)
+        ;
+
+        $this->_setSocketError(888, 'test error');
+
+
+        $socket = new Socket();
+        $socket->connect();
+        $socket->readLine();
+    }
+
+    public function testReadLine_willContinueUntilEOLFound()
+    {
+        // Position the \r\n to be on the split between reads
+        $expected = str_repeat('a', (Socket::MAX_SINGLE_RESPONSE_LENGTH * 2) - 1) . Server::EOL;
+
+        $this->_socketCreateSuccess();
+        $this->_socketConnectSuccess();
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->exactly(3))
+            ->method('socket_read')
+            ->with($this->anything(), Socket::MAX_SINGLE_RESPONSE_LENGTH)
+            ->willReturnOnConsecutiveCalls(
+                substr($expected, 0, Socket::MAX_SINGLE_RESPONSE_LENGTH),
+                substr($expected, Socket::MAX_SINGLE_RESPONSE_LENGTH, Socket::MAX_SINGLE_RESPONSE_LENGTH),
+                substr($expected, Socket::MAX_SINGLE_RESPONSE_LENGTH * 2)
+            )
+        ;
+
+
+        $socket = new Socket();
+        $socket->connect();
+        $data = $socket->readLine();
+
+
+        $this->assertEquals($expected, $data);
+    }
+
+    public function testReadLine_willDiscardEverythingAfterEOL()
+    {
+        $expected = 'hello there' . Server::EOL;
+
+        $this->_socketCreateSuccess();
+        $this->_socketConnectSuccess();
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->once())
+            ->method('socket_read')
+            ->with($this->anything(), Socket::MAX_SINGLE_RESPONSE_LENGTH)
+            ->willReturn($expected . str_repeat('test', 30))
+        ;
+
+
+        $socket = new Socket();
+        $socket->connect();
+        $data = $socket->readLine();
+
+
+        $this->assertEquals($expected, $data);
+    }
+
+    /**
+     * @expectedException \Beanie\Exception\SocketException
+     * @expectedExceptionMessage Socket is not connected.
+     */
+    public function testReadData_beforeConnect_throwsException()
+    {
+        $this->_socketCreateSuccess();
+
+
+        $socket = new Socket();
+        $socket->readData(0);
+    }
+
+    public function testReadData_readsData()
+    {
+        $expected = str_repeat('test data! ', 50) . Server::EOL;
+        $requestedLength = strlen($expected);
+
+        $this->_socketCreateSuccess();
+        $this->_socketConnectSuccess();
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->once())
+            ->method('socket_read')
+            ->with($this->anything(), $requestedLength)
+            ->willReturn($expected)
+        ;
+
+
+        $socket = new Socket();
+        $socket->connect();
+        $data = $socket->readData($requestedLength);
+
+
+        $this->assertEquals($expected, $data);
+    }
+
+    /**
+     * @expectedException \Beanie\Exception\SocketException
+     * @expectedExceptionCode 999
+     * @expectedExceptionMessage denied
+     */
+    public function testReadData_failureDuringRead_throwsSocketException()
+    {
+        $this->_socketCreateSuccess();
+        $this->_socketConnectSuccess();
+        $this->_setSocketError(999, 'denied');
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->once())
+            ->method('socket_read')
+            ->with($this->anything(), 50)
+            ->willReturn(false)
+        ;
+
+
+        $socket = new Socket();
+        $socket->connect();
+        $socket->readData(50);
+    }
+
+    public function testReadData_continuesAfterPartialResponse()
+    {
+        $expected = str_repeat('random', 100) . Server::EOL;
+        $firstPart = substr($expected, 0, 51);
+        $secondPart = substr($expected, 51);
+
+        $this->_socketCreateSuccess();
+        $this->_socketConnectSuccess();
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->exactly(2))
+            ->method('socket_read')
+            ->withConsecutive(
+                [$this->anything(), strlen($expected)],
+                [$this->anything(), strlen($secondPart)]
+            )
+            ->willReturnOnConsecutiveCalls($firstPart, $secondPart)
+        ;
+
+
+        $socket = new Socket();
+        $socket->connect();
+        $data = $socket->readData(strlen($expected));
+
+
+        $this->assertEquals($expected, $data);
+    }
+
+    public function testReadData_picksUpWhereReadLineLeftOff()
+    {
+        $expectedLine = 'this is a test' . Server::EOL;
+        $expectedData = str_repeat('randomdata', 200) . Server::EOL;
+
+        $partOne = substr(($expectedLine . $expectedData), 0, Socket::MAX_SINGLE_RESPONSE_LENGTH);
+        $partTwo = substr(($expectedLine . $expectedData), Socket::MAX_SINGLE_RESPONSE_LENGTH);
+
+        $this->_socketCreateSuccess();
+        $this->_socketConnectSuccess();
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->exactly(2))
+            ->method('socket_read')
+            ->withConsecutive(
+                [$this->anything(), Socket::MAX_SINGLE_RESPONSE_LENGTH],
+                [$this->anything(), strlen($partTwo)]
+            )
+            ->willReturnOnConsecutiveCalls($partOne, $partTwo)
+        ;
+
+
+        $socket = new Socket();
+        $socket->connect();
+        $actualLine = $socket->readLine();
+        $actualData = $socket->readData(strlen($expectedData));
+
+
+        $this->assertEquals($expectedLine, $actualLine);
+        $this->assertEquals($expectedData, $actualData);
+    }
 }
