@@ -21,7 +21,7 @@ class Pool
      */
     public function __construct(array $servers)
     {
-        if (! count($servers)) {
+        if (!count($servers)) {
             throw new InvalidArgumentException('Pool needs servers');
         }
 
@@ -38,7 +38,7 @@ class Pool
      */
     protected function addServer(Server $server)
     {
-        $this->servers[(string)$server] = $server;
+        $this->servers[(string) $server] = $server;
         return $this;
     }
 

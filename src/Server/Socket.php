@@ -64,9 +64,7 @@ class Socket
                     $leftToWrite
                 )) === false
             ) {
-                $errorCode = socket_last_error();
-                $errorMessage = socket_strerror($errorCode);
-                throw new SocketException($errorMessage, $errorCode);
+                throw $this->createSocketException();
             }
 
             $leftToWrite -= $written;
@@ -139,9 +137,7 @@ class Socket
     protected function read($bytes)
     {
         if (($incoming = socket_read($this->socket, $bytes)) === false) {
-            $errorCode = socket_last_error();
-            $errorMessage = socket_strerror($errorCode);
-            throw new SocketException($errorMessage, $errorCode);
+            throw $this->createSocketException();
         }
 
         return $incoming;
@@ -185,9 +181,7 @@ class Socket
     public function connect()
     {
         if (($this->connected = socket_connect($this->socket, $this->hostname, $this->port)) === false) {
-            $errorCode = socket_last_error();
-            $errorMessage = socket_strerror($errorCode);
-            throw new SocketException($errorMessage, $errorCode);
+            throw $this->createSocketException();
         }
     }
 
@@ -199,5 +193,16 @@ class Socket
         if ($this->connected !== true) {
             throw new SocketException('Socket is not connected.');
         }
+    }
+
+    /**
+     * @return SocketException
+     */
+    protected function createSocketException()
+    {
+        $errorCode = socket_last_error();
+        $errorMessage = socket_strerror($errorCode);
+        $exception = new SocketException($errorMessage, $errorCode);
+        return $exception;
     }
 }
