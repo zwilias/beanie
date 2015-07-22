@@ -4,6 +4,7 @@
 namespace Beanie\Server;
 
 
+use Beanie\Command;
 use Beanie\Exception\SocketException;
 
 class Server
@@ -38,15 +39,6 @@ class Server
         return $this;
     }
 
-    public function readLine()
-    {
-        $this->ensureConnected();
-
-        $data = $this->socket->readLine(self::EOL);
-
-        return substr($data, 0, strlen($data) - self::EOL_LENGTH);
-    }
-
     /**
      * @param int $bytes
      * @param int $extra
@@ -60,6 +52,32 @@ class Server
         $data = $this->socket->readData($bytes + $extra);
 
         return substr($data, 0, $bytes);
+    }
+
+    /**
+     * @param Command\AbstractCommand $command
+     * @return \Beanie\Response
+     * @throws SocketException
+     * @throws \Beanie\Exception\BadFormatException
+     * @throws \Beanie\Exception\InternalErrorException
+     * @throws \Beanie\Exception\OutOfMemoryException
+     * @throws \Beanie\Exception\UnknownCommandException
+     */
+    public function dispatchCommand(Command\AbstractCommand $command)
+    {
+        $this->ensureConnected();
+        $this->socket->write($command->getCommandLine() . self::EOL);
+
+        if ($command->hasData()) {
+            $this->socket->write($command->getData() . self::EOL);
+        }
+
+        $responseLine = $this->socket->readLine(self::EOL);
+
+        return $command->parseResponse(
+            substr($responseLine, 0, strlen($responseLine) - self::EOL_LENGTH),
+            $this
+        );
     }
 
     /**

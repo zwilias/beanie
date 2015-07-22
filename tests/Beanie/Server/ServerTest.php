@@ -3,6 +3,8 @@
 
 namespace Beanie\Server;
 
+use Beanie\Response;
+
 require_once 'MockNative_TestCase.php';
 
 class ServerTest extends MockNative_TestCase
@@ -140,21 +142,58 @@ class ServerTest extends MockNative_TestCase
         $server->readData(321);
     }
 
-    public function testReadLine_readsLineFromSocket_stripsEOL()
+    public function testDispatchCommandWithoutData_writesCommand_retrievesResponse()
     {
-        $expected = 'This is a line';
+        $responseLine = 'great job';
+        $commandLine = 'test command';
+
+        $server = new Server();
+        $expectedResponse = new Response(null, null, $server);
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\AbstractCommand $command */
+        $command = $this
+            ->getMockBuilder('\Beanie\Command\AbstractCommand')
+            ->setMethods(['getCommandLine', 'parseResponse', 'hasData'])
+            ->getMockForAbstractClass()
+        ;
+
+        $command
+            ->expects($this->once())
+            ->method('getCommandLine')
+            ->willReturn($commandLine)
+        ;
+
+        $command
+            ->expects($this->once())
+            ->method('hasData')
+            ->willReturn(false)
+        ;
+
+        $command
+            ->expects($this->once())
+            ->method('parseResponse')
+            ->with($responseLine, $server)
+            ->willReturn($expectedResponse)
+        ;
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Socket $socket */
         $socket = $this
             ->getMockBuilder('\Beanie\Server\Socket')
             ->disableOriginalConstructor()
-            ->setMethods(['isConnected', 'readLine'])
+            ->setMethods(['isConnected', 'readLine', 'write'])
             ->getMock()
         ;
 
         $socket
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('isConnected')
+            ->willReturn(true)
+        ;
+
+        $socket
+            ->expects($this->once())
+            ->method('write')
+            ->with($commandLine . Server::EOL)
             ->willReturn(true)
         ;
 
@@ -162,15 +201,95 @@ class ServerTest extends MockNative_TestCase
             ->expects($this->once())
             ->method('readLine')
             ->with(Server::EOL)
-            ->willReturn($expected . Server::EOL)
+            ->willReturn($responseLine . Server::EOL)
         ;
 
 
-        $server = new Server();
         $server->setSocket($socket);
-        $data = $server->readLine();
+        $response = $server->dispatchCommand($command);
 
 
-        $this->assertEquals($expected, $data);
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+
+    public function testDispatchCommandWithData_writesCommandAndData_retrievesResponse()
+    {
+        $responseLine = 'great job';
+        $commandLine = 'test command';
+        $commandData = 'test data';
+
+        $server = new Server();
+        $expectedResponse = new Response(null, null, $server);
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\AbstractCommand $command */
+        $command = $this
+            ->getMockBuilder('\Beanie\Command\AbstractCommand')
+            ->setMethods(['getCommandLine', 'parseResponse', 'hasData', 'getData'])
+            ->getMockForAbstractClass()
+        ;
+
+        $command
+            ->expects($this->once())
+            ->method('getCommandLine')
+            ->willReturn($commandLine)
+        ;
+
+        $command
+            ->expects($this->once())
+            ->method('hasData')
+            ->willReturn(true)
+        ;
+
+        $command
+            ->expects($this->once())
+            ->method('getData')
+            ->willReturn($commandData)
+        ;
+
+        $command
+            ->expects($this->once())
+            ->method('parseResponse')
+            ->with($responseLine, $server)
+            ->willReturn($expectedResponse)
+        ;
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Socket $socket */
+        $socket = $this
+            ->getMockBuilder('\Beanie\Server\Socket')
+            ->disableOriginalConstructor()
+            ->setMethods(['isConnected', 'readLine', 'write'])
+            ->getMock()
+        ;
+
+        $socket
+            ->expects($this->atLeastOnce())
+            ->method('isConnected')
+            ->willReturn(true)
+        ;
+
+        $socket
+            ->expects($this->exactly(2))
+            ->method('write')
+            ->withConsecutive(
+                [$commandLine . Server::EOL],
+                [$commandData . Server::EOL]
+            )
+            ->willReturn(true)
+        ;
+
+        $socket
+            ->expects($this->once())
+            ->method('readLine')
+            ->with(Server::EOL)
+            ->willReturn($responseLine . Server::EOL)
+        ;
+
+
+        $server->setSocket($socket);
+        $response = $server->dispatchCommand($command);
+
+
+        $this->assertEquals($expectedResponse, $response);
     }
 }

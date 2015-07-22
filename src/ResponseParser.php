@@ -11,7 +11,7 @@ interface ResponseParser
     /**
      * @param string $responseLine
      * @param Server $server
-     * @return Response|null
+     * @return Response
      */
     function parseResponse($responseLine, Server $server);
 }
