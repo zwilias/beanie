@@ -99,13 +99,11 @@ class TubeStatus
             $commands[] = new UseCommand($goal->getCurrentTube());
         }
 
-        foreach (array_diff($goal->getWatchedTubes(), $this->getWatchedTubes()) as $watchTube)
-        {
+        foreach (array_diff($goal->getWatchedTubes(), $this->getWatchedTubes()) as $watchTube) {
             $commands[] = new WatchCommand($watchTube);
         }
 
-        foreach (array_diff($this->getWatchedTubes(), $goal->getWatchedTubes()) as $ignoreTube)
-        {
+        foreach (array_diff($this->getWatchedTubes(), $goal->getWatchedTubes()) as $ignoreTube) {
             $commands[] = new IgnoreCommand($ignoreTube);
         }
 
