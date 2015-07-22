@@ -95,13 +95,7 @@ class Socket
         $buffer = '';
 
         do {
-            if (($incoming = socket_read($this->socket, self::MAX_SINGLE_RESPONSE_LENGTH)) === false) {
-                $errorCode = socket_last_error();
-                $errorMessage = socket_strerror($errorCode);
-                throw new SocketException($errorMessage, $errorCode);
-            }
-
-            $buffer .= $incoming;
+            $buffer .= $this->read(self::MAX_SINGLE_RESPONSE_LENGTH);
 
             $eolPosition = strpos($buffer, $endOfLine);
         } while ($eolPosition === false);
@@ -129,17 +123,28 @@ class Socket
         $this->readBuffer = '';
 
         while ($read < $bytes) {
-            if (($incoming = socket_read($this->socket, ($bytes - $read))) === false) {
-                $errorCode = socket_last_error();
-                $errorMessage = socket_strerror($errorCode);
-                throw new SocketException($errorMessage, $errorCode);
-            }
-
+            $incoming = $this->read($bytes - $read);
             $buffer .= $incoming;
             $read += strlen($incoming);
         }
 
         return substr($buffer, 0, $bytes);
+    }
+
+    /**
+     * @param int $bytes
+     * @return bool
+     * @throws SocketException
+     */
+    protected function read($bytes)
+    {
+        if (($incoming = socket_read($this->socket, $bytes)) === false) {
+            $errorCode = socket_last_error();
+            $errorMessage = socket_strerror($errorCode);
+            throw new SocketException($errorMessage, $errorCode);
+        }
+
+        return $incoming;
     }
 
     /**
