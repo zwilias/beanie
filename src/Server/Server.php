@@ -18,6 +18,9 @@ class Server
     /** @var Socket */
     protected $socket;
 
+    /** @var TubeStatus */
+    protected $tubeStatus;
+
     /**
      * @param string $hostName
      * @param int $port
@@ -26,6 +29,7 @@ class Server
     public function __construct($hostName = self::DEFAULT_HOST, $port = self::DEFAULT_PORT)
     {
         $this->socket = new Socket($hostName, $port);
+        $this->tubeStatus = new TubeStatus();
     }
 
     /**
@@ -86,6 +90,11 @@ class Server
     public function __toString()
     {
         return sprintf('%s:%s', $this->socket->getHostname(), $this->socket->getPort());
+    }
+
+    public function getTubeStatus()
+    {
+        return $this->tubeStatus;
     }
 
     protected function ensureConnected()
