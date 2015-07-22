@@ -5,6 +5,10 @@ namespace Beanie\Server;
 
 
 use Beanie\Beanie;
+use Beanie\Command;
+use Beanie\Command\AbstractCommand;
+use Beanie\Command\IgnoreCommand;
+use Beanie\Command\WatchCommand;
 
 class TubeStatusTest extends \PHPUnit_Framework_TestCase
 {
@@ -90,5 +94,101 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
 
 
         $this->assertEquals([Beanie::DEFAULT_TUBE, 'tube-1', 'tube-3'], $tubeStatus->getWatchedTubes());
+    }
+
+
+    /**
+     * @param string $useTube
+     * @param string[] $watchTubes
+     * @param string $otherUseTube
+     * @param string[] $otherWatchTubes
+     * @param AbstractCommand[] $expectedCommands
+     * @dataProvider transformCommandsProvider
+     */
+    public function testGetCommandsToTransformTo($useTube, $watchTubes, $otherUseTube, $otherWatchTubes, $expectedCommands)
+    {
+        $tubeStatus = (new TubeStatus())
+            ->setCurrentTube($useTube)
+            ->setWatchedTubes($watchTubes)
+        ;
+
+        $otherTubeStatus = (new TubeStatus())
+            ->setCurrentTube($otherUseTube)
+            ->setWatchedTubes($otherWatchTubes)
+        ;
+
+
+        $actualCommands = $tubeStatus->getCommandsToTransformTo($otherTubeStatus);
+
+
+        $expectedCommandLines = array_map(
+            function (Command $command) { return $command->getCommandLine(); },
+            $expectedCommands
+        );
+        sort($expectedCommandLines);
+
+        $actualCommandLines = array_map(
+            function (Command $command) { return $command->getCommandLine(); },
+            $actualCommands
+        );
+        sort($actualCommandLines);
+
+        $this->assertEquals($expectedCommandLines, $actualCommandLines);
+    }
+
+    public function transformCommandsProvider()
+    {
+        return [
+            'identical' => [
+                Beanie::DEFAULT_TUBE,
+                [Beanie::DEFAULT_TUBE],
+                Beanie::DEFAULT_TUBE,
+                [Beanie::DEFAULT_TUBE],
+                []
+            ],
+            'overlapping-watch' => [
+                Beanie::DEFAULT_TUBE,
+                ['1only1', '1only2', 'shared1', 'shared2', '1only3'],
+                Beanie::DEFAULT_TUBE,
+                ['2only1', 'shared1', 'shared2', '2only2'],
+                [
+                    new IgnoreCommand('1only1'),
+                    new IgnoreCommand('1only2'),
+                    new IgnoreCommand('1only3'),
+                    new WatchCommand('2only1'),
+                    new WatchCommand('2only2')
+                ]
+            ],
+            'only-additions' => [
+                Beanie::DEFAULT_TUBE,
+                ['shared1', 'shared2'],
+                Beanie::DEFAULT_TUBE,
+                ['2only1', 'shared1', 'shared2', '2only2'],
+                [
+                    new WatchCommand('2only1'),
+                    new WatchCommand('2only2')
+                ]
+            ],
+            'only-removals' => [
+                Beanie::DEFAULT_TUBE,
+                ['1only1', '1only2', 'shared1', 'shared2', '1only3'],
+                Beanie::DEFAULT_TUBE,
+                ['shared1', 'shared2'],
+                [
+                    new IgnoreCommand('1only1'),
+                    new IgnoreCommand('1only2'),
+                    new IgnoreCommand('1only3')
+                ]
+            ],
+            'different-use' => [
+                self::TEST_TUBE,
+                [Beanie::DEFAULT_TUBE],
+                Beanie::DEFAULT_TUBE,
+                [Beanie::DEFAULT_TUBE],
+                [
+                    new Command\UseCommand(Beanie::DEFAULT_TUBE)
+                ]
+            ]
+        ];
     }
 }

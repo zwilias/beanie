@@ -5,6 +5,10 @@ namespace Beanie\Server;
 
 
 use Beanie\Beanie;
+use Beanie\Command\AbstractCommand;
+use Beanie\Command\IgnoreCommand;
+use Beanie\Command\UseCommand;
+use Beanie\Command\WatchCommand;
 
 /**
  * Class TubeStatus
@@ -71,5 +75,40 @@ class TubeStatus
     public function getWatchedTubes()
     {
         return $this->watchedTubes;
+    }
+
+    /**
+     * @param string[] $tubes
+     * @return $this
+     */
+    public function setWatchedTubes(array $tubes)
+    {
+        $this->watchedTubes = $tubes;
+        return $this;
+    }
+
+    /**
+     * @param TubeStatus $goal
+     * @return AbstractCommand[]
+     */
+    public function getCommandsToTransformTo(TubeStatus $goal)
+    {
+        $commands = [];
+
+        if ($goal->getCurrentTube() !== $this->currentTube) {
+            $commands[] = new UseCommand($goal->getCurrentTube());
+        }
+
+        foreach (array_diff($goal->getWatchedTubes(), $this->getWatchedTubes()) as $watchTube)
+        {
+            $commands[] = new WatchCommand($watchTube);
+        }
+
+        foreach (array_diff($this->getWatchedTubes(), $goal->getWatchedTubes()) as $ignoreTube)
+        {
+            $commands[] = new IgnoreCommand($ignoreTube);
+        }
+
+        return $commands;
     }
 }
