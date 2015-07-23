@@ -6,14 +6,14 @@ namespace Beanie\Server;
 
 use Beanie\Command\AbstractCommand;
 use Beanie\Exception\InvalidArgumentException;
+use Beanie\TubeAware;
 
-class Pool
+class Pool implements TubeAware
 {
+    use TubeAwareTrait;
+
     /** @var Server[] */
     protected $servers = [];
-
-    /** @var TubeStatus */
-    protected $tubeStatus;
 
     /**
      * @param Server[] $servers
@@ -70,15 +70,10 @@ class Pool
      */
     public function dispatchCommand(AbstractCommand $command)
     {
-        return $this->synchronizeTubes($this->getRandomServer())->dispatchCommand($command);
-    }
-
-    /**
-     * @return TubeStatus
-     */
-    public function getTubeStatus()
-    {
-        return $this->tubeStatus;
+        return $this
+            ->getRandomServer()
+            ->transformTubeStatusTo($this->tubeStatus)
+            ->dispatchCommand($command);
     }
 
     /**
@@ -87,22 +82,5 @@ class Pool
     protected function getRandomServer()
     {
         return $this->servers[array_rand($this->servers, 1)];
-    }
-
-    /**
-     * @param Server $server
-     * @return Server
-     */
-    protected function synchronizeTubes(Server $server)
-    {
-        foreach ($server->getTubeStatus()->getCommandsToTransformTo($this->getTubeStatus()) as $transformCommand) {
-            $server->dispatchCommand($transformCommand);
-        }
-
-        $server->getTubeStatus()
-            ->setCurrentTube($this->getTubeStatus()->getCurrentTube())
-            ->setWatchedTubes($this->getTubeStatus()->getWatchedTubes());
-
-        return $server;
     }
 }

@@ -8,6 +8,7 @@ use Beanie\Beanie;
 use Beanie\Command;
 use Beanie\Command\AbstractCommand;
 use Beanie\Command\IgnoreCommand;
+use Beanie\Command\UseCommand;
 use Beanie\Command\WatchCommand;
 
 class TubeStatusTest extends \PHPUnit_Framework_TestCase
@@ -102,10 +103,11 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
      * @param string[] $watchTubes
      * @param string $otherUseTube
      * @param string[] $otherWatchTubes
+     * @param int $mode
      * @param AbstractCommand[] $expectedCommands
      * @dataProvider transformCommandsProvider
      */
-    public function testGetCommandsToTransformTo($useTube, $watchTubes, $otherUseTube, $otherWatchTubes, $expectedCommands)
+    public function testGetCommandsToTransformTo($useTube, $watchTubes, $otherUseTube, $otherWatchTubes, $mode, $expectedCommands)
     {
         $tubeStatus = (new TubeStatus())
             ->setCurrentTube($useTube)
@@ -118,7 +120,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
         ;
 
 
-        $actualCommands = $tubeStatus->getCommandsToTransformTo($otherTubeStatus);
+        $actualCommands = $tubeStatus->calculateTransformationTo($otherTubeStatus, $mode);
 
 
         $expectedCommandLines = array_map(
@@ -144,6 +146,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 [Beanie::DEFAULT_TUBE],
                 Beanie::DEFAULT_TUBE,
                 [Beanie::DEFAULT_TUBE],
+                TubeStatus::TRANSFORM_BOTH,
                 []
             ],
             'overlapping-watch' => [
@@ -151,6 +154,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['1only1', '1only2', 'shared1', 'shared2', '1only3'],
                 Beanie::DEFAULT_TUBE,
                 ['2only1', 'shared1', 'shared2', '2only2'],
+                TubeStatus::TRANSFORM_BOTH,
                 [
                     new IgnoreCommand('1only1'),
                     new IgnoreCommand('1only2'),
@@ -164,6 +168,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['shared1', 'shared2'],
                 Beanie::DEFAULT_TUBE,
                 ['2only1', 'shared1', 'shared2', '2only2'],
+                TubeStatus::TRANSFORM_BOTH,
                 [
                     new WatchCommand('2only1'),
                     new WatchCommand('2only2')
@@ -174,6 +179,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['1only1', '1only2', 'shared1', 'shared2', '1only3'],
                 Beanie::DEFAULT_TUBE,
                 ['shared1', 'shared2'],
+                TubeStatus::TRANSFORM_BOTH,
                 [
                     new IgnoreCommand('1only1'),
                     new IgnoreCommand('1only2'),
@@ -185,8 +191,58 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 [Beanie::DEFAULT_TUBE],
                 Beanie::DEFAULT_TUBE,
                 [Beanie::DEFAULT_TUBE],
+                TubeStatus::TRANSFORM_BOTH,
                 [
                     new Command\UseCommand(Beanie::DEFAULT_TUBE)
+                ]
+            ],
+            'different-use-ignored' => [
+                self::TEST_TUBE,
+                [Beanie::DEFAULT_TUBE],
+                Beanie::DEFAULT_TUBE,
+                [Beanie::DEFAULT_TUBE],
+                TubeStatus::TRANSFORM_WATCHED,
+                []
+            ],
+            'different-watch-ignored' => [
+                Beanie::DEFAULT_TUBE,
+                ['shared1', 'shared2'],
+                Beanie::DEFAULT_TUBE,
+                ['2only1', 'shared1', 'shared2', '2only2'],
+                TubeStatus::TRANSFORM_USE,
+                []
+            ],
+            'all-different' => [
+                self::TEST_TUBE,
+                ['shared1', 'shared2'],
+                Beanie::DEFAULT_TUBE,
+                ['2only1', 'shared1', 'shared2', '2only2'],
+                TubeStatus::TRANSFORM_BOTH,
+                [
+                    new UseCommand(Beanie::DEFAULT_TUBE),
+                    new WatchCommand('2only1'),
+                    new WatchCommand('2only2')
+                ]
+            ],
+            'all-different-only-use' => [
+                self::TEST_TUBE,
+                ['shared1', 'shared2'],
+                Beanie::DEFAULT_TUBE,
+                ['2only1', 'shared1', 'shared2', '2only2'],
+                TubeStatus::TRANSFORM_USE,
+                [
+                    new UseCommand(Beanie::DEFAULT_TUBE)
+                ]
+            ],
+            'all-different-only-watched' => [
+                self::TEST_TUBE,
+                ['shared1', 'shared2'],
+                Beanie::DEFAULT_TUBE,
+                ['2only1', 'shared1', 'shared2', '2only2'],
+                TubeStatus::TRANSFORM_WATCHED,
+                [
+                    new WatchCommand('2only1'),
+                    new WatchCommand('2only2')
                 ]
             ]
         ];

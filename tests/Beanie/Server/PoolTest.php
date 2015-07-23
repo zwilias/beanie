@@ -103,13 +103,13 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
         $tubeStatusMock = $this
             ->getMockBuilder('\Beanie\Server\TubeStatus')
-            ->setMethods(['getCommandsToTransformTo', 'setCurrentTube', 'setWatchedTubes'])
+            ->setMethods(['calculateTransformationTo', 'setCurrentTube', 'setWatchedTubes'])
             ->getMock()
         ;
 
         $tubeStatusMock
             ->expects($this->once())
-            ->method('getCommandsToTransformTo')
+            ->method('calculateTransformationTo')
             ->willReturn([$command])
         ;
 
@@ -167,13 +167,13 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
         $tubeStatusMock = $this
             ->getMockBuilder('\Beanie\Server\TubeStatus')
-            ->setMethods(['getCommandsToTransformTo', 'setCurrentTube', 'setWatchedTubes'])
+            ->setMethods(['calculateTransformationTo', 'setCurrentTube', 'setWatchedTubes'])
             ->getMock()
         ;
 
         $tubeStatusMock
             ->expects($this->once())
-            ->method('getCommandsToTransformTo')
+            ->method('calculateTransformationTo')
             ->willReturn([])
         ;
 

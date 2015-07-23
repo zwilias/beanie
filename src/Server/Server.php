@@ -6,9 +6,12 @@ namespace Beanie\Server;
 
 use Beanie\Command;
 use Beanie\Exception\SocketException;
+use Beanie\TubeAware;
 
-class Server
+class Server implements TubeAware
 {
+    use TubeAwareTrait;
+
     const DEFAULT_PORT = 11300;
     const DEFAULT_HOST = '127.0.0.1';
 
@@ -17,9 +20,6 @@ class Server
 
     /** @var Socket */
     protected $socket;
-
-    /** @var TubeStatus */
-    protected $tubeStatus;
 
     /**
      * @param string $hostName
@@ -90,11 +90,6 @@ class Server
     public function __toString()
     {
         return sprintf('%s:%s', $this->socket->getHostname(), $this->socket->getPort());
-    }
-
-    public function getTubeStatus()
-    {
-        return $this->tubeStatus;
     }
 
     protected function ensureConnected()

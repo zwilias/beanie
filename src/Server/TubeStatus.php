@@ -5,7 +5,6 @@ namespace Beanie\Server;
 
 
 use Beanie\Beanie;
-use Beanie\Command\AbstractCommand;
 use Beanie\Command\IgnoreCommand;
 use Beanie\Command\UseCommand;
 use Beanie\Command\WatchCommand;
@@ -19,6 +18,10 @@ use Beanie\Command\WatchCommand;
  */
 class TubeStatus
 {
+    const TRANSFORM_USE = 1;
+    const TRANSFORM_WATCHED = 2;
+    const TRANSFORM_BOTH = 3;
+
     /** @var string */
     protected $currentTube = Beanie::DEFAULT_TUBE;
 
@@ -89,21 +92,40 @@ class TubeStatus
 
     /**
      * @param TubeStatus $goal
-     * @return AbstractCommand[]
+     * @param int $mode
+     * @return \Beanie\Command\AbstractCommand[]
      */
-    public function getCommandsToTransformTo(TubeStatus $goal)
+    public function calculateTransformationTo(TubeStatus $goal, $mode = self::TRANSFORM_BOTH)
     {
         $commands = [];
 
-        if ($goal->getCurrentTube() !== $this->currentTube) {
+        if ($mode & self::TRANSFORM_WATCHED) {
+            $commands = $this->calculateTransformWatched($goal->getWatchedTubes());
+        }
+
+        if (
+            $mode & self::TRANSFORM_USE &&
+            $goal->getCurrentTube() !== $this->currentTube
+        ) {
             $commands[] = new UseCommand($goal->getCurrentTube());
         }
 
-        foreach (array_diff($goal->getWatchedTubes(), $this->getWatchedTubes()) as $watchTube) {
+        return $commands;
+    }
+
+    /**
+     * @param string[] $otherWatchedTubes
+     * @return \Beanie\Command\AbstractCommand[]
+     */
+    protected function calculateTransformWatched(array $otherWatchedTubes = [])
+    {
+        $commands = [];
+
+        foreach (array_diff($otherWatchedTubes, $this->getWatchedTubes()) as $watchTube) {
             $commands[] = new WatchCommand($watchTube);
         }
 
-        foreach (array_diff($this->getWatchedTubes(), $goal->getWatchedTubes()) as $ignoreTube) {
+        foreach (array_diff($this->getWatchedTubes(), $otherWatchedTubes) as $ignoreTube) {
             $commands[] = new IgnoreCommand($ignoreTube);
         }
 
