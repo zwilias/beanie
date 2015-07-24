@@ -13,8 +13,7 @@ class Factory
     private static $responseToStateMap = [
         Response::RESPONSE_INSERTED => Job::STATE_RELEASED,
         Response::RESPONSE_RELEASED => Job::STATE_RELEASED,
-        Response::RESPONSE_BURIED => Job::STATE_BURIED,
-        Response::FAILURE_BURIED => Job::STATE_BURIED
+        Response::RESPONSE_BURIED => Job::STATE_BURIED
     ];
 
     /**

@@ -13,7 +13,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         Response::RESPONSE_INSERTED => Job::STATE_RELEASED,
         Response::RESPONSE_RELEASED => Job::STATE_RELEASED,
         Response::RESPONSE_BURIED => Job::STATE_BURIED,
-        Response::FAILURE_BURIED => Job::STATE_BURIED,
         Response::RESPONSE_OK => Job::STATE_UNKNOWN
     ];
 
