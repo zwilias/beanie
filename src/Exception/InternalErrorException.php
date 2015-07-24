@@ -4,8 +4,8 @@
 namespace Beanie\Exception;
 
 
-class InternalErrorException extends AbstractServerCommandException
+class InternalErrorException extends AbstractServerException
 {
     const DEFAULT_CODE = 500;
-    const DEFAULT_MESSAGE = 'Failed executing \'%s\' command on \'%s\': INTERNAL ERROR';
+    const DEFAULT_MESSAGE = 'Failed executing command on \'%s\': INTERNAL ERROR';
 }

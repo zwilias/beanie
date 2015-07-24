@@ -151,9 +151,10 @@ class ServerTest extends MockNative_TestCase
         $server = new Server();
         $expectedResponse = new Response(null, null, $server);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\AbstractCommand $command */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\Command $command */
         $command = $this
-            ->getMockBuilder('\Beanie\Command\AbstractCommand')
+            ->getMockBuilder('\Beanie\Command\GenericCommand')
+            ->disableOriginalConstructor()
             ->setMethods(['getCommandLine', 'parseResponse', 'hasData'])
             ->getMockForAbstractClass()
         ;
@@ -223,9 +224,10 @@ class ServerTest extends MockNative_TestCase
         $server = new Server();
         $expectedResponse = new Response(null, null, $server);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\AbstractCommand $command */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\Command $command */
         $command = $this
-            ->getMockBuilder('\Beanie\Command\AbstractCommand')
+            ->getMockBuilder('\Beanie\Command\GenericCommand')
+            ->disableOriginalConstructor()
             ->setMethods(['getCommandLine', 'parseResponse', 'hasData', 'getData'])
             ->getMockForAbstractClass()
         ;

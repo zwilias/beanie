@@ -4,7 +4,7 @@
 namespace Beanie\Server;
 
 
-use Beanie\Command\AbstractCommand;
+use Beanie\Command\Command;
 use Beanie\Exception\InvalidArgumentException;
 use Beanie\Tube\TubeAware;
 use Beanie\Tube\TubeStatus;
@@ -66,10 +66,10 @@ class Pool implements TubeAware
     }
 
     /**
-     * @param AbstractCommand $command
+     * @param Command $command
      * @return \Beanie\Command\Response
      */
-    public function dispatchCommand(AbstractCommand $command)
+    public function dispatchCommand(Command $command)
     {
         return $this
             ->getRandomServer()

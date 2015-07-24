@@ -5,8 +5,7 @@ namespace Beanie\Server;
 
 
 
-use Beanie\Command\AbstractCommand;
-use Beanie\Command\Response;
+use Beanie\Command\Command;
 use Beanie\Tube\TubeStatus;
 
 trait TubeAwareTrait
@@ -19,10 +18,10 @@ trait TubeAwareTrait
     protected $tubeStatus;
 
     /**
-     * @param AbstractCommand $command
+     * @param Command $command
      * @return \Beanie\Command\Response
      */
-    abstract public function dispatchCommand(AbstractCommand $command);
+    abstract public function dispatchCommand(Command $command);
 
     /**
      * @return TubeStatus

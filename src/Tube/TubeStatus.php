@@ -5,9 +5,8 @@ namespace Beanie\Tube;
 
 
 use Beanie\Beanie;
-use Beanie\Command\IgnoreCommand;
-use Beanie\Command\UseCommand;
-use Beanie\Command\WatchCommand;
+use Beanie\Command\Command;
+use Beanie\Command\CommandFactory;
 
 /**
  * Class TubeStatus
@@ -28,6 +27,13 @@ class TubeStatus
     /** @var string[] */
     protected $watchedTubes = [Beanie::DEFAULT_TUBE];
 
+    /** @var CommandFactory */
+    protected $commandFactory;
+
+    public function __construct()
+    {
+        $this->commandFactory = new CommandFactory();
+    }
 
     /**
      * @param string $tubeName
@@ -93,7 +99,7 @@ class TubeStatus
     /**
      * @param TubeStatus $goal
      * @param int $mode
-     * @return \Beanie\Command\AbstractCommand[]
+     * @return \Beanie\Command\Command[]
      */
     public function calculateTransformationTo(TubeStatus $goal, $mode = self::TRANSFORM_BOTH)
     {
@@ -107,7 +113,7 @@ class TubeStatus
             $mode & self::TRANSFORM_USE &&
             $goal->getCurrentTube() !== $this->currentTube
         ) {
-            $commands[] = new UseCommand($goal->getCurrentTube());
+            $commands[] = $this->commandFactory->createCommand(Command::COMMAND_USE, [$goal->getCurrentTube()]);
         }
 
         return $commands;
@@ -115,18 +121,29 @@ class TubeStatus
 
     /**
      * @param string[] $otherWatchedTubes
-     * @return \Beanie\Command\AbstractCommand[]
+     * @return \Beanie\Command\Command[]
      */
     protected function calculateTransformWatched(array $otherWatchedTubes = [])
     {
+        return array_merge(
+            $this->calculateDiffTubes($otherWatchedTubes, $this->getWatchedTubes(), Command::COMMAND_WATCH),
+            $this->calculateDiffTubes($this->getWatchedTubes(), $otherWatchedTubes, Command::COMMAND_IGNORE)
+        );
+    }
+
+    /**
+     * @param string[] $tubes
+     * @param string[] $otherTubes
+     * @param string $command
+     * @return Command[]
+     * @throws \Beanie\Exception\InvalidArgumentException
+     */
+    protected function calculateDiffTubes($tubes, $otherTubes, $command)
+    {
         $commands = [];
 
-        foreach (array_diff($otherWatchedTubes, $this->getWatchedTubes()) as $watchTube) {
-            $commands[] = new WatchCommand($watchTube);
-        }
-
-        foreach (array_diff($this->getWatchedTubes(), $otherWatchedTubes) as $ignoreTube) {
-            $commands[] = new IgnoreCommand($ignoreTube);
+        foreach (array_diff($tubes, $otherTubes) as $tube) {
+            $commands[] = $this->commandFactory->createCommand($command, [$tube]);
         }
 
         return $commands;

@@ -4,8 +4,8 @@
 namespace Beanie\Exception;
 
 
-class NotFoundException extends AbstractServerCommandException
+class NotFoundException extends AbstractServerException
 {
     const DEFAULT_CODE = 404;
-    const DEFAULT_MESSAGE = 'Failed executing \'%s\' command on \'%s\': NOT_FOUND';
+    const DEFAULT_MESSAGE = 'Failed executing command on \'%s\': NOT_FOUND';
 }

@@ -5,10 +5,19 @@ namespace Beanie\Server;
 
 
 use Beanie\Beanie;
-use Beanie\Command\UseCommand;
+use Beanie\Command\Command;
+use Beanie\Command\CommandFactory;
 
 class PoolTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var CommandFactory */
+    protected $commandFactory;
+
+    public function setUp()
+    {
+        $this->commandFactory = new CommandFactory();
+    }
+
     public function testConstruct_withServers()
     {
         $serverMock = $this
@@ -98,7 +107,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchCommand_synchronizesTubeStatusAndDispatches()
     {
-        $command = new UseCommand('test');
+        $command = $this->commandFactory->createCommand(Command::COMMAND_USE, ['test']);
         $testResponse = 'test value';
 
         $tubeStatusMock = $this
@@ -163,7 +172,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchCommand_picksRandomServer()
     {
-        $command = new UseCommand('test');
+        $command = $this->commandFactory->createCommand(Command::COMMAND_USE, ['test']);
 
         $tubeStatusMock = $this
             ->getMockBuilder('\Beanie\Server\TubeStatus')

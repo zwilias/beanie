@@ -4,19 +4,14 @@
 namespace Beanie\Tube;
 
 
-use Beanie\Command\AbstractCommand;
-use Beanie\Command\KickCommand;
-use Beanie\Command\PauseTubeCommand;
-use Beanie\Command\PeekBuriedCommand;
-use Beanie\Command\PeekDelayedCommand;
-use Beanie\Command\PeekReadyCommand;
-use Beanie\Command\StatsTubeCommand;
+use Beanie\Command\Command;
+use Beanie\Command\CommandFactory;
+use Beanie\Command\Response;
 use Beanie\Exception;
 use Beanie\Exception\InvalidArgumentException;
 use Beanie\Exception\NotFoundException;
-use Beanie\Job\Job;
 use Beanie\Job\Factory;
-use Beanie\Command\Response;
+use Beanie\Job\Job;
 use Beanie\Server\Server;
 
 
@@ -31,6 +26,9 @@ class Tube implements TubeAware
     /** @var Factory */
     protected $jobFactory;
 
+    /** @var CommandFactory */
+    protected $commandFactory;
+
     /**
      * @param string $tubeName
      * @param Server $server
@@ -43,6 +41,7 @@ class Tube implements TubeAware
         $this->server = $server;
 
         $this->jobFactory = $jobFactory ?: new Factory();
+        $this->commandFactory = new CommandFactory();
     }
 
     /**
@@ -70,7 +69,7 @@ class Tube implements TubeAware
      */
     public function peekReady()
     {
-        return $this->peek(new PeekReadyCommand());
+        return $this->peek($this->commandFactory->createCommand(Command::COMMAND_PEEK_READY));
     }
 
     /**
@@ -78,7 +77,7 @@ class Tube implements TubeAware
      */
     public function peekDelayed()
     {
-        return $this->peek(new PeekDelayedCommand());
+        return $this->peek($this->commandFactory->createCommand(Command::COMMAND_PEEK_DELAYED));
     }
 
     /**
@@ -86,15 +85,15 @@ class Tube implements TubeAware
      */
     public function peekBuried()
     {
-        return $this->peek(new PeekBuriedCommand());
+        return $this->peek($this->commandFactory->createCommand(Command::COMMAND_PEEK_BURIED));
     }
 
     /**
-     * @param AbstractCommand $command
+     * @param Command $command
      * @return Job|null
      * @throws Exception\InvalidArgumentException
      */
-    protected function peek(AbstractCommand $command)
+    protected function peek(Command $command)
     {
         $this->sync();
 
@@ -124,7 +123,9 @@ class Tube implements TubeAware
 
         $this->sync();
 
-        return (int) $this->server->dispatchCommand(new KickCommand($howMany))->getData();
+        return (int) $this->server->dispatchCommand(
+            $this->commandFactory->createCommand(Command::COMMAND_KICK, [$howMany])
+        )->getData();
     }
 
     /**
@@ -138,9 +139,9 @@ class Tube implements TubeAware
         return (array) $this
             ->server
             ->dispatchCommand(
-                new StatsTubeCommand(
+                $this->commandFactory->createCommand(Command::COMMAND_STATS_TUBE, [
                     $this->getTubeStatus()->getCurrentTube()
-                )
+                ])
             )
             ->getData();
     }
@@ -160,7 +161,11 @@ class Tube implements TubeAware
         $this->sync();
 
         return $this->server
-            ->dispatchCommand(new PauseTubeCommand($this->getTubeStatus()->getCurrentTube()))
+            ->dispatchCommand(
+                $this->commandFactory->createCommand(Command::COMMAND_PAUSE_TUBE, [
+                    $this->getTubeStatus()->getCurrentTube()
+                ])
+            )
             ->getName() == Response::RESPONSE_PAUSED;
     }
 }

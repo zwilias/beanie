@@ -4,7 +4,6 @@
 namespace Beanie\Command\ResponseParser;
 
 
-use Beanie\Command\Response;
 use Beanie\Server\Server;
 
 interface ResponseParser
@@ -14,5 +13,5 @@ interface ResponseParser
      * @param Server $server
      * @return \Beanie\Command\Response
      */
-    function parseResponse($responseLine, Server $server);
+    public function parseResponse($responseLine, Server $server);
 }

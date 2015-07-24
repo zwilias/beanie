@@ -4,8 +4,8 @@
 namespace Beanie\Exception;
 
 
-class BadFormatException extends AbstractServerCommandException
+class BadFormatException extends AbstractServerException
 {
     const DEFAULT_CODE = 400;
-    const DEFAULT_MESSAGE = 'Failed executing \'%s\' command on \'%s\': BAD_FORMAT';
+    const DEFAULT_MESSAGE = 'Failed executing command on \'%s\': BAD_FORMAT';
 }
