@@ -3,7 +3,7 @@
 
 namespace Beanie\Command;
 
-use Beanie\Command;
+
 
 class PeekReadyCommandTest extends \PHPUnit_Framework_TestCase
 {

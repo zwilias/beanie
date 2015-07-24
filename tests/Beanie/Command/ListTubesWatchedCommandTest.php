@@ -4,7 +4,7 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command;
+
 
 class ListTubesWatchedCommandTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,10 +5,10 @@ namespace Beanie\Command;
 
 
 use Beanie\Beanie;
-use Beanie\Command;
+
 use Beanie\Exception\NotFoundException;
 use Beanie\Exception\UnexpectedResponseException;
-use Beanie\Response;
+
 use Beanie\Server\Server;
 
 class PauseTubeCommand extends AbstractCommand

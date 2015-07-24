@@ -4,7 +4,7 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command;
+
 
 class ListTubesWatchedCommand extends AbstractWithYAMLResponseCommand
 {

@@ -4,7 +4,7 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command;
+
 use Beanie\Exception\UnexpectedResponseException;
 use Beanie\Server\Server;
 

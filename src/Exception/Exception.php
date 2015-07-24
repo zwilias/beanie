@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Beanie;
+namespace Beanie\Exception;
 
 
 class Exception extends \Exception

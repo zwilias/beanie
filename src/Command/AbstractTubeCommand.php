@@ -5,7 +5,7 @@ namespace Beanie\Command;
 
 
 use Beanie\Exception\UnexpectedResponseException;
-use Beanie\Response;
+
 use Beanie\Server\Server;
 
 abstract class AbstractTubeCommand extends AbstractCommand

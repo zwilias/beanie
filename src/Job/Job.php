@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Beanie;
+namespace Beanie\Job;
 
 
 use Beanie\Server\Server;

@@ -4,8 +4,8 @@
 namespace Beanie\Exception;
 
 
-use Beanie\Command;
-use Beanie\Exception;
+use Beanie\Command\Command;
+
 use Beanie\Server\Server;
 
 class UnexpectedResponseException extends Exception

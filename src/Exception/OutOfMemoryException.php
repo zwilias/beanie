@@ -4,10 +4,6 @@
 namespace Beanie\Exception;
 
 
-use Beanie\Command;
-use Beanie\Exception;
-
-
 class OutOfMemoryException extends AbstractServerCommandException
 {
     const DEFAULT_CODE = 503;

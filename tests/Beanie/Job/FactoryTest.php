@@ -4,8 +4,8 @@
 namespace Beanie\Job;
 
 
-use Beanie\Job;
-use Beanie\Response;
+
+use Beanie\Command\Response;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,10 +4,6 @@
 namespace Beanie\Exception;
 
 
-use Beanie\Command;
-use Beanie\Exception;
-
-
 class NotFoundException extends AbstractServerCommandException
 {
     const DEFAULT_CODE = 404;

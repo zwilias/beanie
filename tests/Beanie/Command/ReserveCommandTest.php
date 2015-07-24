@@ -4,9 +4,6 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command;
-use Beanie\Response;
-
 require_once 'WithServerMock_TestCase.php';
 
 class ReserveCommandTest extends WithServerMock_TestCase

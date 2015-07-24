@@ -4,17 +4,16 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command;
-use Beanie\Exception;
 use Beanie\Exception\BadFormatException;
 use Beanie\Exception\InternalErrorException;
+use Beanie\Exception\InvalidNameException;
 use Beanie\Exception\UnknownCommandException;
 use Beanie\Exception\OutOfMemoryException;
-use Beanie\Response;
-use Beanie\ResponseParser;
+
+
 use Beanie\Server\Server;
 
-abstract class AbstractCommand implements Command, ResponseParser
+abstract class AbstractCommand implements Command
 {
     /**
      * @inheritDoc
@@ -48,7 +47,7 @@ abstract class AbstractCommand implements Command, ResponseParser
 
     /**
      * @param string $name
-     * @throws Exception\InvalidNameException
+     * @throws InvalidNameException
      */
     protected function ensureValidName($name)
     {
@@ -61,7 +60,7 @@ abstract class AbstractCommand implements Command, ResponseParser
                 $name = sprintf('{object of type %s', get_class($name));
             }
 
-            throw new Exception\InvalidNameException("Invalid name: {$name}");
+            throw new InvalidNameException("Invalid name: {$name}");
         }
     }
 

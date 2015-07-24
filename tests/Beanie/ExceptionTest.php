@@ -4,6 +4,8 @@
 namespace Beanie;
 
 
+use Beanie\Exception\Exception;
+
 class ExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testWrap_wrapsBeanieExceptionWithOriginalMessageAndCode()

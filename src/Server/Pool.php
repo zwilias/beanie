@@ -6,7 +6,8 @@ namespace Beanie\Server;
 
 use Beanie\Command\AbstractCommand;
 use Beanie\Exception\InvalidArgumentException;
-use Beanie\TubeAware;
+use Beanie\Tube\TubeAware;
+use Beanie\Tube\TubeStatus;
 
 class Pool implements TubeAware
 {
@@ -66,7 +67,7 @@ class Pool implements TubeAware
 
     /**
      * @param AbstractCommand $command
-     * @return \Beanie\Response
+     * @return \Beanie\Command\Response
      */
     public function dispatchCommand(AbstractCommand $command)
     {

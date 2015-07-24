@@ -4,10 +4,10 @@
 namespace Beanie\Command;
 
 use Beanie\Beanie;
-use Beanie\Command;
+
 use Beanie\Exception\NotFoundException;
 use Beanie\Exception\UnexpectedResponseException;
-use Beanie\Response;
+
 
 require_once 'WithServerMock_TestCase.php';
 
@@ -94,7 +94,7 @@ class ReleaseCommandTest extends WithServerMock_TestCase
         $response = $releaseCommand->parseResponse($responseName, $this->_getServerMock());
 
 
-        $this->assertInstanceOf('Beanie\Response', $response);
+        $this->assertInstanceOf('Beanie\Command\Response', $response);
         $this->assertEquals($responseName, $response->getName());
         $this->assertNull($response->getData());
         $this->assertEquals($this->_getServerMock(), $response->getServer());

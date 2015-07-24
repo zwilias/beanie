@@ -5,11 +5,12 @@ namespace Beanie\Server;
 
 
 use Beanie\Beanie;
-use Beanie\Command;
+use Beanie\Command\Command;
 use Beanie\Command\AbstractCommand;
 use Beanie\Command\IgnoreCommand;
 use Beanie\Command\UseCommand;
 use Beanie\Command\WatchCommand;
+use Beanie\Tube\TubeStatus;
 
 class TubeStatusTest extends \PHPUnit_Framework_TestCase
 {
@@ -193,7 +194,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 [Beanie::DEFAULT_TUBE],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    new Command\UseCommand(Beanie::DEFAULT_TUBE)
+                    new UseCommand(Beanie::DEFAULT_TUBE)
                 ]
             ],
             'different-use-ignored' => [

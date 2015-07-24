@@ -5,7 +5,7 @@ namespace Beanie\Command;
 
 
 use Beanie\Exception\NotFoundException;
-use Beanie\Response;
+
 use Beanie\Server\Server;
 
 abstract class AbstractPeekCommand extends AbstractCommand

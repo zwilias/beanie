@@ -6,11 +6,11 @@ namespace Beanie\Command;
 require_once 'WithServerMock_TestCase.php';
 
 use Beanie\Beanie;
-use Beanie\Command;
+
 use Beanie\Exception\DrainingException;
 use Beanie\Exception\ExpectedCRLFException;
 use Beanie\Exception\JobTooBigException;
-use Beanie\Response;
+
 
 class PutCommandTest extends WithServerMock_TestCase
 {
@@ -109,7 +109,7 @@ class PutCommandTest extends WithServerMock_TestCase
         $response = $putCommand->parseResponse($response, $this->_getServerMock());
 
 
-        $this->assertInstanceOf('Beanie\Response', $response);
+        $this->assertInstanceOf('Beanie\Command\Response', $response);
         $this->assertEquals($type, $response->getName());
         $this->assertEquals($data, $response->getData());
         $this->assertEquals($this->_getServerMock(), $response->getServer());

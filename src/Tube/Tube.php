@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Beanie;
+namespace Beanie\Tube;
 
 
 use Beanie\Command\AbstractCommand;
@@ -11,11 +11,14 @@ use Beanie\Command\PeekBuriedCommand;
 use Beanie\Command\PeekDelayedCommand;
 use Beanie\Command\PeekReadyCommand;
 use Beanie\Command\StatsTubeCommand;
+use Beanie\Exception;
 use Beanie\Exception\InvalidArgumentException;
 use Beanie\Exception\NotFoundException;
+use Beanie\Job\Job;
 use Beanie\Job\Factory;
+use Beanie\Command\Response;
 use Beanie\Server\Server;
-use Beanie\Server\TubeStatus;
+
 
 class Tube implements TubeAware
 {

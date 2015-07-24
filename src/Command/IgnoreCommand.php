@@ -4,9 +4,9 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command;
+
 use Beanie\Exception\NotIgnoredException;
-use Beanie\Response;
+
 use Beanie\Server\Server;
 
 class IgnoreCommand extends AbstractTubeCommand

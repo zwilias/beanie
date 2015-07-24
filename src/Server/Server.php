@@ -4,9 +4,10 @@
 namespace Beanie\Server;
 
 
-use Beanie\Command;
+use Beanie\Command\AbstractCommand;
 use Beanie\Exception\SocketException;
-use Beanie\TubeAware;
+use Beanie\Tube\TubeAware;
+use Beanie\Tube\TubeStatus;
 
 class Server implements TubeAware
 {
@@ -59,15 +60,15 @@ class Server implements TubeAware
     }
 
     /**
-     * @param Command\AbstractCommand $command
-     * @return \Beanie\Response
+     * @param \Beanie\Command\AbstractCommand $command
+     * @return \Beanie\Command\Response
      * @throws SocketException
      * @throws \Beanie\Exception\BadFormatException
      * @throws \Beanie\Exception\InternalErrorException
      * @throws \Beanie\Exception\OutOfMemoryException
      * @throws \Beanie\Exception\UnknownCommandException
      */
-    public function dispatchCommand(Command\AbstractCommand $command)
+    public function dispatchCommand(AbstractCommand $command)
     {
         $this->ensureConnected();
         $this->socket->write($command->getCommandLine() . self::EOL);

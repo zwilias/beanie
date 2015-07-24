@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Beanie;
+namespace Beanie\Tube;
 
 
-use Beanie\Server\TubeStatus;
+
 
 interface TubeAware
 {

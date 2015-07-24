@@ -4,8 +4,7 @@
 namespace Beanie\Command;
 
 use Beanie\Beanie;
-use Beanie\Command;
-use Beanie\Response;
+
 
 require_once 'WithServerMock_TestCase.php';
 

@@ -4,8 +4,8 @@
 namespace Beanie\Command;
 
 
-use Beanie\Exception;
-use Beanie\Response;
+use Beanie\Exception\Exception;
+
 use Beanie\Server\Server;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
@@ -14,7 +14,7 @@ abstract class AbstractWithYAMLResponseCommand extends AbstractCommand
 {
     /**
      * @inheritdoc
-     * @throws Exception
+     * @throws \Beanie\Exception\Exception
      */
     protected function parseResponseLine($responseLine, Server $server)
     {

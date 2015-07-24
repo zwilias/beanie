@@ -3,8 +3,6 @@
 
 namespace Beanie\Command;
 
-use Beanie\Command;
-use Beanie\Response;
 
 require_once 'WithServerMock_TestCase.php';
 
@@ -25,7 +23,7 @@ class ListTubeUsedCommandTest extends WithServerMock_TestCase
         $response = $command->parseResponse($responseLine, $this->_getServerMock());
 
 
-        $this->assertInstanceOf('\Beanie\Response', $response);
+        $this->assertInstanceOf('\Beanie\Command\Response', $response);
         $this->assertEquals(Response::RESPONSE_USING, $response->getName());
         $this->assertEquals($tubeUsed, $response->getData());
         $this->assertEquals($this->_getServerMock(), $response->getServer());

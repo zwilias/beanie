@@ -29,7 +29,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
 
         $this->assertEquals(['test' => $serverMock], $pool->getServers());
-        $this->assertInstanceOf('\Beanie\Server\TubeStatus', $pool->getTubeStatus());
+        $this->assertInstanceOf('\Beanie\Tube\TubeStatus', $pool->getTubeStatus());
     }
 
     /**

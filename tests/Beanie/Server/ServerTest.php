@@ -3,7 +3,7 @@
 
 namespace Beanie\Server;
 
-use Beanie\Response;
+use Beanie\Command\Response;
 
 require_once 'MockNative_TestCase.php';
 
@@ -18,7 +18,7 @@ class ServerTest extends MockNative_TestCase
 
 
         $this->assertEquals('127.0.0.1:11300', (string)$server);
-        $this->assertInstanceOf('\Beanie\Server\TubeStatus', $server->getTubeStatus());
+        $this->assertInstanceOf('\Beanie\Tube\TubeStatus', $server->getTubeStatus());
     }
 
     public function testConstruct_withArgs_usesArgs()

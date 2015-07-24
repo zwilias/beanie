@@ -4,7 +4,7 @@
 namespace Beanie\Exception;
 
 
-use Beanie\Exception;
+
 use Beanie\Server\Server;
 
 class JobTooBigException extends Exception

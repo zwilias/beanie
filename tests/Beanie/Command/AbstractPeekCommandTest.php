@@ -3,7 +3,7 @@
 
 namespace Beanie\Command;
 
-use Beanie\Response;
+
 
 require_once 'WithServerMock_TestCase.php';
 
@@ -45,7 +45,7 @@ class AbstractPeekCommandTest extends WithServerMock_TestCase
         $response = $command->parseResponse($responseLine, $serverMock);
 
 
-        $this->assertInstanceOf('\Beanie\Response', $response);
+        $this->assertInstanceOf('\Beanie\Command\Response', $response);
         $this->assertEquals(Response::RESPONSE_FOUND, $response->getName());
         $this->assertEquals($serverMock, $response->getServer());
         $this->assertEquals([

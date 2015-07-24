@@ -4,9 +4,6 @@
 namespace Beanie\Exception;
 
 
-use Beanie\Command;
-use Beanie\Exception;
-
 class DeadlineSoonException extends AbstractServerCommandException
 {
     const DEFAULT_CODE = 408;

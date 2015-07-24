@@ -3,8 +3,6 @@
 
 namespace Beanie\Command;
 
-use Beanie\Command;
-use Beanie\Response;
 
 require_once 'WithServerMock_TestCase.php';
 
@@ -31,7 +29,7 @@ class TouchCommandTest extends WithServerMock_TestCase
         $response = $touchCommand->parseResponse(Response::RESPONSE_TOUCHED, $this->_getServerMock());
 
 
-        $this->assertInstanceOf('Beanie\Response', $response);
+        $this->assertInstanceOf('Beanie\Command\Response', $response);
         $this->assertEquals(Response::RESPONSE_TOUCHED, $response->getName());
         $this->assertNull($response->getData());
         $this->assertEquals($this->_getServerMock(), $response->getServer());

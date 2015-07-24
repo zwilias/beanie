@@ -4,11 +4,10 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command;
-use Beanie\Exception;
 use Beanie\Exception\DeadlineSoonException;
+use Beanie\Exception\InvalidArgumentException;
 use Beanie\Exception\TimedOutException;
-use Beanie\Response;
+
 use Beanie\Server\Server;
 
 class ReserveCommand extends AbstractCommand
@@ -25,13 +24,13 @@ class ReserveCommand extends AbstractCommand
     /**
      * @param string $mode
      * @param int $timeout
-     * @throws Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($mode = self::MODE_RESERVE, $timeout = 0)
     {
         $validModes = [self::MODE_RESERVE, self::MODE_RESERVE_WITH_TIMEOUT];
         if (!in_array($mode, $validModes)) {
-            throw new Exception\InvalidArgumentException('Can\'t reserve with mode: \'' . $mode . '\'');
+            throw new InvalidArgumentException('Can\'t reserve with mode: \'' . $mode . '\'');
         }
 
         $this->mode = $mode;

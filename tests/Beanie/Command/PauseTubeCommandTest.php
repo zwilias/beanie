@@ -4,8 +4,7 @@
 namespace Beanie\Command;
 
 use Beanie\Beanie;
-use Beanie\Command;
-use Beanie\Response;
+
 
 require_once 'WithServerMock_TestCase.php';
 
@@ -84,7 +83,7 @@ class PauseTubeCommandTest extends WithServerMock_TestCase
         $response = (new PauseTubeCommand(self::TEST_TUBE))->parseResponse(Response::RESPONSE_PAUSED, $this->_getServerMock());
 
 
-        $this->assertInstanceOf('\Beanie\Response', $response);
+        $this->assertInstanceOf('\Beanie\Command\Response', $response);
         $this->assertEquals(Response::RESPONSE_PAUSED, $response->getName());
         $this->assertNull($response->getData());
         $this->assertEquals($this->_getServerMock(), $response->getServer());

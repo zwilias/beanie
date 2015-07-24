@@ -1,10 +1,13 @@
 <?php
 
 
-namespace Beanie;
+namespace Beanie\Command;
 
 
-interface Command
+use Beanie\Command\CommandLineCreator\CommandLineCreator;
+use Beanie\Command\ResponseParser\ResponseParser;
+
+interface Command extends CommandLineCreator, ResponseParser
 {
     const VALID_NAME_REGEX = '/^[A-Za-z0-9+\/;.$_()][A-Za-z0-9+\/;.$_()\-]*$/';
 
@@ -32,19 +35,4 @@ interface Command
     const COMMAND_TOUCH = 'touch';
     const COMMAND_USE = 'use';
     const COMMAND_WATCH = 'watch';
-
-    /**
-     * @return string
-     */
-    function getCommandLine();
-
-    /**
-     * @return bool
-     */
-    function hasData();
-
-    /**
-     * @return string
-     */
-    function getData();
 }

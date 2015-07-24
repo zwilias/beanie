@@ -3,8 +3,7 @@
 
 namespace Beanie\Command;
 
-use Beanie\Command;
-use Beanie\Response;
+
 use Symfony\Component\Yaml\Yaml;
 
 require_once 'WithServerMock_TestCase.php';

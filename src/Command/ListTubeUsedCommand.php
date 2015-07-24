@@ -4,8 +4,6 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command;
-use Beanie\Response;
 use Beanie\Server\Server;
 
 class ListTubeUsedCommand extends AbstractCommand

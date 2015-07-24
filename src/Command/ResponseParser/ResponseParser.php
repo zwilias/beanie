@@ -1,9 +1,10 @@
 <?php
 
 
-namespace Beanie;
+namespace Beanie\Command\ResponseParser;
 
 
+use Beanie\Command\Response;
 use Beanie\Server\Server;
 
 interface ResponseParser
@@ -11,7 +12,7 @@ interface ResponseParser
     /**
      * @param string $responseLine
      * @param Server $server
-     * @return Response
+     * @return \Beanie\Command\Response
      */
     function parseResponse($responseLine, Server $server);
 }

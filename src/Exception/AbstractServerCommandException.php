@@ -4,8 +4,7 @@
 namespace Beanie\Exception;
 
 
-use Beanie\Command;
-use Beanie\Exception;
+use Beanie\Command\Command;
 use Beanie\Server\Server;
 
 abstract class AbstractServerCommandException extends Exception

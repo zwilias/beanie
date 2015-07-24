@@ -4,8 +4,7 @@
 namespace Beanie\Command;
 
 use Beanie\Beanie;
-use Beanie\Command;
-use Beanie\Response;
+
 
 require_once 'WithServerMock_TestCase.php';
 
@@ -64,7 +63,7 @@ class BuryCommandTest extends WithServerMock_TestCase
         $response = (new BuryCommand(self::TEST_ID))->parseResponse(Response::RESPONSE_BURIED, $this->_getServerMock());
 
 
-        $this->assertInstanceOf('\Beanie\Response', $response);
+        $this->assertInstanceOf('\Beanie\Command\Response', $response);
         $this->assertEquals(Response::RESPONSE_BURIED, $response->getName());
         $this->assertNull($response->getData());
         $this->assertEquals($this->_getServerMock(), $response->getServer());

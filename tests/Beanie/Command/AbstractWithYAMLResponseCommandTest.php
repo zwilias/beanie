@@ -5,8 +5,8 @@ namespace Beanie\Command;
 
 require_once 'WithServerMock_TestCase.php';
 
-use Beanie\Exception;
-use Beanie\Response;
+use Beanie\Exception\Exception;
+
 use Symfony\Component\Yaml\Yaml;
 
 class AbstractWithYAMLResponseCommandTest extends WithServerMock_TestCase
@@ -33,7 +33,7 @@ class AbstractWithYAMLResponseCommandTest extends WithServerMock_TestCase
         $response = $command->parseResponse($responseLine, $serverMock);
 
 
-        $this->assertInstanceOf('\Beanie\Response', $response);
+        $this->assertInstanceOf('\Beanie\Command\Response', $response);
         $this->assertEquals(Response::RESPONSE_OK, $response->getName());
         $this->assertEquals($serverMock, $response->getServer());
         $this->assertEquals($testDataRaw, $response->getData());
@@ -55,7 +55,7 @@ class AbstractWithYAMLResponseCommandTest extends WithServerMock_TestCase
         try {
             $command->parseResponse($responseLine, $serverMock);
         } catch (Exception $exception) {
-            $this->assertInstanceOf('\Beanie\Exception', $exception);
+            $this->assertInstanceOf('\Beanie\Exception\Exception', $exception);
             $previous = $exception->getPrevious();
 
             $this->assertInstanceOf('\Symfony\Component\Yaml\Exception\ParseException', $previous);

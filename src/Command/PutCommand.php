@@ -5,11 +5,11 @@ namespace Beanie\Command;
 
 
 use Beanie\Beanie;
-use Beanie\Command;
+
 use Beanie\Exception\DrainingException;
 use Beanie\Exception\ExpectedCRLFException;
 use Beanie\Exception\JobTooBigException;
-use Beanie\Response;
+
 use Beanie\Server\Server;
 
 class PutCommand extends AbstractCommand

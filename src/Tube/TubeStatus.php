@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Beanie\Server;
+namespace Beanie\Tube;
 
 
 use Beanie\Beanie;

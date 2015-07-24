@@ -5,8 +5,8 @@ namespace Beanie\Command;
 
 
 use Beanie\Beanie;
-use Beanie\Command;
-use Beanie\Response;
+
+
 use Beanie\Server\Server;
 
 class KickCommand extends AbstractCommand

@@ -5,9 +5,12 @@ namespace Beanie;
 
 
 use Beanie\Command\PeekReadyCommand;
+use Beanie\Command\Response;
 use Beanie\Exception\NotFoundException;
 use Beanie\Exception\OutOfMemoryException;
-use Beanie\Server\TubeStatus;
+use Beanie\Job\Job;
+use Beanie\Tube\TubeStatus;
+use Beanie\Tube\Tube;
 
 class TubeTest extends \PHPUnit_Framework_TestCase
 {
@@ -69,7 +72,7 @@ class TubeTest extends \PHPUnit_Framework_TestCase
         $job = $tube->peekReady();
 
 
-        $this->assertInstanceOf('\Beanie\Job', $job);
+        $this->assertInstanceOf('\Beanie\Job\Job', $job);
         $this->assertEquals(123, $job->getId());
         $this->assertEquals('test', $job->getData());
         $this->assertEquals(Job::STATE_UNKNOWN, $job->getState());
@@ -130,7 +133,7 @@ class TubeTest extends \PHPUnit_Framework_TestCase
         $job = $tube->peekBuried();
 
 
-        $this->assertInstanceOf('\Beanie\Job', $job);
+        $this->assertInstanceOf('\Beanie\Job\Job', $job);
         $this->assertEquals(123, $job->getId());
         $this->assertEquals('test', $job->getData());
         $this->assertEquals(Job::STATE_UNKNOWN, $job->getState());
@@ -153,7 +156,7 @@ class TubeTest extends \PHPUnit_Framework_TestCase
         $job = $tube->peekDelayed();
 
 
-        $this->assertInstanceOf('\Beanie\Job', $job);
+        $this->assertInstanceOf('\Beanie\Job\Job', $job);
         $this->assertEquals(123, $job->getId());
         $this->assertEquals('test', $job->getData());
         $this->assertEquals(Job::STATE_UNKNOWN, $job->getState());

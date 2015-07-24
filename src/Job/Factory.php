@@ -5,8 +5,8 @@ namespace Beanie\Job;
 
 
 use Beanie\Exception\InvalidArgumentException;
-use Beanie\Job;
-use Beanie\Response;
+
+use Beanie\Command\Response;
 
 class Factory
 {
@@ -17,7 +17,7 @@ class Factory
     ];
 
     /**
-     * @param Response $response
+     * @param \Beanie\Command\Response $response
      * @return Job
      * @throws InvalidArgumentException
      */

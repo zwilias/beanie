@@ -5,7 +5,6 @@ namespace Beanie\Command;
 
 require_once 'WithServerMock_TestCase.php';
 
-use Beanie\Response;
 
 class AbstractCommandTest extends WithServerMock_TestCase
 {

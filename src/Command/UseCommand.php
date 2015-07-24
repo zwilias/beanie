@@ -4,9 +4,6 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command;
-use Beanie\Response;
-
 class UseCommand extends AbstractTubeCommand
 {
     /**
