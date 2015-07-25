@@ -90,7 +90,7 @@ class Worker implements TubeAware
         $command = Command::COMMAND_RESERVE;
         $arguments = [];
 
-        if (! is_null($timeout)) {
+        if (!is_null($timeout)) {
             $command = Command::COMMAND_RESERVE_WITH_TIMEOUT;
             $arguments[] = $timeout;
         }
