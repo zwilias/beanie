@@ -101,6 +101,24 @@ class TubeStatus
      * @param int $mode
      * @return \Beanie\Command\Command[]
      */
+    public function transformTo(TubeStatus $goal, $mode = self::TRANSFORM_BOTH)
+    {
+        if ($mode & self::TRANSFORM_USE) {
+            $this->setCurrentTube($goal->getCurrentTube());
+        }
+
+        if ($mode & self::TRANSFORM_WATCHED) {
+            $this->setWatchedTubes($goal->getWatchedTubes());
+        }
+
+        return $this->calculateTransformationTo($goal, $mode);
+    }
+
+    /**
+     * @param TubeStatus $goal
+     * @param int $mode
+     * @return \Beanie\Command\Command[]
+     */
     public function calculateTransformationTo(TubeStatus $goal, $mode = self::TRANSFORM_BOTH)
     {
         $commands = [];

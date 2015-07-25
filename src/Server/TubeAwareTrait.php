@@ -39,17 +39,9 @@ trait TubeAwareTrait
     public function transformTubeStatusTo(TubeStatus $otherTube, $mode = TubeStatus::TRANSFORM_BOTH)
     {
         foreach (
-            $this->getTubeStatus()->calculateTransformationTo($otherTube, $mode) as $transformation
+            $this->getTubeStatus()->transformTo($otherTube, $mode) as $transformation
         ) {
             $this->dispatchCommand($transformation);
-        }
-
-        if ($mode & TubeStatus::TRANSFORM_USE) {
-            $this->getTubeStatus()->setCurrentTube($otherTube->getCurrentTube());
-        }
-
-        if ($mode & TubeStatus::TRANSFORM_WATCHED) {
-            $this->getTubeStatus()->setWatchedTubes($otherTube->getWatchedTubes());
         }
 
         return $this;

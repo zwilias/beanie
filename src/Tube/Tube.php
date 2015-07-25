@@ -57,11 +57,7 @@ class Tube implements TubeAware
      */
     public function transformTubeStatusTo(TubeStatus $tubeStatus, $mode = TubeStatus::TRANSFORM_USE)
     {
-        if ($mode & TubeStatus::TRANSFORM_USE) {
-            $this->getTubeStatus()->setCurrentTube(
-                $tubeStatus->getCurrentTube()
-            );
-        }
+        $this->getTubeStatus()->transformTo($tubeStatus, $mode);
     }
 
     /**

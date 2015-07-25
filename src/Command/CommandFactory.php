@@ -215,7 +215,7 @@ class CommandFactory
     ];
 
     /**
-     * @return static
+     * @return CommandFactory
      */
     public static function instance()
     {
