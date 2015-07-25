@@ -5,6 +5,7 @@ namespace Beanie\Server;
 
 use Beanie\Command\GenericCommand;
 use Beanie\Command\Response;
+use Beanie\Manager;
 use Beanie\Tube\TubeStatus;
 
 require_once 'MockNative_TestCase.php';
@@ -34,6 +35,18 @@ class ServerTest extends MockNative_TestCase
 
 
         $this->assertEquals($hostName . ':' . $port, (string)$server);
+    }
+
+    public function testGetManager_returnsManager()
+    {
+        $this->_socketCreateSuccess();
+
+
+        $server = new Server();
+        $manager = $server->getManager();
+
+
+        $this->assertInstanceOf(Manager::class, $manager);
     }
 
     /**

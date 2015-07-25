@@ -4,8 +4,11 @@
 namespace Beanie\Job;
 
 
+use Beanie\Command\Command;
 use Beanie\Command\Response;
 use Beanie\Exception\InvalidArgumentException;
+use Beanie\Exception\NotFoundException;
+use Beanie\Server\Server;
 
 class JobFactory
 {
@@ -40,7 +43,7 @@ class JobFactory
      * @return Job
      * @throws InvalidArgumentException
      */
-    public function createFrom(Response $response)
+    public function createFromResponse(Response $response)
     {
         $state = isset(self::$responseToStateMap[$response->getName()])
             ? self::$responseToStateMap[$response->getName()]
@@ -49,6 +52,20 @@ class JobFactory
         $this->validateResponseData($response->getData());
 
         return new Job($response->getData()['id'], $response->getData()['data'], $response->getServer(), $state);
+    }
+
+    /**
+     * @param Command $command
+     * @param Server $server
+     * @return Job|null
+     */
+    public function createFromCommand(Command $command, Server $server)
+    {
+        try {
+            return $this->createFromResponse($server->dispatchCommand($command));
+        } catch (NotFoundException $exception) {
+            return null;
+        }
     }
 
     /**

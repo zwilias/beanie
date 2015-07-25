@@ -3,12 +3,15 @@
 
 namespace Beanie\Job;
 
+require_once __DIR__ . '/../WithServerMock_TestCase.php';
 
 
+use Beanie\Command\Command;
+use Beanie\Command\CommandFactory;
 use Beanie\Command\Response;
-use Beanie\Server\Server;
+use Beanie\WithServerMock_TestCase;
 
-class JobFactoryTest extends \PHPUnit_Framework_TestCase
+class JobFactoryTest extends WithServerMock_TestCase
 {
     protected static $responseToStateMap = [
         Response::RESPONSE_INSERTED => Job::STATE_RELEASED,
@@ -36,12 +39,58 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $JobFactory = new JobFactory();
 
 
-        $job = $JobFactory->createFrom($response);
+        $job = $JobFactory->createFromResponse($response);
 
 
         $this->assertEquals($expectedState, $job->getState());
         $this->assertEquals(self::TEST_ID, $job->getId());
         $this->assertEquals(self::TEST_DATA, $job->getData());
+    }
+
+    public function testCreateFromCommand_createsJob()
+    {
+        $serverMock = $this->getServerMock(['dispatchCommand']);
+
+        $command = CommandFactory::instance()->create(Command::COMMAND_PEEK, [self::TEST_ID]);
+
+        $response = new Response(Response::RESPONSE_FOUND, [
+            'id' => self::TEST_ID,
+            'data' => self::TEST_DATA
+        ], $serverMock);
+
+        $serverMock
+            ->expects($this->once())
+            ->method('dispatchCommand')
+            ->with($this->callback(function (Command $command) {
+                return $command->getCommandLine() == sprintf('%s %s', Command::COMMAND_PEEK, self::TEST_ID);
+            }))
+            ->willReturn($response);
+
+        $JobFactory = new JobFactory();
+
+
+        $job = $JobFactory->createFromCommand($command, $serverMock);
+
+
+        $this->assertEquals(Job::STATE_UNKNOWN, $job->getState());
+        $this->assertEquals(self::TEST_ID, $job->getId());
+        $this->assertEquals(self::TEST_DATA, $job->getData());
+    }
+
+    public function testUnsetInstance_unsetsInstance()
+    {
+        $instance = JobFactory::instance();
+        JobFactory::unsetInstance();
+
+        $this->assertNotSame($instance, JobFactory::instance());
+    }
+
+    public function testInstance_consecutiveCalls_returnSame()
+    {
+        $instance = JobFactory::instance();
+
+
+        $this->assertSame($instance, JobFactory::instance());
     }
 
     /**
@@ -56,7 +105,7 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $JobFactory = new JobFactory();
 
 
-        $JobFactory->createFrom($response);
+        $JobFactory->createFromResponse($response);
     }
 
     /**
@@ -71,7 +120,7 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $JobFactory = new JobFactory();
 
 
-        $JobFactory->createFrom($response);
+        $JobFactory->createFromResponse($response);
     }
     /**
      * @return array
@@ -85,16 +134,5 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         }
 
         return $result;
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Server
-     */
-    public function getServerMock()
-    {
-        return $this
-            ->getMockBuilder(Server::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }

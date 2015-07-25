@@ -97,12 +97,10 @@ class Tube implements TubeAware
     {
         $this->sync();
 
-        try {
-            $response = $this->server->dispatchCommand($command);
-            return $this->jobFactory->createFrom($response);
-        } catch (NotFoundException $notFound) {
-            return null;
-        }
+        return $this->jobFactory->createFromCommand(
+            $command,
+            $this->server
+        );
     }
 
     protected function sync()

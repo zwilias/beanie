@@ -6,7 +6,6 @@ namespace Beanie;
 
 use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
-use Beanie\Exception\NotFoundException;
 use Beanie\Job\JobFactory;
 use Beanie\Server\Server;
 use Beanie\Tube\Tube;
@@ -48,15 +47,10 @@ class Manager
      */
     public function peek($jobId)
     {
-        try {
-            return $this->jobFactory->createFrom(
-                $this->server->dispatchCommand(
-                    $this->commandFactory->create(Command::COMMAND_PEEK, [$jobId])
-                )
-            );
-        } catch (NotFoundException $exception) {
-            return null;
-        }
+        return $this->jobFactory->createFromCommand(
+            $this->commandFactory->create(Command::COMMAND_PEEK, [$jobId]),
+            $this->server
+        );
     }
 
     /**
@@ -70,8 +64,7 @@ class Manager
         foreach (
             $this->server->dispatchCommand(
                 $this->commandFactory->create(Command::COMMAND_LIST_TUBES)
-            )->getData()
-            as $tubeName
+            )->getData() as $tubeName
         ) {
             $tubes[] = new Tube($tubeName, $this->server);
         }
