@@ -3,7 +3,9 @@
 
 namespace Beanie\Server;
 
+use Beanie\Command\GenericCommand;
 use Beanie\Command\Response;
+use Beanie\Tube\TubeStatus;
 
 require_once 'MockNative_TestCase.php';
 
@@ -18,7 +20,7 @@ class ServerTest extends MockNative_TestCase
 
 
         $this->assertEquals('127.0.0.1:11300', (string)$server);
-        $this->assertInstanceOf('\Beanie\Tube\TubeStatus', $server->getTubeStatus());
+        $this->assertInstanceOf(TubeStatus::class, $server->getTubeStatus());
     }
 
     public function testConstruct_withArgs_usesArgs()
@@ -61,7 +63,7 @@ class ServerTest extends MockNative_TestCase
     ) {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Socket $socket */
         $socket = $this
-            ->getMockBuilder('\Beanie\Server\Socket')
+            ->getMockBuilder(Socket::class)
             ->disableOriginalConstructor()
             ->setMethods(['isConnected', 'connect', 'readData'])
             ->getMock()
@@ -153,7 +155,7 @@ class ServerTest extends MockNative_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\Command $command */
         $command = $this
-            ->getMockBuilder('\Beanie\Command\GenericCommand')
+            ->getMockBuilder(GenericCommand::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCommandLine', 'parseResponse', 'hasData'])
             ->getMockForAbstractClass()
@@ -180,7 +182,7 @@ class ServerTest extends MockNative_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Socket $socket */
         $socket = $this
-            ->getMockBuilder('\Beanie\Server\Socket')
+            ->getMockBuilder(Socket::class)
             ->disableOriginalConstructor()
             ->setMethods(['isConnected', 'readLine', 'write'])
             ->getMock()
@@ -226,7 +228,7 @@ class ServerTest extends MockNative_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\Command $command */
         $command = $this
-            ->getMockBuilder('\Beanie\Command\GenericCommand')
+            ->getMockBuilder(GenericCommand::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCommandLine', 'parseResponse', 'hasData', 'getData'])
             ->getMockForAbstractClass()
@@ -259,7 +261,7 @@ class ServerTest extends MockNative_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Socket $socket */
         $socket = $this
-            ->getMockBuilder('\Beanie\Server\Socket')
+            ->getMockBuilder(Socket::class)
             ->disableOriginalConstructor()
             ->setMethods(['isConnected', 'readLine', 'write'])
             ->getMock()

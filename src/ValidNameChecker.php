@@ -12,6 +12,7 @@ class ValidNameChecker
 
     /**
      * @param string $name
+     * @return bool
      * @throws InvalidNameException
      */
     public function ensureValidName($name)
@@ -25,6 +26,8 @@ class ValidNameChecker
                 'Invalid name: \'%s\'', $this->asString($name)
             ));
         }
+
+        return true;
     }
 
     /**

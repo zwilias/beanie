@@ -15,6 +15,9 @@ use Beanie\Exception\NotFoundException;
 use Beanie\Exception\UnexpectedResponseException;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * @coversNothing
+ */
 class AllCommandsTest extends WithServerMock_TestCase
 {
     const TEST_ID = 999;
@@ -89,7 +92,7 @@ class AllCommandsTest extends WithServerMock_TestCase
             ->parseResponse(Response::RESPONSE_BURIED, $this->_getServerMock());
 
 
-        $this->assertInstanceOf('\Beanie\Command\Response', $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::RESPONSE_BURIED, $response->getName());
         $this->assertNull($response->getData());
         $this->assertEquals($this->_getServerMock(), $response->getServer());
@@ -220,7 +223,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $response = $command->parseResponse($responseLine, $this->_getServerMock());
 
 
-        $this->assertInstanceOf('\Beanie\Command\Response', $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::RESPONSE_KICKED, $response->getName());
         $this->assertEquals($kicked, $response->getData());
         $this->assertEquals($this->_getServerMock(), $response->getServer());
@@ -311,7 +314,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $response = $command->parseResponse($responseLine, $this->_getServerMock());
 
 
-        $this->assertInstanceOf('\Beanie\Command\Response', $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::RESPONSE_USING, $response->getName());
         $this->assertEquals($tubeUsed, $response->getData());
         $this->assertEquals($this->_getServerMock(), $response->getServer());
@@ -340,7 +343,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $command = $this->commandFactory->create(Command::COMMAND_PAUSE_TUBE, [$tubeName]);
 
 
-        $this->assertInstanceOf('\Beanie\Command\Command', $command);
+        $this->assertInstanceOf(Command::class, $command);
     }
 
     /**
@@ -397,7 +400,7 @@ class AllCommandsTest extends WithServerMock_TestCase
             ->parseResponse(Response::RESPONSE_PAUSED, $this->_getServerMock());
 
 
-        $this->assertInstanceOf('\Beanie\Command\Response', $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::RESPONSE_PAUSED, $response->getName());
         $this->assertNull($response->getData());
         $this->assertEquals($this->_getServerMock(), $response->getServer());
@@ -439,7 +442,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $response = $command->parseResponse($responseLine, $serverMock);
 
 
-        $this->assertInstanceOf('\Beanie\Command\Response', $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::RESPONSE_FOUND, $response->getName());
         $this->assertEquals($serverMock, $response->getServer());
         $this->assertEquals([
@@ -701,12 +704,12 @@ class AllCommandsTest extends WithServerMock_TestCase
         return [
             'not found' => [
                 Response::FAILURE_NOT_FOUND,
-                '\Beanie\Exception\NotFoundException',
+                NotFoundException::class,
                 NotFoundException::DEFAULT_CODE
             ],
             'unexpected' => [
                 'WHAT',
-                '\Beanie\Exception\UnexpectedResponseException',
+                UnexpectedResponseException::class,
                 UnexpectedResponseException::DEFAULT_CODE
             ]
         ];
@@ -916,7 +919,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $command = $this->commandFactory->create(Command::COMMAND_STATS_TUBE, [$tubeName]);
 
 
-        $this->assertInstanceOf('\Beanie\Command\Command', $command);
+        $this->assertInstanceOf(Command::class, $command);
     }
 
     public function testStatsTubeCommand_GetCommandLine_correctFormat()
@@ -1069,17 +1072,17 @@ class AllCommandsTest extends WithServerMock_TestCase
         return [
             'draining' => [
                 Response::FAILURE_DRAINING,
-                '\Beanie\Exception\DrainingException',
+                DrainingException::class,
                 DrainingException::DEFAULT_CODE
             ],
             'job too big' => [
                 Response::FAILURE_JOB_TOO_BIG,
-                '\Beanie\Exception\JobTooBigEXception',
+                JobTooBigEXception::class,
                 JobTooBigException::DEFAULT_CODE
             ],
             'expected crlf' => [
                 Response::FAILURE_EXPECTED_CRLF,
-                '\Beanie\Exception\ExpectedCRLFException',
+                ExpectedCRLFException::class,
                 ExpectedCRLFException::DEFAULT_CODE
             ]
         ];

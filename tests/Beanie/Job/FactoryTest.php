@@ -6,6 +6,7 @@ namespace Beanie\Job;
 
 
 use Beanie\Command\Response;
+use Beanie\Server\Server;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,7 +93,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function getServerMock()
     {
         return $this
-            ->getMockBuilder('\Beanie\Server\Server')
+            ->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

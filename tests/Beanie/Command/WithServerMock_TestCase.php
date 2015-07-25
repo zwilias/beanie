@@ -4,6 +4,8 @@
 namespace Beanie\Command;
 
 
+use Beanie\Server\Server;
+
 class WithServerMock_TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -12,7 +14,7 @@ class WithServerMock_TestCase extends \PHPUnit_Framework_TestCase
     protected function _getServerMock()
     {
         return $this
-            ->getMockBuilder('\Beanie\Server\Server')
+            ->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
             ->setMethods(['__toString', 'readData'])
             ->getMock()

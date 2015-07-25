@@ -17,4 +17,14 @@ class GenericCommandLineCreatorTest extends \PHPUnit_Framework_TestCase
 
         new GenericCommandLineCreator('test', [], $defaults);
     }
+
+    public function testCreate_hasNoData()
+    {
+        $commandLineCreator = new GenericCommandLineCreator('test', []);
+
+
+        $this->assertFalse($commandLineCreator->hasData());
+        $this->assertNull($commandLineCreator->getData());
+        $this->assertEquals('test', $commandLineCreator->getCommandLine());
+    }
 }

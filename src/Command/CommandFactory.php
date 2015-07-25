@@ -226,6 +226,11 @@ class CommandFactory
         return self::$instance;
     }
 
+    public static function unsetInstance()
+    {
+        self::$instance = null;
+    }
+
     /**
      * @param string $commandName
      * @param array $arguments

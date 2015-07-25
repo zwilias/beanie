@@ -7,6 +7,7 @@ namespace Beanie\Server;
 use Beanie\Beanie;
 use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
+use Beanie\Tube\TubeStatus;
 
 class PoolTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +22,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     public function testConstruct_withServers()
     {
         $serverMock = $this
-            ->getMockBuilder('\Beanie\Server\Server')
+            ->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
             ->setMethods(['__toString'])
             ->getMock()
@@ -38,7 +39,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
 
         $this->assertEquals(['test' => $serverMock], $pool->getServers());
-        $this->assertInstanceOf('\Beanie\Tube\TubeStatus', $pool->getTubeStatus());
+        $this->assertInstanceOf(TubeStatus::class, $pool->getTubeStatus());
     }
 
     /**
@@ -52,7 +53,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     public function testGetServer_returnsServer()
     {
         $serverMockBuilder = $this
-            ->getMockBuilder('\Beanie\Server\Server')
+            ->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
             ->setMethods(['__toString'])
         ;
@@ -86,7 +87,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     public function testGetServer_unknownName_throwsException()
     {
         $serverMock = $this
-            ->getMockBuilder('\Beanie\Server\Server')
+            ->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
             ->setMethods(['__toString'])
             ->getMock()
@@ -111,7 +112,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $testResponse = 'test value';
 
         $tubeStatusMock = $this
-            ->getMockBuilder('\Beanie\Server\TubeStatus')
+            ->getMockBuilder(TubeStatus::class)
             ->setMethods(['calculateTransformationTo', 'setCurrentTube', 'setWatchedTubes'])
             ->getMock()
         ;
@@ -137,7 +138,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         ;
 
         $serverMock = $this
-            ->getMockBuilder('\Beanie\Server\Server')
+            ->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
             ->setMethods(['__toString', 'getTubeStatus', 'dispatchCommand'])
             ->getMock()
@@ -175,7 +176,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $command = $this->commandFactory->create(Command::COMMAND_USE, ['test']);
 
         $tubeStatusMock = $this
-            ->getMockBuilder('\Beanie\Server\TubeStatus')
+            ->getMockBuilder(TubeStatus::class)
             ->setMethods(['calculateTransformationTo', 'setCurrentTube', 'setWatchedTubes'])
             ->getMock()
         ;
@@ -201,7 +202,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         ;
 
         $serverMock = $this
-            ->getMockBuilder('\Beanie\Server\Server')
+            ->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
             ->setMethods(['__toString', 'getTubeStatus', 'dispatchCommand'])
             ->getMock()
@@ -228,7 +229,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Pool $poolStubbedRandom */
-        $poolStubbedRandom = $this->getMockBuilder('\Beanie\Server\Pool')
+        $poolStubbedRandom = $this->getMockBuilder(Pool::class)
             ->setMethods(['getRandomServer'])
             ->setConstructorArgs([[$serverMock]])
             ->getMock()

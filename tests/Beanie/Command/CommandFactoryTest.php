@@ -10,20 +10,18 @@ class CommandFactoryTest extends WithServerMock_TestCase
     const TEST_ID = 999;
 
     /**
-     * @var CommandFactory
-     */
-    private $commandFactory;
-
-    public function setUp()
-    {
-        $this->commandFactory = CommandFactory::instance();
-    }
-
-    /**
      * @expectedException \Beanie\Exception\InvalidArgumentException
      */
-    public function testcreate_UnknownCommand_ThrowsException()
+    public function testCreate_UnknownCommand_ThrowsException()
     {
-        $this->commandFactory->create('UNKNOWN');
+        CommandFactory::instance()->create('UNKNOWN');
+    }
+
+    public function testInstance_returnsSame()
+    {
+        CommandFactory::unsetInstance();
+        $firstInstance = CommandFactory::instance();
+
+        $this->assertSame($firstInstance, CommandFactory::instance());
     }
 }
