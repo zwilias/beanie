@@ -25,6 +25,4 @@ trait FactoryTrait
     {
         self::$instance = null;
     }
-
-    public function __construct() {}
 }
