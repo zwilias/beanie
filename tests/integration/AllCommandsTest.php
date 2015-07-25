@@ -1,7 +1,7 @@
 <?php
 
 
-require_once __DIR__  . '/Beanie/WithServerMock_TestCase.php';
+require_once __DIR__  . '/../Beanie/WithServerMock_TestCase.php';
 
 use Beanie\Beanie;
 use Beanie\Command\Command;

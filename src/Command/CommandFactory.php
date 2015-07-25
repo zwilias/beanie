@@ -22,11 +22,11 @@ use Beanie\Exception\JobTooBigException;
 use Beanie\Exception\NotFoundException;
 use Beanie\Exception\NotIgnoredException;
 use Beanie\Exception\TimedOutException;
+use Beanie\Util\FactoryTrait;
 
 class CommandFactory
 {
-    /** @var CommandFactory */
-    private static $instance;
+    use FactoryTrait;
 
     protected static $defaultCommandStructure = [
         'responseParser' => GenericResponseParser::class,
@@ -213,23 +213,6 @@ class CommandFactory
         Response::FAILURE_DEADLINE_SOON => DeadlineSoonException::class,
         Response::FAILURE_TIMED_OUT => TimedOutException::class
     ];
-
-    /**
-     * @return CommandFactory
-     */
-    public static function instance()
-    {
-        if (!isset(self::$instance)) {
-            self::$instance = new static();
-        }
-
-        return self::$instance;
-    }
-
-    public static function unsetInstance()
-    {
-        self::$instance = null;
-    }
 
     /**
      * @param string $commandName
