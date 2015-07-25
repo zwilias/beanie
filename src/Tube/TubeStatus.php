@@ -32,7 +32,7 @@ class TubeStatus
 
     public function __construct()
     {
-        $this->commandFactory = new CommandFactory();
+        $this->commandFactory = CommandFactory::instance();
     }
 
     /**
@@ -113,7 +113,7 @@ class TubeStatus
             $mode & self::TRANSFORM_USE &&
             $goal->getCurrentTube() !== $this->currentTube
         ) {
-            $commands[] = $this->commandFactory->createCommand(Command::COMMAND_USE, [$goal->getCurrentTube()]);
+            $commands[] = $this->commandFactory->create(Command::COMMAND_USE, [$goal->getCurrentTube()]);
         }
 
         return $commands;
@@ -143,7 +143,7 @@ class TubeStatus
         $commands = [];
 
         foreach (array_diff($tubes, $otherTubes) as $tube) {
-            $commands[] = $this->commandFactory->createCommand($command, [$tube]);
+            $commands[] = $this->commandFactory->create($command, [$tube]);
         }
 
         return $commands;

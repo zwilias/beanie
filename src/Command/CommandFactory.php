@@ -25,6 +25,9 @@ use Beanie\Exception\TimedOutException;
 
 class CommandFactory
 {
+    /** @var CommandFactory */
+    private static $instance;
+
     protected static $defaultCommandStructure = [
         'responseParser' => GenericResponseParser::class,
         'acceptableResponses' => [],
@@ -212,12 +215,24 @@ class CommandFactory
     ];
 
     /**
+     * @return static
+     */
+    public static function instance()
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new static();
+        }
+
+        return self::$instance;
+    }
+
+    /**
      * @param string $commandName
      * @param array $arguments
      * @return GenericCommand
      * @throws InvalidArgumentException
      */
-    public function createCommand($commandName, array $arguments = [])
+    public function create($commandName, array $arguments = [])
     {
         if (!isset(self::$commandStructureMap[$commandName])) {
             throw new InvalidArgumentException('Could not create Command for \'' . $commandName . '\'');
@@ -226,7 +241,7 @@ class CommandFactory
         $commandStructure = array_merge(self::$defaultCommandStructure, self::$commandStructureMap[$commandName]);
 
         return new GenericCommand(
-            $this->createCommandLineCreator($commandStructure, $commandName, $arguments),
+            $this->createLineCreator($commandStructure, $commandName, $arguments),
             $this->createResponseParser($commandStructure)
         );
     }
@@ -252,7 +267,7 @@ class CommandFactory
      * @param array $arguments
      * @return CommandLineCreator
      */
-    private function createCommandLineCreator($commandStructure, $commandName, $arguments)
+    private function createLineCreator($commandStructure, $commandName, $arguments)
     {
         return new $commandStructure['commandLineCreator'](
             $commandName, $arguments, $commandStructure['argumentDefaults']

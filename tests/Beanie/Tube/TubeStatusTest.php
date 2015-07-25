@@ -137,7 +137,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
 
     public function transformCommandsProvider()
     {
-        $commandFactory = new CommandFactory();
+        $commandFactory = CommandFactory::instance();
 
         return [
             'identical' => [
@@ -155,11 +155,11 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['2only1', 'shared1', 'shared2', '2only2'],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    $commandFactory->createCommand(Command::COMMAND_IGNORE, ['1only1']),
-                    $commandFactory->createCommand(Command::COMMAND_IGNORE, ['1only2']),
-                    $commandFactory->createCommand(Command::COMMAND_IGNORE, ['1only3']),
-                    $commandFactory->createCommand(Command::COMMAND_WATCH, ['2only1']),
-                    $commandFactory->createCommand(Command::COMMAND_WATCH, ['2only2'])
+                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only1']),
+                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only2']),
+                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only3']),
+                    $commandFactory->create(Command::COMMAND_WATCH, ['2only1']),
+                    $commandFactory->create(Command::COMMAND_WATCH, ['2only2'])
                 ]
             ],
             'only-additions' => [
@@ -169,8 +169,8 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['2only1', 'shared1', 'shared2', '2only2'],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    $commandFactory->createCommand(Command::COMMAND_WATCH, ['2only1']),
-                    $commandFactory->createCommand(Command::COMMAND_WATCH, ['2only2'])
+                    $commandFactory->create(Command::COMMAND_WATCH, ['2only1']),
+                    $commandFactory->create(Command::COMMAND_WATCH, ['2only2'])
                 ]
             ],
             'only-removals' => [
@@ -180,9 +180,9 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['shared1', 'shared2'],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    $commandFactory->createCommand(Command::COMMAND_IGNORE, ['1only1']),
-                    $commandFactory->createCommand(Command::COMMAND_IGNORE, ['1only2']),
-                    $commandFactory->createCommand(Command::COMMAND_IGNORE, ['1only3'])
+                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only1']),
+                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only2']),
+                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only3'])
                 ]
             ],
             'different-use' => [
@@ -192,7 +192,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 [Beanie::DEFAULT_TUBE],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    $commandFactory->createCommand(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE])
+                    $commandFactory->create(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE])
                 ]
             ],
             'different-use-ignored' => [
@@ -218,9 +218,9 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['2only1', 'shared1', 'shared2', '2only2'],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    $commandFactory->createCommand(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE]),
-                    $commandFactory->createCommand(Command::COMMAND_WATCH, ['2only1']),
-                    $commandFactory->createCommand(Command::COMMAND_WATCH, ['2only2'])
+                    $commandFactory->create(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE]),
+                    $commandFactory->create(Command::COMMAND_WATCH, ['2only1']),
+                    $commandFactory->create(Command::COMMAND_WATCH, ['2only2'])
                 ]
             ],
             'all-different-only-use' => [
@@ -230,7 +230,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['2only1', 'shared1', 'shared2', '2only2'],
                 TubeStatus::TRANSFORM_USE,
                 [
-                    $commandFactory->createCommand(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE])
+                    $commandFactory->create(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE])
                 ]
             ],
             'all-different-only-watched' => [
@@ -240,8 +240,8 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['2only1', 'shared1', 'shared2', '2only2'],
                 TubeStatus::TRANSFORM_WATCHED,
                 [
-                    $commandFactory->createCommand(Command::COMMAND_WATCH, ['2only1']),
-                    $commandFactory->createCommand(Command::COMMAND_WATCH, ['2only2'])
+                    $commandFactory->create(Command::COMMAND_WATCH, ['2only1']),
+                    $commandFactory->create(Command::COMMAND_WATCH, ['2only2'])
                 ]
             ]
         ];

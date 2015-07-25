@@ -41,7 +41,7 @@ class Tube implements TubeAware
         $this->server = $server;
 
         $this->jobFactory = $jobFactory ?: new Factory();
-        $this->commandFactory = new CommandFactory();
+        $this->commandFactory = CommandFactory::instance();
     }
 
     /**
@@ -69,7 +69,7 @@ class Tube implements TubeAware
      */
     public function peekReady()
     {
-        return $this->peek($this->commandFactory->createCommand(Command::COMMAND_PEEK_READY));
+        return $this->peek($this->commandFactory->create(Command::COMMAND_PEEK_READY));
     }
 
     /**
@@ -77,7 +77,7 @@ class Tube implements TubeAware
      */
     public function peekDelayed()
     {
-        return $this->peek($this->commandFactory->createCommand(Command::COMMAND_PEEK_DELAYED));
+        return $this->peek($this->commandFactory->create(Command::COMMAND_PEEK_DELAYED));
     }
 
     /**
@@ -85,7 +85,7 @@ class Tube implements TubeAware
      */
     public function peekBuried()
     {
-        return $this->peek($this->commandFactory->createCommand(Command::COMMAND_PEEK_BURIED));
+        return $this->peek($this->commandFactory->create(Command::COMMAND_PEEK_BURIED));
     }
 
     /**
@@ -124,7 +124,7 @@ class Tube implements TubeAware
         $this->sync();
 
         return (int) $this->server->dispatchCommand(
-            $this->commandFactory->createCommand(Command::COMMAND_KICK, [$howMany])
+            $this->commandFactory->create(Command::COMMAND_KICK, [$howMany])
         )->getData();
     }
 
@@ -139,7 +139,7 @@ class Tube implements TubeAware
         return (array) $this
             ->server
             ->dispatchCommand(
-                $this->commandFactory->createCommand(Command::COMMAND_STATS_TUBE, [
+                $this->commandFactory->create(Command::COMMAND_STATS_TUBE, [
                     $this->getTubeStatus()->getCurrentTube()
                 ])
             )
@@ -162,7 +162,7 @@ class Tube implements TubeAware
 
         return $this->server
             ->dispatchCommand(
-                $this->commandFactory->createCommand(Command::COMMAND_PAUSE_TUBE, [
+                $this->commandFactory->create(Command::COMMAND_PAUSE_TUBE, [
                     $this->getTubeStatus()->getCurrentTube()
                 ])
             )

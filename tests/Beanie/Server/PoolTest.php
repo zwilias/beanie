@@ -15,7 +15,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->commandFactory = new CommandFactory();
+        $this->commandFactory = CommandFactory::instance();
     }
 
     public function testConstruct_withServers()
@@ -107,7 +107,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchCommand_synchronizesTubeStatusAndDispatches()
     {
-        $command = $this->commandFactory->createCommand(Command::COMMAND_USE, ['test']);
+        $command = $this->commandFactory->create(Command::COMMAND_USE, ['test']);
         $testResponse = 'test value';
 
         $tubeStatusMock = $this
@@ -172,7 +172,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchCommand_picksRandomServer()
     {
-        $command = $this->commandFactory->createCommand(Command::COMMAND_USE, ['test']);
+        $command = $this->commandFactory->create(Command::COMMAND_USE, ['test']);
 
         $tubeStatusMock = $this
             ->getMockBuilder('\Beanie\Server\TubeStatus')
