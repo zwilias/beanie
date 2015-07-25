@@ -14,6 +14,7 @@ use Beanie\WithServerMock_TestCase;
 class JobFactoryTest extends WithServerMock_TestCase
 {
     protected static $responseToStateMap = [
+        Response::RESPONSE_RESERVED => Job::STATE_RESERVED,
         Response::RESPONSE_INSERTED => Job::STATE_RELEASED,
         Response::RESPONSE_RELEASED => Job::STATE_RELEASED,
         Response::RESPONSE_BURIED => Job::STATE_BURIED,
