@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Beanie\Command;
+namespace Beanie;
 
 
 use Beanie\Server\Server;
@@ -9,14 +9,17 @@ use Beanie\Server\Server;
 class WithServerMock_TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Beanie\Server\Server
+     * @param array $extraMethods
+     * @return Server|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getServerMock()
+    protected function getServerMock($extraMethods = [])
     {
+        $methods = array_merge(['__toString', 'readData'], $extraMethods);
+
         return $this
             ->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__toString', 'readData'])
+            ->setMethods($methods)
             ->getMock()
         ;
     }
@@ -28,7 +31,7 @@ class WithServerMock_TestCase extends \PHPUnit_Framework_TestCase
      */
     protected function _getServerReturningYAMLData($data)
     {
-        $serverMock = $this->_getServerMock();
+        $serverMock = $this->getServerMock();
         $serverMock->expects($this->once())
             ->method('readData')
             ->with(strlen($data))

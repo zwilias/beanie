@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Beanie;
+namespace Beanie\Tube;
 
 
 class ValidNameCheckerTest extends \PHPUnit_Framework_TestCase

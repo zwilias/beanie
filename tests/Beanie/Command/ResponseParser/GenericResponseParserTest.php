@@ -3,11 +3,11 @@
 
 namespace Beanie\Command\ResponseParser;
 
-require_once __DIR__ . '/../WithServerMock_TestCase.php';
+require_once __DIR__ . '/../../WithServerMock_TestCase.php';
 
 use Beanie\Command\Response;
-use Beanie\Command\WithServerMock_TestCase;
 use Beanie\Exception\DrainingException;
+use Beanie\WithServerMock_TestCase;
 
 class GenericResponseParserTest extends WithServerMock_TestCase
 {
@@ -23,7 +23,7 @@ class GenericResponseParserTest extends WithServerMock_TestCase
         $responseParser = new GenericResponseParser([], $expectedErrorResponse);
 
 
-        $responseParser->parseResponse(Response::FAILURE_DRAINING, $this->_getServerMock());
+        $responseParser->parseResponse(Response::FAILURE_DRAINING, $this->getServerMock());
     }
 
     /**
@@ -38,7 +38,7 @@ class GenericResponseParserTest extends WithServerMock_TestCase
         $responseParser = new GenericResponseParser($acceptableResponses, []);
 
 
-        $responseParser->parseResponse(Response::RESPONSE_FOUND, $this->_getServerMock());
+        $responseParser->parseResponse(Response::RESPONSE_FOUND, $this->getServerMock());
     }
 
     public function testParseResponse_returnsResponse()
@@ -47,7 +47,7 @@ class GenericResponseParserTest extends WithServerMock_TestCase
             Response::RESPONSE_OK
         ];
 
-        $serverMock = $this->_getServerMock();
+        $serverMock = $this->getServerMock();
 
         $responseParser = new GenericResponseParser($acceptableResponses, []);
 

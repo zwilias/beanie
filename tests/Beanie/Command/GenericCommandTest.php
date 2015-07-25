@@ -3,16 +3,17 @@
 
 namespace Beanie\Command;
 
-require_once 'WithServerMock_TestCase.php';
+require_once __DIR__ . '/../WithServerMock_TestCase.php';
 
 use Beanie\Command\CommandLineCreator\CommandLineCreator;
 use Beanie\Command\ResponseParser\ResponseParser;
+use Beanie\WithServerMock_TestCase;
 
 class GenericCommandTest extends WithServerMock_TestCase
 {
     public function testGenericCommand_actsAsFacade()
     {
-        $serverMock = $this->_getServerMock();
+        $serverMock = $this->getServerMock();
         $response = new Response('test', null, $serverMock);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|CommandLineCreator $commandLineCreatorMock */

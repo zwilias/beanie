@@ -6,6 +6,7 @@ namespace Beanie\Server;
 
 use Beanie\Command\Command;
 use Beanie\Exception\SocketException;
+use Beanie\Manager;
 use Beanie\Tube\TubeAware;
 use Beanie\Tube\TubeStatus;
 
@@ -83,6 +84,14 @@ class Server implements TubeAware
             substr($responseLine, 0, strlen($responseLine) - self::EOL_LENGTH),
             $this
         );
+    }
+
+    /**
+     * @return Manager
+     */
+    public function getManager()
+    {
+        return new Manager($this);
     }
 
     /**

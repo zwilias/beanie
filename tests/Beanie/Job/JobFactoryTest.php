@@ -8,7 +8,7 @@ namespace Beanie\Job;
 use Beanie\Command\Response;
 use Beanie\Server\Server;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class JobFactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected static $responseToStateMap = [
         Response::RESPONSE_INSERTED => Job::STATE_RELEASED,
@@ -33,10 +33,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'data' => self::TEST_DATA
         ], $this->getServerMock());
 
-        $factory = new Factory();
+        $JobFactory = new JobFactory();
 
 
-        $job = $factory->createFrom($response);
+        $job = $JobFactory->createFrom($response);
 
 
         $this->assertEquals($expectedState, $job->getState());
@@ -53,10 +53,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'data' => self::TEST_DATA
         ], $this->getServerMock());
 
-        $factory = new Factory();
+        $JobFactory = new JobFactory();
 
 
-        $factory->createFrom($response);
+        $JobFactory->createFrom($response);
     }
 
     /**
@@ -68,10 +68,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'id' => self::TEST_ID
         ], $this->getServerMock());
 
-        $factory = new Factory();
+        $JobFactory = new JobFactory();
 
 
-        $factory->createFrom($response);
+        $JobFactory->createFrom($response);
     }
     /**
      * @return array

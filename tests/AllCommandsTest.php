@@ -1,18 +1,18 @@
 <?php
 
 
-require_once __DIR__ . '/Beanie/Command/WithServerMock_TestCase.php';
+require_once __DIR__  . '/Beanie/WithServerMock_TestCase.php';
 
 use Beanie\Beanie;
 use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
 use Beanie\Command\Response;
-use Beanie\Command\WithServerMock_TestCase;
 use Beanie\Exception\DrainingException;
 use Beanie\Exception\ExpectedCRLFException;
 use Beanie\Exception\JobTooBigException;
 use Beanie\Exception\NotFoundException;
 use Beanie\Exception\UnexpectedResponseException;
+use Beanie\WithServerMock_TestCase;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -71,7 +71,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_BURY, [self::TEST_ID])
-            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->_getServerMock());
+            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
     /**
@@ -82,20 +82,20 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_BURY, [self::TEST_ID])
-            ->parseResponse('WTF', $this->_getServerMock());
+            ->parseResponse('WTF', $this->getServerMock());
     }
 
     public function testBuryCommand_ParseResponse_buriedResponse_returnsResponse()
     {
         $response = $this->commandFactory
             ->create(Command::COMMAND_BURY, [self::TEST_ID])
-            ->parseResponse(Response::RESPONSE_BURIED, $this->_getServerMock());
+            ->parseResponse(Response::RESPONSE_BURIED, $this->getServerMock());
 
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::RESPONSE_BURIED, $response->getName());
         $this->assertNull($response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     // DELETE COMMAND //
@@ -116,13 +116,13 @@ class AllCommandsTest extends WithServerMock_TestCase
         $deleteCommand = $this->commandFactory->create(Command::COMMAND_DELETE, [self::TEST_ID]);
 
 
-        $response = $deleteCommand->parseResponse(Response::RESPONSE_DELETED, $this->_getServerMock());
+        $response = $deleteCommand->parseResponse(Response::RESPONSE_DELETED, $this->getServerMock());
 
 
         $this->assertInstanceOf('Beanie\Command\Response', $response);
         $this->assertEquals(Response::RESPONSE_DELETED, $response->getName());
         $this->assertNull($response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     /**
@@ -133,7 +133,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_DELETE, [self::TEST_ID])
-            ->parseResponse('what', $this->_getServerMock());
+            ->parseResponse('what', $this->getServerMock());
     }
 
     /**
@@ -144,7 +144,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_DELETE, [self::TEST_ID])
-            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->_getServerMock());
+            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
     // IGNORE COMMAND //
@@ -169,12 +169,12 @@ class AllCommandsTest extends WithServerMock_TestCase
         $ignoreCommand = $this->commandFactory->create(Command::COMMAND_IGNORE, [Beanie::DEFAULT_TUBE]);
 
 
-        $response = $ignoreCommand->parseResponse($responseLine, $this->_getServerMock());
+        $response = $ignoreCommand->parseResponse($responseLine, $this->getServerMock());
 
 
         $this->assertEquals(Response::RESPONSE_WATCHING, $response->getName());
         $this->assertEquals(Beanie::DEFAULT_TUBE, $response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     /**
@@ -186,7 +186,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $ignoreCommand = $this->commandFactory->create(Command::COMMAND_IGNORE, [Beanie::DEFAULT_TUBE]);
 
 
-        $ignoreCommand->parseResponse(Response::FAILURE_NOT_IGNORED, $this->_getServerMock());
+        $ignoreCommand->parseResponse(Response::FAILURE_NOT_IGNORED, $this->getServerMock());
     }
 
     // KICK COMMAND //
@@ -220,13 +220,13 @@ class AllCommandsTest extends WithServerMock_TestCase
 
 
         $command = $this->commandFactory->create(Command::COMMAND_KICK);
-        $response = $command->parseResponse($responseLine, $this->_getServerMock());
+        $response = $command->parseResponse($responseLine, $this->getServerMock());
 
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::RESPONSE_KICKED, $response->getName());
         $this->assertEquals($kicked, $response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     // KICK-JOB COMMAND //
@@ -246,13 +246,13 @@ class AllCommandsTest extends WithServerMock_TestCase
         $kickCommand = $this->commandFactory->create(Command::COMMAND_KICK_JOB, [self::TEST_ID]);
 
 
-        $response = $kickCommand->parseResponse(Response::RESPONSE_KICKED, $this->_getServerMock());
+        $response = $kickCommand->parseResponse(Response::RESPONSE_KICKED, $this->getServerMock());
 
 
         $this->assertInstanceOf('Beanie\Command\Response', $response);
         $this->assertEquals(Response::RESPONSE_KICKED, $response->getName());
         $this->assertNull($response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     /**
@@ -263,7 +263,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_KICK_JOB, [self::TEST_ID])
-            ->parseResponse('what', $this->_getServerMock());
+            ->parseResponse('what', $this->getServerMock());
     }
 
     /**
@@ -274,7 +274,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_KICK_JOB, [self::TEST_ID])
-            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->_getServerMock());
+            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
     // LIST-TUBES COMMAND //
@@ -311,13 +311,13 @@ class AllCommandsTest extends WithServerMock_TestCase
 
 
         $command = $this->commandFactory->create(Command::COMMAND_LIST_TUBE_USED);
-        $response = $command->parseResponse($responseLine, $this->_getServerMock());
+        $response = $command->parseResponse($responseLine, $this->getServerMock());
 
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::RESPONSE_USING, $response->getName());
         $this->assertEquals($tubeUsed, $response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     // PAUSE-TUBE COMMAND //
@@ -379,7 +379,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_PAUSE_TUBE, [self::TEST_TUBE])
-            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->_getServerMock());
+            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
     /**
@@ -390,20 +390,20 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_PAUSE_TUBE, [self::TEST_TUBE])
-            ->parseResponse('something', $this->_getServerMock());
+            ->parseResponse('something', $this->getServerMock());
     }
 
     public function testPauseTubeCommand_ParseResponse_pausedResponse_returnsResponse()
     {
         $response = $this->commandFactory
             ->create(Command::COMMAND_PAUSE_TUBE, [self::TEST_TUBE])
-            ->parseResponse(Response::RESPONSE_PAUSED, $this->_getServerMock());
+            ->parseResponse(Response::RESPONSE_PAUSED, $this->getServerMock());
 
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::RESPONSE_PAUSED, $response->getName());
         $this->assertNull($response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     // PEEK COMMAND //
@@ -416,14 +416,14 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\Command $command */
         $command = $this->commandFactory->create(Command::COMMAND_PEEK, [self::TEST_TUBE]);
-        $command->parseResponse(Response::FAILURE_NOT_FOUND, $this->_getServerMock());
+        $command->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
     public function testPeekCommand_ParseResponse_foundResponse_returnsResponse()
     {
         $data = 'this is some testdata and might as well be an actual job';
 
-        $serverMock = $this->_getServerMock();
+        $serverMock = $this->getServerMock();
         $serverMock->expects($this->once())
             ->method('readData')
             ->with(strlen($data))
@@ -558,7 +558,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $caughtException = false;
 
         try {
-            $putCommand->parseResponse($response, $this->_getServerMock());
+            $putCommand->parseResponse($response, $this->getServerMock());
         } catch (\Exception $exception) {
             $caughtException = true;
 
@@ -583,13 +583,13 @@ class AllCommandsTest extends WithServerMock_TestCase
         $putCommand = $this->commandFactory->create(Command::COMMAND_PUT, [self::TEST_DATA]);
 
 
-        $response = $putCommand->parseResponse($response, $this->_getServerMock());
+        $response = $putCommand->parseResponse($response, $this->getServerMock());
 
 
         $this->assertInstanceOf('Beanie\Command\Response', $response);
         $this->assertEquals($type, $response->getName());
         $this->assertEquals($data, $response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     // QUIT COMMAND //
@@ -609,7 +609,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_QUIT)
-            ->parseResponse('something', $this->_getServerMock());
+            ->parseResponse('something', $this->getServerMock());
     }
 
     // RELEASE COMMAND //
@@ -667,7 +667,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $caughtException = false;
 
         try {
-            $releaseCommand->parseResponse($response, $this->_getServerMock());
+            $releaseCommand->parseResponse($response, $this->getServerMock());
         } catch (\Exception $exception) {
             $caughtException = true;
 
@@ -690,13 +690,13 @@ class AllCommandsTest extends WithServerMock_TestCase
         $releaseCommand = $this->commandFactory->create(Command::COMMAND_RELEASE, [self::TEST_ID]);
 
 
-        $response = $releaseCommand->parseResponse($responseName, $this->_getServerMock());
+        $response = $releaseCommand->parseResponse($responseName, $this->getServerMock());
 
 
         $this->assertInstanceOf('Beanie\Command\Response', $response);
         $this->assertEquals($responseName, $response->getName());
         $this->assertNull($response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     public function failureReleaseCommand_Responses()
@@ -747,7 +747,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_RESERVE)
-            ->parseResponse(Response::FAILURE_DEADLINE_SOON, $this->_getServerMock());
+            ->parseResponse(Response::FAILURE_DEADLINE_SOON, $this->getServerMock());
     }
 
     public function testReserveCommand_ParseResponse_readsDataFromServer_returnsResponse()
@@ -760,7 +760,7 @@ class AllCommandsTest extends WithServerMock_TestCase
             strlen($data)
         ]);
 
-        $serverMock = $this->_getServerMock();
+        $serverMock = $this->getServerMock();
 
         $serverMock->expects($this->once())
             ->method('readData')
@@ -804,7 +804,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_RESERVE_WITH_TIMEOUT, [self::TEST_TIMEOUT])
-            ->parseResponse(Response::FAILURE_DEADLINE_SOON, $this->_getServerMock());
+            ->parseResponse(Response::FAILURE_DEADLINE_SOON, $this->getServerMock());
     }
 
     /**
@@ -815,7 +815,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_RESERVE_WITH_TIMEOUT, [self::TEST_TIMEOUT])
-            ->parseResponse(Response::FAILURE_TIMED_OUT, $this->_getServerMock());
+            ->parseResponse(Response::FAILURE_TIMED_OUT, $this->getServerMock());
     }
 
     public function testReserveCommandWithTimeout_ParseResponse_readsDataFromServer_returnsResponse()
@@ -828,7 +828,7 @@ class AllCommandsTest extends WithServerMock_TestCase
             strlen($data)
         ]);
 
-        $serverMock = $this->_getServerMock();
+        $serverMock = $this->getServerMock();
 
         $serverMock->expects($this->once())
             ->method('readData')
@@ -879,7 +879,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_STATS_JOB, [self::TEST_ID])
-            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->_getServerMock());
+            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
     public function testStatsJobCommand_ParseResponse_OKResponse_callsParent()
@@ -941,7 +941,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_STATS_TUBE, [self::TEST_TUBE])
-            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->_getServerMock());
+            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
     public function testStatsTubeCommand_ParseResponse_OKResponse_callsParent()
@@ -977,13 +977,13 @@ class AllCommandsTest extends WithServerMock_TestCase
         $touchCommand = $this->commandFactory->create(Command::COMMAND_TOUCH, [self::TEST_ID]);
 
 
-        $response = $touchCommand->parseResponse(Response::RESPONSE_TOUCHED, $this->_getServerMock());
+        $response = $touchCommand->parseResponse(Response::RESPONSE_TOUCHED, $this->getServerMock());
 
 
         $this->assertInstanceOf('Beanie\Command\Response', $response);
         $this->assertEquals(Response::RESPONSE_TOUCHED, $response->getName());
         $this->assertNull($response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     /**
@@ -994,7 +994,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_TOUCH, [self::TEST_ID])
-            ->parseResponse('what', $this->_getServerMock());
+            ->parseResponse('what', $this->getServerMock());
     }
 
     /**
@@ -1005,7 +1005,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $this->commandFactory
             ->create(Command::COMMAND_TOUCH, [self::TEST_ID])
-            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->_getServerMock());
+            ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
     // USE COMMAND //
@@ -1029,12 +1029,12 @@ class AllCommandsTest extends WithServerMock_TestCase
         $useCommand = $this->commandFactory->create(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE]);
 
 
-        $response = $useCommand->parseResponse($responseLine, $this->_getServerMock());
+        $response = $useCommand->parseResponse($responseLine, $this->getServerMock());
 
 
         $this->assertEquals(Response::RESPONSE_USING, $response->getName());
         $this->assertEquals(Beanie::DEFAULT_TUBE, $response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     // WATCH COMMAND //
@@ -1058,12 +1058,12 @@ class AllCommandsTest extends WithServerMock_TestCase
         $watchCommand = $this->commandFactory->create(Command::COMMAND_WATCH, [Beanie::DEFAULT_TUBE]);
 
 
-        $response = $watchCommand->parseResponse($responseLine, $this->_getServerMock());
+        $response = $watchCommand->parseResponse($responseLine, $this->getServerMock());
 
 
         $this->assertEquals(Response::RESPONSE_WATCHING, $response->getName());
         $this->assertEquals(1, $response->getData());
-        $this->assertEquals($this->_getServerMock(), $response->getServer());
+        $this->assertEquals($this->getServerMock(), $response->getServer());
     }
 
     // DATA PROVIDERS //

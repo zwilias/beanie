@@ -4,17 +4,36 @@
 namespace Beanie\Job;
 
 
+use Beanie\Command\Response;
 use Beanie\Exception\InvalidArgumentException;
 
-use Beanie\Command\Response;
-
-class Factory
+class JobFactory
 {
     private static $responseToStateMap = [
         Response::RESPONSE_INSERTED => Job::STATE_RELEASED,
         Response::RESPONSE_RELEASED => Job::STATE_RELEASED,
         Response::RESPONSE_BURIED => Job::STATE_BURIED
     ];
+
+    /** @var JobFactory */
+    private static $instance;
+
+    /**
+     * @return JobFactory
+     */
+    public static function instance()
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new static();
+        }
+
+        return self::$instance;
+    }
+
+    public static function unsetInstance()
+    {
+        self::$instance = null;
+    }
 
     /**
      * @param \Beanie\Command\Response $response

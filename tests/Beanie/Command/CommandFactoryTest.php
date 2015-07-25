@@ -3,7 +3,9 @@
 
 namespace Beanie\Command;
 
-require_once 'WithServerMock_TestCase.php';
+use Beanie\WithServerMock_TestCase;
+
+require_once __DIR__ . '/../WithServerMock_TestCase.php';
 
 class CommandFactoryTest extends WithServerMock_TestCase
 {

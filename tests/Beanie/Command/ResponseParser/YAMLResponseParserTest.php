@@ -3,10 +3,10 @@
 
 namespace Beanie\Command\ResponseParser;
 
-require_once __DIR__ . '/../WithServerMock_TestCase.php';
+require_once __DIR__ . '/../../WithServerMock_TestCase.php';
 
-use Beanie\Command\WithServerMock_TestCase;
 use Beanie\Exception\Exception;
+use Beanie\WithServerMock_TestCase;
 use Symfony\Component\Yaml\Yaml;
 
 class YAMLResponseParserTest extends WithServerMock_TestCase

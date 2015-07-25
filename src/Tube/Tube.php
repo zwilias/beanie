@@ -10,8 +10,8 @@ use Beanie\Command\Response;
 use Beanie\Exception;
 use Beanie\Exception\InvalidArgumentException;
 use Beanie\Exception\NotFoundException;
-use Beanie\Job\Factory;
 use Beanie\Job\Job;
+use Beanie\Job\JobFactory;
 use Beanie\Server\Server;
 
 
@@ -23,7 +23,7 @@ class Tube implements TubeAware
     /** @var Server */
     protected $server;
 
-    /** @var Factory */
+    /** @var JobFactory */
     protected $jobFactory;
 
     /** @var CommandFactory */
@@ -32,15 +32,15 @@ class Tube implements TubeAware
     /**
      * @param string $tubeName
      * @param Server $server
-     * @param Factory|null $jobFactory
+     * @param JobFactory|null $jobFactory
      */
-    public function __construct($tubeName, Server $server, Factory $jobFactory = null)
+    public function __construct($tubeName, Server $server, JobFactory $jobFactory = null)
     {
         $this->tubeStatus = new TubeStatus();
         $this->tubeStatus->setCurrentTube($tubeName);
         $this->server = $server;
 
-        $this->jobFactory = $jobFactory ?: new Factory();
+        $this->jobFactory = $jobFactory ?: JobFactory::instance();
         $this->commandFactory = CommandFactory::instance();
     }
 
@@ -144,6 +144,14 @@ class Tube implements TubeAware
                 ])
             )
             ->getData();
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->tubeStatus->getCurrentTube();
     }
 
     /**

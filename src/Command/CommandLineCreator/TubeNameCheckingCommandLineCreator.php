@@ -5,7 +5,7 @@ namespace Beanie\Command\CommandLineCreator;
 
 
 use Beanie\Exception\InvalidNameException;
-use Beanie\ValidNameChecker;
+use Beanie\Tube\ValidNameChecker;
 
 class TubeNameCheckingCommandLineCreator extends GenericCommandLineCreator
 {

@@ -3,10 +3,10 @@
 
 namespace Beanie\Command\ResponseParser;
 
-require_once __DIR__ . '/../WithServerMock_TestCase.php';
+require_once __DIR__ . '/../../WithServerMock_TestCase.php';
 
 use Beanie\Command\Response;
-use Beanie\Command\WithServerMock_TestCase;
+use Beanie\WithServerMock_TestCase;
 
 class SimpleValueResponseParserTest extends WithServerMock_TestCase
 {
@@ -19,7 +19,7 @@ class SimpleValueResponseParserTest extends WithServerMock_TestCase
 
 
         $parser = new SimpleValueResponseParser([$responseName]);
-        $response = $parser->parseResponse($responseLine, $this->_getServerMock());
+        $response = $parser->parseResponse($responseLine, $this->getServerMock());
 
 
         $this->assertEquals($responseName, $response->getName());
