@@ -9,6 +9,9 @@ trait FactoryTrait
     /** @var static */
     private static $instance;
 
+    /**
+     * @return static
+     */
     public static function instance()
     {
         if (!isset(self::$instance)) {

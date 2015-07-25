@@ -80,7 +80,7 @@ class Pool implements TubeAware
     /**
      * @return Server
      */
-    protected function getRandomServer()
+    public function getRandomServer()
     {
         return $this->servers[array_rand($this->servers, 1)];
     }
