@@ -90,6 +90,21 @@ array_map(
 );
 ```
 
+## Installation
+
+Installation is recommended to happen through [composer](https://getcomposer.org/). As soon as more exhaustive
+integration tests are written, a 0.1.0 release should happen.
+
+```
+# Install composer
+$ curl -sS https://getcomposer.org/installer | php
+
+# Require Beanie
+$ php composer.phar require zwilias/Beanie
+
+# Check your vendor/ directory!
+```
+
 ## Architecture
 
 ### Use case
@@ -107,6 +122,20 @@ during page generation and offload them to longer lived workers.
 Classes a "casual" user would come into contact with are highlighted in green.
 
 [![HTML View on Gliffy](http://www.gliffy.com/go/publish/image/8559467/L.png)](https://www.gliffy.com/go/publish/8559467)
+
+## Contributing
+
+Pull requests are appreciated. Make sure code-quality (according to [scrutinizer](https://scrutinizer-ci.com/)) doesn't 
+suffer too badly. Make sure you add thorough white-box unit tests and, if applicable, black-box integration tests.
+
+Running the tests locally:
+
+```
+$ git clone https://github.com/zwilias/Beanie.git
+$ cd Beanie
+$ composer install
+$ vendor/bin/phpunit
+```
 
 ## License
 
