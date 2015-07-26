@@ -1,7 +1,10 @@
 <?php
 
 
-
+/**
+ * Class BeanstalkTest
+ * @coversNothing
+ */
 class BeanstalkTest extends PHPUnit_Framework_TestCase
 {
     /** @var \Beanie\Beanie */
@@ -142,5 +145,6 @@ class BeanstalkTest extends PHPUnit_Framework_TestCase
         $jobStats = $job->stats();
 
         $this->assertEquals($jobStats['state'], 'ready');
+        $job->delete();
     }
 }
