@@ -92,6 +92,18 @@ array_map(
 
 ## Architecture
 
+### Use case
+
+Each producer writes to random connections on the pool. Each worker handles a single connection -- which doesn't
+preclude the possibility of having multiple workers for each queue, of course.
+
+This is a PHP library, and as such, is optimized for the most common use case - short lived producers which create jobs
+during page generation and offload them to longer lived workers.
+
+[![HTML View on Gliffy](http://www.gliffy.com/go/publish/image/8600841/L.png)](http://www.gliffy.com/go/publish/8600841)
+
+### Class map
+
 Classes a "casual" user would come into contact with are highlighted in green.
 
 [![HTML View on Gliffy](http://www.gliffy.com/go/publish/image/8559467/L.png)](https://www.gliffy.com/go/publish/8559467)
