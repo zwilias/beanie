@@ -229,7 +229,6 @@ class ServerTest extends MockNative_TestCase
         $this->assertEquals($expectedResponse, $response);
     }
 
-
     public function testDispatchCommandWithData_writesCommandAndData_retrievesResponse()
     {
         $responseLine = 'great job';
@@ -309,5 +308,23 @@ class ServerTest extends MockNative_TestCase
 
 
         $this->assertEquals($expectedResponse, $response);
+    }
+
+    public function testTransformTubeStatusTo_willDispatchCommand()
+    {
+        $tubeStatus = new TubeStatus();
+        $tubeStatus->setCurrentTube('test')->addWatchedTube('test');
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Server $serverStub */
+        $serverStub = $this->getMockBuilder(Server::class)
+            ->setMethods(['dispatchCommand'])
+            ->getMock();
+
+        $serverStub->expects($this->exactly(2))
+            ->method('dispatchCommand')
+            ->willReturnSelf();
+
+
+        $serverStub->transformTubeStatusTo($tubeStatus);
     }
 }

@@ -166,7 +166,8 @@ class Tube implements TubeAware
         return $this->server
             ->dispatchCommand(
                 $this->commandFactory->create(Command::COMMAND_PAUSE_TUBE, [
-                    $this->getTubeStatus()->getCurrentTube()
+                    $this->getTubeStatus()->getCurrentTube(),
+                    $howLong
                 ])
             )
             ->getName() == Response::RESPONSE_PAUSED;
