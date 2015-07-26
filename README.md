@@ -16,6 +16,12 @@
 
 ## Quickstart
 
+Requirements:
+
+- PHP 5.5, 5.6 or 7.x
+- beanstalkd 1.3 or higher
+- PHP `socket_*` functions must not be disabled
+
 ### Producer
 
 A *Producer* exposes the necessary commands to produce jobs on the queue. It operates on an entire *Pool*, and will
