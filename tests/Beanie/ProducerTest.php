@@ -13,6 +13,21 @@ use Beanie\Tube\TubeStatus;
 
 class ProducerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGetPool_returnsPool()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Pool $poolMock */
+        $poolMock = $this
+            ->getMockBuilder(Pool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+
+        $producer = new Producer($poolMock);
+
+
+        $this->assertSame($poolMock, $producer->getPool());
+    }
+
     public function testUse_onlyUpdatesTubeStatus()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|Pool $poolMock */

@@ -13,6 +13,17 @@ require_once 'WithServerMock_TestCase.php';
 
 class WorkerTest extends WithServerMock_TestCase
 {
+    public function testGetServer_returnsServer()
+    {
+        $serverMock = $this->getServerMock();
+
+
+        $worker = new Worker($serverMock);
+
+
+        $this->assertSame($serverMock, $worker->getServer());
+    }
+
     public function testTransformTubeStatusTo_onlyUpdatesTubeStatus()
     {
         $tubeStatus = new TubeStatus();

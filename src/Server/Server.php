@@ -102,10 +102,18 @@ class Server implements TubeAware
         return sprintf('%s:%s', $this->socket->getHostname(), $this->socket->getPort());
     }
 
+    /**
+     * @throws SocketException
+     */
+    public function connect()
+    {
+        $this->socket->connect();
+    }
+
     protected function ensureConnected()
     {
         if (!$this->socket->isConnected()) {
-            $this->socket->connect();
+            $this->connect();
         }
     }
 }

@@ -103,4 +103,12 @@ class Producer implements TubeAware
     {
         $this->tubeStatus->transformTo($tubeStatus, $mode);
     }
+
+    /**
+     * @return Pool
+     */
+    public function getPool()
+    {
+        return $this->pool;
+    }
 }

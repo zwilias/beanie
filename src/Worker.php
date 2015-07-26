@@ -104,4 +104,12 @@ class Worker implements TubeAware
             return null;
         }
     }
+
+    /**
+     * @return Server
+     */
+    public function getServer()
+    {
+        return $this->server;
+    }
 }

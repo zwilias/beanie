@@ -58,7 +58,7 @@ class Socket
 
         do {
             if (
-                ($written = socket_write(
+                ($written = @socket_write(
                     $this->socket,
                     substr($data, -$leftToWrite),
                     $leftToWrite
@@ -136,7 +136,7 @@ class Socket
      */
     protected function read($bytes)
     {
-        if (($incoming = socket_read($this->socket, $bytes)) === false) {
+        if (($incoming = @socket_read($this->socket, $bytes)) === false) {
             throw $this->createSocketException();
         }
 
@@ -180,7 +180,7 @@ class Socket
      */
     public function connect()
     {
-        if (($this->connected = socket_connect($this->socket, $this->hostname, $this->port)) === false) {
+        if (($this->connected = @socket_connect($this->socket, $this->hostname, $this->port)) === false) {
             throw $this->createSocketException();
         }
     }
@@ -204,5 +204,13 @@ class Socket
         $errorMessage = socket_strerror($errorCode);
         $exception = new SocketException($errorMessage, $errorCode);
         return $exception;
+    }
+
+    /**
+     * Attempt to close the socket if it is still open.
+     */
+    public function __destruct()
+    {
+        @socket_close($this->socket);
     }
 }
