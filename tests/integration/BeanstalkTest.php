@@ -4,6 +4,7 @@
 /**
  * Class BeanstalkTest
  * @coversNothing
+ * @group beanstalk
  */
 class BeanstalkTest extends PHPUnit_Framework_TestCase
 {
@@ -15,12 +16,8 @@ class BeanstalkTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $host = defined('BEANSTALK_HOST')
-            ? BEANSTALK_HOST
-            : 'localhost';
-        $port = defined('BEANSTALK_PORT')
-            ? BEANSTALK_PORT
-            : 11300;
+        $host = getenv('BEANSTALK_HOST') ?: 'localhost';
+        $port = getenv('BEANSTALK_PORT') ?: 11300;
 
         $this->serverName = sprintf('%s:%s', $host, $port);
 

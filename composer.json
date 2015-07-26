@@ -1,5 +1,9 @@
 {
     "name": "zwilias/beanie",
+    "type": "library",
+    "description": "A clean, lean PHP beanstalkd client library",
+    "keywords": ["beanstalkd", "queue", "worker"],
+    "homepage": "https://github.com/zwilias/beanie",
     "license": "MIT",
     "authors": [
         {
@@ -8,6 +12,7 @@
         }
     ],
     "require": {
+        "php": ">=5.5.0",
         "symfony/yaml": "^2.7"
     },
     "require-dev": {

@@ -1,5 +1,5 @@
 # Beanie
-> A clean, lean PHP beanstalk client
+> A clean, lean PHP beanstalkd client library
 
 [![Build Status](https://travis-ci.org/zwilias/beanie.svg?branch=master)](https://travis-ci.org/zwilias/beanie)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zwilias/beanie/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zwilias/beanie/?branch=master)
@@ -98,15 +98,14 @@ array_map(
 
 ## Installation
 
-Installation is recommended to happen through [composer](https://getcomposer.org/). As soon as more exhaustive
-integration tests are written, a 0.1.0 release should happen.
+Installation is recommended to happen through [composer](https://getcomposer.org/).
 
 ```
 # Install composer
 $ curl -sS https://getcomposer.org/installer | php
 
 # Require Beanie
-$ php composer.phar require zwilias/Beanie
+$ php composer.phar require zwilias/beanie
 
 # Check your vendor/ directory!
 ```
@@ -142,6 +141,11 @@ $ cd Beanie
 $ composer install
 $ vendor/bin/phpunit
 ```
+
+**Note**: Some of the integration tests depend on a locally running beanstalkd. These tests are excluded in the default
+phpunit.xml.dist file. In order to include them, run phpunit with the `--group __nogroup__,beanstalk` flag. If you want
+the tests to connect to a server other than `localhost:11300`, set the `BEANSTALK_HOST` and `BEANSTALK_PORT` environment
+variables.
 
 ## License
 
