@@ -18,6 +18,9 @@
 
 ### Producer
 
+A *Producer* exposes the necessary commands to produce jobs on the queue. It operates on an entire *Pool*, and will
+create its jobs on random connections from that pool, as a means of randomly distributing load to the workers.
+
 ```php
 use Beanie\Beanie;
 
@@ -34,6 +37,11 @@ print_r($job->stats());
 
 ### Worker
 
+A *Worker* exposes the commands needed to consume jobs from the queue. Rather than operating on the entire *Pool* - like
+the *Producers* do - it only operates on a single connection. The idea behind this is to ensure, on an architectural
+level, that each beanstalk queue requires as least on Worker to operate, and you won't have one queue filling up because
+all your workers are waiting for a job from a different queue.
+
 ```php
 use Beanie\Beanie;
 
@@ -46,15 +54,22 @@ $worker->watch('some-tube');
 // now let's get ourselves some work to do
 $job = $worker->reserve();
 
+// get the data…
 echo $job->getData();
 
+// … and delete the job
 $job->delete();
 ```
 
 ### Manager
 
+The *Managers* do exactly what it says on the package. They're your go-to class for writing code to get a view on how
+your beanstalk instances are performing, or occasionally kicking buried jobs on to the queue again. They expose
+statistics on every connection and every tube on every connection.
+
 ```php
 use Beanie\Beanie;
+use Beanie\Tube\Tube;
 
 // get a Manager instance for each connection in the pool
 $managers = Beanie::pool(['localhost:11300', 'otherhost:11301'])->managers();
@@ -63,4 +78,20 @@ $managers = Beanie::pool(['localhost:11300', 'otherhost:11301'])->managers();
 foreach ($managers as $manager) {
     print_r($manager->stats());
 }
+
+// print stats for each tube of the first connection in the pool
+$manager = reset($managers);
+
+array_map(
+    function (Tube $tube) {
+        print_r($tube->stats());
+    },
+    $manager->tubes();
+);
 ```
+
+## License
+
+Copyright (c) 2015 Ilias Van Peer
+
+Released under the MIT License, see the enclosed `LICENSE` file.
