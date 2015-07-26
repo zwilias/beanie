@@ -22,9 +22,10 @@ use Beanie\Exception\JobTooBigException;
 use Beanie\Exception\NotFoundException;
 use Beanie\Exception\NotIgnoredException;
 use Beanie\Exception\TimedOutException;
+use Beanie\Util\Factory;
 use Beanie\Util\FactoryTrait;
 
-class CommandFactory
+class CommandFactory implements Factory
 {
     use FactoryTrait;
 

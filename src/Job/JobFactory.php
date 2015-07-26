@@ -9,9 +9,10 @@ use Beanie\Command\Response;
 use Beanie\Exception\InvalidArgumentException;
 use Beanie\Exception\NotFoundException;
 use Beanie\Server\Server;
+use Beanie\Util\Factory;
 use Beanie\Util\FactoryTrait;
 
-class JobFactory
+class JobFactory implements Factory
 {
     use FactoryTrait;
 
