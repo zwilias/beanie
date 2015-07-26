@@ -1,9 +1,9 @@
 # Beanie
 > A clean, lean PHP beanstalk client
 
-[![Build Status](https://travis-ci.org/zwilias/Beanie.svg?branch=master)](https://travis-ci.org/zwilias/Beanie)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zwilias/Beanie/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zwilias/Beanie/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/zwilias/Beanie/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/zwilias/Beanie/?branch=master)
+[![Build Status](https://travis-ci.org/zwilias/beanie.svg?branch=master)](https://travis-ci.org/zwilias/beanie)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/zwilias/beanie/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/zwilias/beanie/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/zwilias/beanie/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/zwilias/beanie/?branch=master)
 
 ## Core features
 
@@ -137,7 +137,7 @@ suffer too badly. Make sure you add thorough white-box unit tests and, if applic
 Running the tests locally:
 
 ```
-$ git clone https://github.com/zwilias/Beanie.git
+$ git clone https://github.com/zwilias/beanie.git
 $ cd Beanie
 $ composer install
 $ vendor/bin/phpunit
