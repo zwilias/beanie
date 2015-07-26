@@ -73,7 +73,7 @@ class Pool implements TubeAware
     {
         return $this
             ->getRandomServer()
-            ->transformTubeStatusTo($this->tubeStatus)
+            ->transformTubeStatusTo($this->tubeStatus, TubeStatus::TRANSFORM_USE)
             ->dispatchCommand($command);
     }
 

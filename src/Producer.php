@@ -9,16 +9,16 @@ use Beanie\Command\CommandFactory;
 use Beanie\Command\Response;
 use Beanie\Job\Job;
 use Beanie\Server\Pool;
+use Beanie\Server\TubeAwareTrait;
 use Beanie\Tube\TubeAware;
 use Beanie\Tube\TubeStatus;
 
 class Producer implements TubeAware
 {
+    use TubeAwareTrait;
+
     /** @var Pool */
     protected $pool;
-
-    /** @var TubeStatus */
-    protected $tubeStatus;
 
     /** @var CommandFactory */
     protected $commandFactory;
@@ -86,22 +86,6 @@ class Producer implements TubeAware
     {
         $this->tubeStatus->setCurrentTube($tubeName);
         return $this;
-    }
-
-    /**
-     * @return TubeStatus
-     */
-    public function getTubeStatus()
-    {
-        return $this->tubeStatus;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function transformTubeStatusTo(TubeStatus $tubeStatus, $mode = TubeStatus::TRANSFORM_USE)
-    {
-        $this->tubeStatus->transformTo($tubeStatus, $mode);
     }
 
     /**

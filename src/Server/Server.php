@@ -12,8 +12,6 @@ use Beanie\Tube\TubeStatus;
 
 class Server implements TubeAware
 {
-    use TubeAwareTrait;
-
     const DEFAULT_PORT = 11300;
     const DEFAULT_HOST = '127.0.0.1';
 
@@ -22,6 +20,9 @@ class Server implements TubeAware
 
     /** @var Socket */
     protected $socket;
+
+    /** @var TubeStatus */
+    protected $tubeStatus;
 
     /**
      * @param string $hostName
@@ -115,5 +116,27 @@ class Server implements TubeAware
         if (!$this->socket->isConnected()) {
             $this->connect();
         }
+    }
+
+    /**
+     * @param TubeStatus $goal
+     * @param int $mode
+     * @return $this
+     */
+    public function transformTubeStatusTo(TubeStatus $goal, $mode = TubeStatus::TRANSFORM_BOTH)
+    {
+        foreach ($this->tubeStatus->transformTo($goal, $mode) as $transformCommand) {
+            $this->dispatchCommand($transformCommand);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return TubeStatus
+     */
+    public function getTubeStatus()
+    {
+        return $this->tubeStatus;
     }
 }

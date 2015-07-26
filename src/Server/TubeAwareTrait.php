@@ -5,7 +5,6 @@ namespace Beanie\Server;
 
 
 
-use Beanie\Command\Command;
 use Beanie\Tube\TubeStatus;
 
 trait TubeAwareTrait
@@ -16,12 +15,6 @@ trait TubeAwareTrait
      * @var TubeStatus
      */
     protected $tubeStatus;
-
-    /**
-     * @param Command $command
-     * @return \Beanie\Command\Response
-     */
-    abstract public function dispatchCommand(Command $command);
 
     /**
      * @return TubeStatus
@@ -38,11 +31,7 @@ trait TubeAwareTrait
      */
     public function transformTubeStatusTo(TubeStatus $otherTube, $mode = TubeStatus::TRANSFORM_BOTH)
     {
-        foreach (
-            $this->getTubeStatus()->transformTo($otherTube, $mode) as $transformation
-        ) {
-            $this->dispatchCommand($transformation);
-        }
+        $this->getTubeStatus()->transformTo($otherTube, $mode);
 
         return $this;
     }

@@ -34,7 +34,7 @@ class WorkerTest extends WithServerMock_TestCase
 
 
         $worker = new Worker($serverMock);
-        $worker->transformTubeStatusTo($tubeStatus);
+        $worker->transformTubeStatusTo($tubeStatus, TubeStatus::TRANSFORM_WATCHED);
 
 
         $this->assertEquals(Beanie::DEFAULT_TUBE, $worker->getTubeStatus()->getCurrentTube());

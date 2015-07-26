@@ -10,16 +10,16 @@ use Beanie\Exception\TimedOutException;
 use Beanie\Job\Job;
 use Beanie\Job\JobFactory;
 use Beanie\Server\Server;
+use Beanie\Server\TubeAwareTrait;
 use Beanie\Tube\TubeAware;
 use Beanie\Tube\TubeStatus;
 
 class Worker implements TubeAware
 {
+    use TubeAwareTrait;
+
     /** @var Server */
     protected $server;
-
-    /** @var TubeStatus */
-    protected $tubeStatus;
 
     /** @var CommandFactory */
     protected $commandFactory;
@@ -36,23 +36,6 @@ class Worker implements TubeAware
         $this->tubeStatus = new TubeStatus();
         $this->commandFactory = CommandFactory::instance();
         $this->jobFactory = JobFactory::instance();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getTubeStatus()
-    {
-        return $this->tubeStatus;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function transformTubeStatusTo(TubeStatus $tubeStatus, $mode = TubeStatus::TRANSFORM_WATCHED)
-    {
-        $this->getTubeStatus()->transformTo($tubeStatus, $mode);
-        return $this;
     }
 
     /**

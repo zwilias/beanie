@@ -4,7 +4,6 @@
 namespace Beanie\Server;
 
 
-use Beanie\Beanie;
 use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
 use Beanie\Tube\TubeStatus;
@@ -111,36 +110,10 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $command = $this->commandFactory->create(Command::COMMAND_USE, ['test']);
         $testResponse = 'test value';
 
-        $tubeStatusMock = $this
-            ->getMockBuilder(TubeStatus::class)
-            ->setMethods(['calculateTransformationTo', 'setCurrentTube', 'setWatchedTubes'])
-            ->getMock()
-        ;
-
-        $tubeStatusMock
-            ->expects($this->once())
-            ->method('calculateTransformationTo')
-            ->willReturn([$command])
-        ;
-
-        $tubeStatusMock
-            ->expects($this->atMost(1))
-            ->method('setCurrentTube')
-            ->with(Beanie::DEFAULT_TUBE)
-            ->willReturn($tubeStatusMock)
-        ;
-
-        $tubeStatusMock
-            ->expects($this->atMost(1))
-            ->method('setWatchedTubes')
-            ->with([Beanie::DEFAULT_TUBE])
-            ->willReturn($tubeStatusMock)
-        ;
-
         $serverMock = $this
             ->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__toString', 'getTubeStatus', 'dispatchCommand'])
+            ->setMethods(['__toString', 'transformTubeStatusTo', 'dispatchCommand'])
             ->getMock()
         ;
 
@@ -151,13 +124,13 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         ;
 
         $serverMock
-            ->expects($this->atLeastOnce())
-            ->method('getTubeStatus')
-            ->willReturn($tubeStatusMock)
+            ->expects($this->once())
+            ->method('transformTubeStatusTo')
+            ->willReturnSelf()
         ;
 
         $serverMock
-            ->expects($this->exactly(2))
+            ->expects($this->once())
             ->method('dispatchCommand')
             ->with($command)
             ->willReturn('test value');
@@ -175,36 +148,10 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     {
         $command = $this->commandFactory->create(Command::COMMAND_USE, ['test']);
 
-        $tubeStatusMock = $this
-            ->getMockBuilder(TubeStatus::class)
-            ->setMethods(['calculateTransformationTo', 'setCurrentTube', 'setWatchedTubes'])
-            ->getMock()
-        ;
-
-        $tubeStatusMock
-            ->expects($this->once())
-            ->method('calculateTransformationTo')
-            ->willReturn([])
-        ;
-
-        $tubeStatusMock
-            ->expects($this->atMost(1))
-            ->method('setCurrentTube')
-            ->with(Beanie::DEFAULT_TUBE)
-            ->willReturn($tubeStatusMock)
-        ;
-
-        $tubeStatusMock
-            ->expects($this->atMost(1))
-            ->method('setWatchedTubes')
-            ->with([Beanie::DEFAULT_TUBE])
-            ->willReturn($tubeStatusMock)
-        ;
-
         $serverMock = $this
             ->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__toString', 'getTubeStatus', 'dispatchCommand'])
+            ->setMethods(['__toString', 'transformTubeStatusTo', 'dispatchCommand'])
             ->getMock()
         ;
 
@@ -216,8 +163,8 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
         $serverMock
             ->expects($this->atLeastOnce())
-            ->method('getTubeStatus')
-            ->willReturn($tubeStatusMock)
+            ->method('transformTubeStatusTo')
+            ->willReturnSelf()
         ;
 
         $serverMock

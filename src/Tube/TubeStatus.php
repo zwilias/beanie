@@ -103,6 +103,8 @@ class TubeStatus
      */
     public function transformTo(TubeStatus $goal, $mode = self::TRANSFORM_BOTH)
     {
+        $commands = $this->calculateTransformationTo($goal, $mode);
+
         if ($mode & self::TRANSFORM_USE) {
             $this->setCurrentTube($goal->getCurrentTube());
         }
@@ -111,7 +113,7 @@ class TubeStatus
             $this->setWatchedTubes($goal->getWatchedTubes());
         }
 
-        return $this->calculateTransformationTo($goal, $mode);
+        return $commands;
     }
 
     /**
