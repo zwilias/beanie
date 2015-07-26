@@ -90,6 +90,12 @@ array_map(
 );
 ```
 
+## Architecture
+
+Classes a "casual" user would come into contact with are highlighted in green.
+
+[![HTML View on Gliffy](http://www.gliffy.com/go/publish/image/8559467/L.png)](https://www.gliffy.com/go/publish/8559467)
+
 ## License
 
 Copyright (c) 2015 Ilias Van Peer
