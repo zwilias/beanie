@@ -4,6 +4,7 @@
 namespace Beanie\Tube;
 
 
+use Beanie\Beanie;
 use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
 use Beanie\Command\Response;
@@ -109,7 +110,7 @@ class Tube implements TubeAware
      * @return int
      * @throws InvalidArgumentException
      */
-    public function kick($howMany)
+    public function kick($howMany = Beanie::DEFAULT_MAX_TO_KICK)
     {
         if (!is_int($howMany) || $howMany < 1) {
             throw new InvalidArgumentException('Kick requires a strictly positive number of jobs to kick');

@@ -140,8 +140,7 @@ class BeanstalkTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($jobStats['state'], 'buried');
 
-
-        $job->kick();
+        $this->beanie->manager($this->serverName)->tubes()[0]->kick();
         $jobStats = $job->stats();
 
         $this->assertEquals($jobStats['state'], 'ready');
