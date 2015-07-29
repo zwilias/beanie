@@ -97,7 +97,7 @@ class Tube implements TubeAware
         return $this->jobFactory->createFromCommand(
             $command,
             $this->server
-        );
+        )->invoke();
     }
 
     protected function sync()
@@ -120,7 +120,7 @@ class Tube implements TubeAware
 
         return (int) $this->server->dispatchCommand(
             $this->commandFactory->create(Command::COMMAND_KICK, [$howMany])
-        )->getData();
+        )->invoke()->getData();
     }
 
     /**
@@ -138,6 +138,7 @@ class Tube implements TubeAware
                     $this->getTubeStatus()->getCurrentTube()
                 ])
             )
+            ->invoke()
             ->getData();
     }
 
@@ -170,6 +171,7 @@ class Tube implements TubeAware
                     $howLong
                 ])
             )
+            ->invoke()
             ->getName() == Response::RESPONSE_PAUSED;
     }
 }

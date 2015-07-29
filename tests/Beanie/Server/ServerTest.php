@@ -226,7 +226,7 @@ class ServerTest extends MockNative_TestCase
         $response = $server->dispatchCommand($command);
 
 
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertEquals($expectedResponse, $response->invoke());
     }
 
     public function testDispatchCommandWithData_writesCommandAndData_retrievesResponse()
@@ -307,7 +307,7 @@ class ServerTest extends MockNative_TestCase
         $response = $server->dispatchCommand($command);
 
 
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertEquals($expectedResponse, $response->invoke());
     }
 
     public function testTransformTubeStatusTo_willDispatchCommand()
@@ -322,7 +322,12 @@ class ServerTest extends MockNative_TestCase
 
         $serverStub->expects($this->exactly(2))
             ->method('dispatchCommand')
-            ->willReturnSelf();
+            ->willReturn(
+                $this->getMockBuilder(ResponseOath::class)
+                    ->disableOriginalConstructor()
+                    ->setMethods(['invoke'])
+                    ->getMock()
+            );
 
 
         $serverStub->transformTubeStatusTo($tubeStatus);

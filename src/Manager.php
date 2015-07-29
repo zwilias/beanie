@@ -37,7 +37,10 @@ class Manager
      */
     public function stats()
     {
-        return $this->server->dispatchCommand($this->commandFactory->create(Command::COMMAND_STATS))->getData();
+        return $this->server
+            ->dispatchCommand($this->commandFactory->create(Command::COMMAND_STATS))
+            ->invoke()
+            ->getData();
     }
 
     /**
@@ -50,7 +53,7 @@ class Manager
         return $this->jobFactory->createFromCommand(
             $this->commandFactory->create(Command::COMMAND_PEEK, [$jobId]),
             $this->server
-        );
+        )->invoke();
     }
 
     /**
@@ -64,7 +67,7 @@ class Manager
         foreach (
             $this->server->dispatchCommand(
                 $this->commandFactory->create(Command::COMMAND_LIST_TUBES)
-            )->getData() as $tubeName
+            )->invoke()->getData() as $tubeName
         ) {
             $tubes[] = new Tube($tubeName, $this->server);
         }

@@ -67,7 +67,7 @@ class Pool implements TubeAware
 
     /**
      * @param Command $command
-     * @return \Beanie\Command\Response
+     * @return \Beanie\Server\ResponseOath
      */
     public function dispatchCommand(Command $command)
     {

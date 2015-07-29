@@ -59,7 +59,7 @@ class Producer implements TubeAware
                 $this->commandFactory->create(Command::COMMAND_PUT, [
                     $jobData, $priority, $delay, $timeToRun
                 ])
-            )
+            )->invoke()
         );
     }
 

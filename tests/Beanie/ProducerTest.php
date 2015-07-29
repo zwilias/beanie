@@ -3,6 +3,7 @@
 
 namespace Beanie;
 
+require_once 'WithServerMock_TestCase.php';
 
 use Beanie\Command\Command;
 use Beanie\Command\Response;
@@ -11,7 +12,7 @@ use Beanie\Server\Pool;
 use Beanie\Server\Server;
 use Beanie\Tube\TubeStatus;
 
-class ProducerTest extends \PHPUnit_Framework_TestCase
+class ProducerTest extends WithServerMock_TestCase
 {
     public function testGetPool_returnsPool()
     {
@@ -136,7 +137,7 @@ class ProducerTest extends \PHPUnit_Framework_TestCase
                     $command->hasData() === true &&
                     $command->getData() === $jobData;
             }))
-            ->willReturn(new Response($responseName, $jobId, $serverMock));
+            ->willReturn($this->oath(new Response($responseName, $jobId, $serverMock)));
 
 
         $producer = new Producer($poolMock);

@@ -142,6 +142,8 @@ class Job
      */
     private function executeCommand($command, $arguments = [])
     {
-        return $this->server->dispatchCommand($this->commandFactory->create($command, array_merge([$this->id], $arguments)));
+        return $this->server
+            ->dispatchCommand($this->commandFactory->create($command, array_merge([$this->id], $arguments)))
+            ->invoke();
     }
 }

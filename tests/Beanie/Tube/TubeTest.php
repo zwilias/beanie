@@ -3,6 +3,7 @@
 
 namespace Beanie\Tube;
 
+require_once __DIR__ . '/../WithServerMock_TestCase.php';
 
 use Beanie\Beanie;
 use Beanie\Command\Command;
@@ -11,9 +12,10 @@ use Beanie\Exception\NotFoundException;
 use Beanie\Exception\OutOfMemoryException;
 use Beanie\Job\Job;
 use Beanie\Server\Server;
+use Beanie\WithServerMock_TestCase;
 
 
-class TubeTest extends \PHPUnit_Framework_TestCase
+class TubeTest extends WithServerMock_TestCase
 {
     const TEST_TUBE = 'test';
 
@@ -65,7 +67,7 @@ class TubeTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->isInstanceOf(Command::class))
-            ->willReturn($response);
+            ->willReturn($this->oath($response));
 
         $tube = new Tube(Beanie::DEFAULT_TUBE, $serverMock);
 
@@ -83,11 +85,17 @@ class TubeTest extends \PHPUnit_Framework_TestCase
     {
         $serverMock = $this->getServerMockCheckTransform(['dispatchCommand', '__toString']);
 
+        $oathMock = $this->_getResponseOathMock();
+        $oathMock
+            ->expects($this->once())
+            ->method('invoke')
+            ->willThrowException(new NotFoundException($serverMock));
+
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->isInstanceOf(Command::class))
-            ->willThrowException(new NotFoundException($serverMock));
+            ->willReturn($oathMock);
 
         $tube = new Tube(Beanie::DEFAULT_TUBE, $serverMock);
 
@@ -126,7 +134,7 @@ class TubeTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->isInstanceOf(Command::class))
-            ->willReturn($response);
+            ->willReturn($this->oath($response));
 
         $tube = new Tube(Beanie::DEFAULT_TUBE, $serverMock);
 
@@ -149,7 +157,7 @@ class TubeTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->isInstanceOf(Command::class))
-            ->willReturn($response);
+            ->willReturn($this->oath($response));
 
         $tube = new Tube(Beanie::DEFAULT_TUBE, $serverMock);
 
@@ -174,7 +182,7 @@ class TubeTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->isInstanceOf(Command::class))
-            ->willReturn($response);
+            ->willReturn($this->oath($response));
 
         $tube = new Tube(Beanie::DEFAULT_TUBE, $serverMock);
 
@@ -217,7 +225,7 @@ class TubeTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->isInstanceOf(Command::class))
-            ->willReturn($response);
+            ->willReturn($this->oath($response));
 
         $tube = new Tube(Beanie::DEFAULT_TUBE, $serverMock);
 
@@ -237,7 +245,7 @@ class TubeTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->isInstanceOf(Command::class))
-            ->willReturn($response);
+            ->willReturn($this->oath($response));
 
         $tube = new Tube(Beanie::DEFAULT_TUBE, $serverMock);
 
@@ -257,7 +265,7 @@ class TubeTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->isInstanceOf(Command::class))
-            ->willReturn($response);
+            ->willReturn($this->oath($response));
 
         $tube = new Tube(Beanie::DEFAULT_TUBE, $serverMock);
 

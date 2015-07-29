@@ -104,7 +104,7 @@ class WorkerTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) {
                 return $command->getCommandLine() === Command::COMMAND_RESERVE;
             }))
-            ->willReturn($response);
+            ->willReturn($this->oath($response));
 
 
         $worker = new Worker($serverMock);
@@ -138,7 +138,7 @@ class WorkerTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) {
                 return $command->getCommandLine() === Command::COMMAND_RESERVE_WITH_TIMEOUT . ' 12';
             }))
-            ->willReturn($response);
+            ->willReturn($this->oath($response));
 
 
         $worker = new Worker($serverMock);

@@ -63,7 +63,7 @@ class Server implements TubeAware
 
     /**
      * @param \Beanie\Command\Command $command
-     * @return \Beanie\Command\Response
+     * @return \Beanie\Server\ResponseOath
      * @throws SocketException
      * @throws \Beanie\Exception\BadFormatException
      * @throws \Beanie\Exception\InternalErrorException
@@ -79,12 +79,7 @@ class Server implements TubeAware
             $this->socket->write($command->getData() . self::EOL);
         }
 
-        $responseLine = $this->socket->readLine(self::EOL);
-
-        return $command->parseResponse(
-            substr($responseLine, 0, strlen($responseLine) - self::EOL_LENGTH),
-            $this
-        );
+        return new ResponseOath($this->socket, $this, $command);
     }
 
     /**
@@ -126,7 +121,7 @@ class Server implements TubeAware
     public function transformTubeStatusTo(TubeStatus $goal, $mode = TubeStatus::TRANSFORM_BOTH)
     {
         foreach ($this->tubeStatus->transformTo($goal, $mode) as $transformCommand) {
-            $this->dispatchCommand($transformCommand);
+            $this->dispatchCommand($transformCommand)->invoke();
         }
 
         return $this;

@@ -7,7 +7,6 @@ namespace Beanie\Job;
 use Beanie\Command\Command;
 use Beanie\Command\Response;
 use Beanie\Exception\InvalidArgumentException;
-use Beanie\Exception\NotFoundException;
 use Beanie\Server\Server;
 use Beanie\Util\Factory;
 use Beanie\Util\FactoryTrait;
@@ -42,15 +41,14 @@ class JobFactory implements Factory
     /**
      * @param Command $command
      * @param Server $server
-     * @return Job|null
+     * @return JobOath
      */
     public function createFromCommand(Command $command, Server $server)
     {
-        try {
-            return $this->createFromResponse($server->dispatchCommand($command));
-        } catch (NotFoundException $exception) {
-            return null;
-        }
+        return new JobOath(
+            $server->dispatchCommand($command),
+            $this
+        );
     }
 
     /**

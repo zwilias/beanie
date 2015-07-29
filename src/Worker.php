@@ -82,7 +82,7 @@ class Worker implements TubeAware
             return $this->jobFactory->createFromCommand(
                 $this->commandFactory->create($command, $arguments),
                 $this->server->transformTubeStatusTo($this->getTubeStatus())
-            );
+            )->invoke();
         } catch (TimedOutException $timeOut) {
             return null;
         }

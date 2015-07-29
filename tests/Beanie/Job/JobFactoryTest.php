@@ -65,12 +65,12 @@ class JobFactoryTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) {
                 return $command->getCommandLine() == sprintf('%s %s', Command::COMMAND_PEEK, self::TEST_ID);
             }))
-            ->willReturn($response);
+            ->willReturn($this->oath($response));
 
         $JobFactory = new JobFactory();
 
 
-        $job = $JobFactory->createFromCommand($command, $serverMock);
+        $job = $JobFactory->createFromCommand($command, $serverMock)->invoke();
 
 
         $this->assertEquals(Job::STATE_UNKNOWN, $job->getState());

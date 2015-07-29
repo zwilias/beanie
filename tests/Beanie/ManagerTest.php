@@ -26,7 +26,7 @@ class ManagerTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) {
                 return $command->getCommandLine() == Command::COMMAND_STATS;
             }))
-            ->willReturn($response)
+            ->willReturn($this->oath($response))
         ;
 
 
@@ -51,7 +51,7 @@ class ManagerTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) use ($jobId) {
                 return $command->getCommandLine() == sprintf('%s %s', Command::COMMAND_PEEK, $jobId);
             }))
-            ->willReturn($response)
+            ->willReturn($this->oath($response))
         ;
 
 
@@ -68,14 +68,23 @@ class ManagerTest extends WithServerMock_TestCase
     public function testPeek_notFoundFailure_retursNull()
     {
         $jobId = 5;
+
+
         $serverMock = $this->getServerMock(['dispatchCommand']);
+
+        $responseOathMock = $this->_getResponseOathMock();
+        $responseOathMock
+            ->expects($this->once())
+            ->method('invoke')
+            ->willThrowException(new NotFoundException($serverMock));
+
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->callback(function (Command $command) use ($jobId) {
                 return $command->getCommandLine() == sprintf('%s %s', Command::COMMAND_PEEK, $jobId);
             }))
-            ->willThrowException(new NotFoundException($serverMock));
+            ->willReturn($responseOathMock)
         ;
 
 
@@ -99,7 +108,7 @@ class ManagerTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) {
                 return $command->getCommandLine() == Command::COMMAND_LIST_TUBES;
             }))
-            ->willReturn($response)
+            ->willReturn($this->oath($response))
         ;
 
 

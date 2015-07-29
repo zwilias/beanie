@@ -24,7 +24,7 @@ class JobTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) {
                 return $command->getCommandLine() === sprintf('%s %s', Command::COMMAND_KICK_JOB, self::TEST_ID);
             }))
-            ->willReturn(true);
+            ->willReturn($this->_getResponseOathMock());
 
         $job = new Job(self::TEST_ID, null, $serverMock);
 
@@ -42,7 +42,7 @@ class JobTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) {
                 return $command->getCommandLine() === sprintf('%s %s', Command::COMMAND_TOUCH, self::TEST_ID);
             }))
-            ->willReturn(true);
+            ->willReturn($this->_getResponseOathMock());
 
         $job = new Job(self::TEST_ID, null, $serverMock);
 
@@ -60,7 +60,7 @@ class JobTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) {
                 return $command->getCommandLine() === sprintf('%s %s', Command::COMMAND_DELETE, self::TEST_ID);
             }))
-            ->willReturn(true);
+            ->willReturn($this->_getResponseOathMock());
 
         $job = new Job(self::TEST_ID, null, $serverMock);
 
@@ -77,13 +77,19 @@ class JobTest extends WithServerMock_TestCase
         $stats = ['some' => 'stats'];
         $response = new Response(Response::RESPONSE_OK, $stats, $serverMock);
 
+        $responseOath = $this->_getResponseOathMock();
+        $responseOath
+            ->expects($this->once())
+            ->method('invoke')
+            ->willReturn($response);
+
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->callback(function (Command $command) {
                 return $command->getCommandLine() === sprintf('%s %s', Command::COMMAND_STATS_JOB, self::TEST_ID);
             }))
-            ->willReturn($response);
+            ->willReturn($responseOath);
 
         $job = new Job(self::TEST_ID, null, $serverMock);
 
@@ -104,7 +110,7 @@ class JobTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) {
                 return $command->getCommandLine() === sprintf('%s %s %s', Command::COMMAND_BURY, self::TEST_ID, Beanie::DEFAULT_PRIORITY);
             }))
-            ->willReturn(true);
+            ->willReturn($this->_getResponseOathMock());
 
         $job = new Job(self::TEST_ID, null, $serverMock);
 
@@ -126,7 +132,7 @@ class JobTest extends WithServerMock_TestCase
             ->with($this->callback(function (Command $command) use ($priority) {
                 return $command->getCommandLine() === sprintf('%s %s %s', Command::COMMAND_BURY, self::TEST_ID, $priority);
             }))
-            ->willReturn(true);
+            ->willReturn($this->_getResponseOathMock());
 
         $job = new Job(self::TEST_ID, null, $serverMock);
 
@@ -151,13 +157,19 @@ class JobTest extends WithServerMock_TestCase
         $serverMock = $this->getServerMock(['dispatchCommand']);
         $response = new Response($responseName, null, $serverMock);
 
+        $oath = $this->_getResponseOathMock();
+        $oath
+            ->expects($this->once())
+            ->method('invoke')
+            ->willReturn($response);
+
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
             ->with($this->callback(function (Command $command) use ($actualArgs) {
                 return $command->getCommandLine() === sprintf('%s %s %s', Command::COMMAND_RELEASE, self::TEST_ID, join(' ', $actualArgs));
             }))
-            ->willReturn($response);
+            ->willReturn($oath);
 
         $job = new Job(self::TEST_ID, null, $serverMock);
 
