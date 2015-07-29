@@ -138,7 +138,6 @@ class Job
      * @param string $command
      * @param array $arguments
      * @return Response
-     * @throws \Beanie\Exception\InvalidArgumentException
      */
     private function executeCommand($command, $arguments = [])
     {

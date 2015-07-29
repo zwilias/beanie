@@ -118,9 +118,7 @@ class Tube implements TubeAware
 
         $this->sync();
 
-        return (int) $this->server->dispatchCommand(
-            $this->commandFactory->create(Command::COMMAND_KICK, [$howMany])
-        )->invoke()->getData();
+        return (int) $this->executeCommand(Command::COMMAND_KICK, [$howMany])->getData();
     }
 
     /**
@@ -132,13 +130,7 @@ class Tube implements TubeAware
         $this->sync();
 
         return (array) $this
-            ->server
-            ->dispatchCommand(
-                $this->commandFactory->create(Command::COMMAND_STATS_TUBE, [
-                    $this->getTubeStatus()->getCurrentTube()
-                ])
-            )
-            ->invoke()
+            ->executeCommand(Command::COMMAND_STATS_TUBE, [$this->getTubeStatus()->getCurrentTube()])
             ->getData();
     }
 
@@ -164,14 +156,20 @@ class Tube implements TubeAware
 
         $this->sync();
 
-        return $this->server
-            ->dispatchCommand(
-                $this->commandFactory->create(Command::COMMAND_PAUSE_TUBE, [
-                    $this->getTubeStatus()->getCurrentTube(),
-                    $howLong
-                ])
-            )
-            ->invoke()
+        return $this
+            ->executeCommand(Command::COMMAND_PAUSE_TUBE, [$this->getTubeStatus()->getCurrentTube(), $howLong])
             ->getName() == Response::RESPONSE_PAUSED;
+    }
+
+    /**
+     * @param string $command
+     * @param array $arguments
+     * @return Response
+     */
+    private function executeCommand($command, $arguments = [])
+    {
+        return $this->server
+            ->dispatchCommand($this->commandFactory->create($command, $arguments))
+            ->invoke();
     }
 }
