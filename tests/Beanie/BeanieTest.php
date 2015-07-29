@@ -171,4 +171,30 @@ class BeanieTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame([$managerMock], $managers);
     }
+
+    public function testWorkers_retrievesServers_getsWorkers()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Server $serverMock */
+        $serverMock = $this->getMockBuilder(Server::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Pool $poolMock */
+        $poolMock = $this->getMockBuilder(Pool::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getServers'])
+            ->getMock();
+
+        $poolMock
+            ->expects($this->once())
+            ->method('getServers')
+            ->willReturn([$serverMock]);
+
+
+        $beanie = new Beanie($poolMock);
+        $workers = $beanie->workers();
+
+
+        $this->assertEquals([new Worker($serverMock)], $workers);
+    }
 }

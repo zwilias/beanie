@@ -9,6 +9,7 @@ use Beanie\Command\CommandFactory;
 use Beanie\Exception\TimedOutException;
 use Beanie\Job\Job;
 use Beanie\Job\JobFactory;
+use Beanie\Job\JobOath;
 use Beanie\Server\Server;
 use Beanie\Server\TubeAwareTrait;
 use Beanie\Tube\TubeAware;
@@ -86,6 +87,18 @@ class Worker implements TubeAware
         } catch (TimedOutException $timeOut) {
             return null;
         }
+    }
+
+    /**
+     * @return JobOath
+     * @throws Exception\InvalidArgumentException
+     */
+    public function reserveOath()
+    {
+        return $this->jobFactory->createFromCommand(
+            $this->commandFactory->create(Command::COMMAND_RESERVE),
+            $this->server->transformTubeStatusTo($this->getTubeStatus(), TubeStatus::TRANSFORM_WATCHED)
+        );
     }
 
     /**

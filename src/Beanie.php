@@ -42,6 +42,16 @@ class Beanie
     }
 
     /**
+     * @return Worker[]
+     */
+    public function workers()
+    {
+        return array_map(function (Server $server) {
+            return new Worker($server);
+        }, $this->pool->getServers());
+    }
+
+    /**
      * @return Producer
      */
     public function producer()

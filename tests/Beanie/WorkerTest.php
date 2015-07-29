@@ -7,6 +7,7 @@ use Beanie\Command\Command;
 use Beanie\Command\Response;
 use Beanie\Exception\TimedOutException;
 use Beanie\Job\Job;
+use Beanie\Job\JobOath;
 use Beanie\Tube\TubeStatus;
 
 require_once 'WithServerMock_TestCase.php';
@@ -115,6 +116,32 @@ class WorkerTest extends WithServerMock_TestCase
         $this->assertEquals(Job::STATE_RESERVED, $job->getState());
         $this->assertEquals(12, $job->getId());
         $this->assertEquals('hi', $job->getData());
+    }
+
+    public function testReserveOath_returnsJobOath()
+    {
+        $serverMock = $this->getServerMock(['dispatchCommand', 'transformTubeStatusTo']);
+
+        $serverMock
+            ->expects($this->once())
+            ->method('transformTubeStatusTo')
+            ->with($this->isInstanceOf(TubeStatus::class))
+            ->willReturn($serverMock);
+
+        $serverMock
+            ->expects($this->once())
+            ->method('dispatchCommand')
+            ->with($this->callback(function (Command $command) {
+                return $command->getCommandLine() === Command::COMMAND_RESERVE;
+            }))
+            ->willReturn($this->_getResponseOathMock());
+
+
+        $worker = new Worker($serverMock);
+        $jobOath = $worker->reserveOath();
+
+
+        $this->assertInstanceOf(JobOath::class, $jobOath);
     }
 
     public function testReserve_withTimeout_returnsJob()
