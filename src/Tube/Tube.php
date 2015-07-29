@@ -112,10 +112,7 @@ class Tube implements TubeAware
      */
     public function kick($howMany = Beanie::DEFAULT_MAX_TO_KICK)
     {
-        if (!is_int($howMany) || $howMany < 1) {
-            throw new InvalidArgumentException('Kick requires a strictly positive number of jobs to kick');
-        }
-
+        $this->checkConstraints($howMany, 1, 'Kick requires a strictly positive number of jobs to kick');
         $this->sync();
 
         return (int) $this->executeCommand(Command::COMMAND_KICK, [$howMany])->getData();
@@ -150,15 +147,19 @@ class Tube implements TubeAware
      */
     public function pause($howLong)
     {
-        if (!is_int($howLong) || $howLong < 0) {
-            throw new InvalidArgumentException('Must pause for 0 or more seconds');
-        }
-
+        $this->checkConstraints($howLong, 0, 'Must pause for 0 or more seconds');
         $this->sync();
 
         return $this
             ->executeCommand(Command::COMMAND_PAUSE_TUBE, [$this->getTubeStatus()->getCurrentTube(), $howLong])
             ->getName() == Response::RESPONSE_PAUSED;
+    }
+
+    private function checkConstraints($actual, $minimum, $message)
+    {
+        if (!is_int($actual) || $actual < $minimum) {
+            throw new InvalidArgumentException($message);
+        }
     }
 
     /**
