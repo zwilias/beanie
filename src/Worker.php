@@ -66,6 +66,14 @@ class Worker implements TubeAware
     }
 
     /**
+     * @throws Exception\InvalidArgumentException
+     */
+    public function quit()
+    {
+        $this->server->dispatchCommand($this->commandFactory->create(Command::COMMAND_QUIT));
+    }
+
+    /**
      * @param null|int $timeout
      * @return Job|null
      */

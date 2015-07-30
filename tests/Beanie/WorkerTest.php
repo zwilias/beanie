@@ -84,6 +84,23 @@ class WorkerTest extends WithServerMock_TestCase
         $this->assertNotContains($tubeToIgnore, $worker->getTubeStatus()->getWatchedTubes());
     }
 
+    public function testQuit_firesQuitCommand()
+    {
+        $serverMock = $this->getServerMock(['dispatchCommand']);
+        $serverMock
+            ->expects($this->once())
+            ->method('dispatchCommand')
+            ->with($this->callback(function (Command $command) {
+                return $command->getCommandLine() === Command::COMMAND_QUIT;
+            }))
+            ->willReturnSelf();
+
+        $worker = new Worker($serverMock);
+
+
+        $worker->quit();
+    }
+
     public function testReserve_returnsJob()
     {
         $serverMock = $this->getServerMock(['dispatchCommand', 'transformTubeStatusTo']);
