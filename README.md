@@ -122,6 +122,16 @@ during page generation and offload them to longer lived workers.
 
 [![HTML View on Gliffy](http://www.gliffy.com/go/publish/image/8600841/L.png)](http://www.gliffy.com/go/publish/8600841)
 
+**However**: using the `Worker::reserveOath` method which returns a `JobOath` object, one could poll multiple workers
+for a Job. The reserveOath method writes the blocking reserve command to the beanstalk connection, but does not enter
+the blocking read call until the `invoke` method is called on the returned `JobOath` object. The `JobOath` object also
+exposes the raw socket resource, so using `socket_select` or something like and `\EvIo` watcher could enable a use-case
+like so:
+
+[![HTML View on Gliffy](http://www.gliffy.com/go/publish/image/8630261/L.png)](http://www.gliffy.com/go/publish/8630261)
+
+A *Queue Manager*  PHP library named *QMan* which provides such functionality is currently in the works.
+
 ### Class map
 
 Classes a "casual" user would come into contact with are highlighted in green.
