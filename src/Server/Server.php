@@ -106,6 +106,14 @@ class Server implements TubeAware
         $this->socket->connect();
     }
 
+    /**
+     * @throws SocketException
+     */
+    public function disconnect()
+    {
+        $this->socket->disconnect();
+    }
+
     protected function ensureConnected()
     {
         if (!$this->socket->isConnected()) {

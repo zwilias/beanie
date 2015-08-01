@@ -116,4 +116,22 @@ class Worker implements TubeAware
     {
         return $this->server;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->server;
+    }
+
+    public function reconnect()
+    {
+        $this->getServer()->connect();
+    }
+
+    public function disconnect()
+    {
+        $this->getServer()->disconnect();
+    }
 }

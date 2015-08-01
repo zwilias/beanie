@@ -6,7 +6,6 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/zwilias/beanie/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/zwilias/beanie/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/zwilias/beanie/v/stable)](https://packagist.org/packages/zwilias/beanie) 
 [![Total Downloads](https://poser.pugx.org/zwilias/beanie/downloads)](https://packagist.org/packages/zwilias/beanie) 
-[![Latest Unstable Version](https://poser.pugx.org/zwilias/beanie/v/unstable)](https://packagist.org/packages/zwilias/beanie) 
 [![License](https://poser.pugx.org/zwilias/beanie/license)](https://packagist.org/packages/zwilias/beanie)
 
 ## Core features

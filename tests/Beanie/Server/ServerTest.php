@@ -332,4 +332,30 @@ class ServerTest extends MockNative_TestCase
 
         $serverStub->transformTubeStatusTo($tubeStatus);
     }
+
+    public function testDisconnect_callsSocketDisconnect()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Socket $socketMock */
+        $socketMock = $this
+            ->getMockBuilder(Socket::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['disconnect'])
+            ->getMock();
+
+        $socketMock
+            ->expects($this->once())
+            ->method('disconnect');
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Server $serverStub */
+        $serverStub = $this
+            ->getMockBuilder(Server::class)
+            ->disableOriginalConstructor()
+            ->enableProxyingToOriginalMethods()
+            ->getMock();
+
+        $serverStub->setSocket($socketMock);
+
+
+        $serverStub->disconnect();
+    }
 }

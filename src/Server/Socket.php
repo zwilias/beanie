@@ -40,9 +40,7 @@ class Socket
         $this->port = (int) $port;
 
         if (($this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
-            $errorCode = socket_last_error();
-            $errorMessage = socket_strerror($errorCode);
-            throw new SocketException($errorMessage, $errorCode);
+            throw $this->createSocketException();
         }
     }
 
@@ -140,6 +138,10 @@ class Socket
             throw $this->createSocketException();
         }
 
+        if ($incoming === '') {
+            throw new SocketException('No more data', -1);
+        }
+
         return $incoming;
     }
 
@@ -173,6 +175,19 @@ class Socket
     public function getRaw()
     {
         return $this->socket;
+    }
+
+    /**
+     * @throws SocketException
+     */
+    public function disconnect()
+    {
+        $this->connected = false;
+        @socket_close($this->socket);
+
+        if (($this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
+            throw $this->createSocketException();
+        }
     }
 
     /**

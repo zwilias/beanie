@@ -220,4 +220,46 @@ class WorkerTest extends WithServerMock_TestCase
 
         $this->assertNull($job);
     }
+
+    public function testToString_callsServerToString()
+    {
+        $serverMock = $this->getServerMock();
+        $serverMock
+            ->expects($this->once())
+            ->method('__toString')
+            ->willReturn('test');
+
+
+        $worker = new Worker($serverMock);
+
+
+        $this->assertEquals('test', (string)$worker);
+    }
+
+    public function testReconnect_callsServerConnect()
+    {
+        $serverMock = $this->getServerMock(['connect']);
+        $serverMock
+            ->expects($this->once())
+            ->method('connect');
+
+
+        $worker = new Worker($serverMock);
+
+
+        $worker->reconnect();
+    }
+
+    public function testDisconnect_callsServerDisconnect()
+    {
+        $serverMock = $this->getServerMock(['disconnect']);
+        $serverMock
+            ->expects($this->once())
+            ->method('disconnect');
+
+        $worker = new Worker($serverMock);
+
+
+        $worker->disconnect();
+    }
 }

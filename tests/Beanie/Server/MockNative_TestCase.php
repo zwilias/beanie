@@ -9,7 +9,8 @@ $mockedNativeFunctions = [
     'socket_strerror',
     'socket_connect',
     'socket_write',
-    'socket_read'
+    'socket_read',
+    'socket_close'
 ];
 
 $namespace = __NAMESPACE__;

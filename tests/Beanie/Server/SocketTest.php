@@ -414,4 +414,75 @@ class SocketTest extends MockNative_TestCase
         $this->assertEquals($expectedLine, $actualLine);
         $this->assertEquals($expectedData, $actualData);
     }
+
+    /**
+     * @expectedException \Beanie\Exception\SocketException
+     * @expectedExceptionCode -1
+     */
+    public function testReadLine_noMoreData_throwsException()
+    {
+        $this->_socketCreateSuccess();
+        $this->_socketConnectSuccess();
+
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->once())
+            ->method('socket_read')
+            ->willReturn('');
+
+
+        $socket = new Socket();
+        $socket->connect();
+
+
+        $socket->readLine();
+    }
+
+    public function testDisconnect_disconnectsSocketAndCreatesNew()
+    {
+        $this->_getNativeFunctionMock()
+            ->expects($this->exactly(2))
+            ->method('socket_create')
+            ->with(AF_INET, SOCK_STREAM, SOL_TCP)
+            ->willReturn(true)
+        ;
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->atLeastOnce())
+            ->method('socket_close');
+
+
+        $socket = new Socket();
+
+
+        $socket->disconnect();
+    }
+
+    /**
+     * @expectedException \Beanie\Exception\SocketException
+     * @expectedExceptionCode 333
+     * @expectedExceptionMessage test
+     */
+    public function testDisconnect_recreateSocketFails_throwsException()
+    {
+        $this->_getNativeFunctionMock()
+            ->expects($this->exactly(2))
+            ->method('socket_create')
+            ->with(AF_INET, SOCK_STREAM, SOL_TCP)
+            ->willReturnOnConsecutiveCalls(true, false)
+        ;
+
+        $this->_getNativeFunctionMock()
+            ->expects($this->atLeastOnce())
+            ->method('socket_close')
+        ;
+
+        $this->_setSocketError(333, 'test');
+
+
+        $socket = new Socket();
+
+
+        $socket->disconnect();
+    }
 }
