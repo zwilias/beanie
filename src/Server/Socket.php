@@ -39,9 +39,7 @@ class Socket
         $this->hostname = (string) $hostname;
         $this->port = (int) $port;
 
-        if (($this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
-            throw $this->createSocketException();
-        }
+        $this->createSocket();
     }
 
     /**
@@ -185,9 +183,7 @@ class Socket
         $this->connected = false;
         @socket_close($this->socket);
 
-        if (($this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
-            throw $this->createSocketException();
-        }
+        $this->createSocket();
     }
 
     /**
@@ -227,5 +223,12 @@ class Socket
     public function __destruct()
     {
         @socket_close($this->socket);
+    }
+
+    protected function createSocket()
+    {
+        if (($this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
+            throw $this->createSocketException();
+        }
     }
 }
