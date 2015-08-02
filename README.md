@@ -133,7 +133,7 @@ like so:
 
 [![HTML View on Gliffy](http://www.gliffy.com/go/publish/image/8630261/L.png)](http://www.gliffy.com/go/publish/8630261)
 
-A *Queue Manager*  PHP library named *QMan* which provides such functionality is currently in the works.
+The above use case is implemented in [QMan](https://github.com/zwilias/qman), check it out!
 
 ### Class map
 

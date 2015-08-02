@@ -23,5 +23,8 @@
         "psr-4": {
             "Beanie\\": "src/"
         }
+    },
+    "suggest": {
+        "zwilias/qman": "A queue manager, built on top of beanie"
     }
 }
