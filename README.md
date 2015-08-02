@@ -6,7 +6,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/zwilias/beanie/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/zwilias/beanie/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/zwilias/beanie/v/stable)](https://packagist.org/packages/zwilias/beanie) 
 [![Total Downloads](https://poser.pugx.org/zwilias/beanie/downloads)](https://packagist.org/packages/zwilias/beanie) 
-[![License](https://poser.pugx.org/zwilias/beanie/license)](https://packagist.org/packages/zwilias/beanie)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/fd5f7759-24c7-482b-a077-3563e65c8add/mini.png)](https://insight.sensiolabs.com/projects/fd5f7759-24c7-482b-a077-3563e65c8add)
 
 ## Core features
 
