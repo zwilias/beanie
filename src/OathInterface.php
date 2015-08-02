@@ -4,7 +4,7 @@
 namespace Beanie;
 
 
-interface Oath
+interface OathInterface
 {
     /**
      * @return resource

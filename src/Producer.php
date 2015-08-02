@@ -4,16 +4,16 @@
 namespace Beanie;
 
 
-use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
+use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\Job\Job;
 use Beanie\Server\Pool;
 use Beanie\Server\TubeAwareTrait;
-use Beanie\Tube\TubeAware;
+use Beanie\Tube\TubeAwareInterface;
 use Beanie\Tube\TubeStatus;
 
-class Producer implements TubeAware
+class Producer implements TubeAwareInterface
 {
     use TubeAwareTrait;
 
@@ -56,7 +56,7 @@ class Producer implements TubeAware
         return $this->createJob(
             $jobData,
             $this->pool->transformTubeStatusTo($this->tubeStatus)->dispatchCommand(
-                $this->commandFactory->create(Command::COMMAND_PUT, [
+                $this->commandFactory->create(CommandInterface::COMMAND_PUT, [
                     $jobData, $priority, $delay, $timeToRun
                 ])
             )->invoke()

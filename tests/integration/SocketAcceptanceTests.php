@@ -69,7 +69,7 @@ class SocketAcceptanceTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             sprintf(
                 '%s %s %s %s %s%s%s%s',
-                \Beanie\Command\Command::COMMAND_PUT,
+                \Beanie\Command\CommandInterface::COMMAND_PUT,
                 \Beanie\Beanie::DEFAULT_PRIORITY,
                 \Beanie\Beanie::DEFAULT_DELAY,
                 \Beanie\Beanie::DEFAULT_TIME_TO_RUN,
@@ -108,7 +108,7 @@ class SocketAcceptanceTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(sprintf(
             '%s' . "\r\n",
-            \Beanie\Command\Command::COMMAND_RESERVE
+            \Beanie\Command\CommandInterface::COMMAND_RESERVE
         ), $command);
 
         $this->assertInstanceOf(\Beanie\Job\Job::class, $job);

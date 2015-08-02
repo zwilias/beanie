@@ -4,7 +4,7 @@
 namespace Beanie\Util;
 
 
-interface Factory
+interface FactoryInterface
 {
     /**
      * @return static

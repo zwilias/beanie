@@ -5,8 +5,8 @@ namespace Beanie\Tube;
 
 
 use Beanie\Beanie;
-use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
+use Beanie\Command\CommandInterface;
 
 class TubeStatusTest extends \PHPUnit_Framework_TestCase
 {
@@ -101,7 +101,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
      * @param string $otherUseTube
      * @param string[] $otherWatchTubes
      * @param int $mode
-     * @param Command[] $expectedCommands
+     * @param CommandInterface[] $expectedCommands
      * @dataProvider transformCommandsProvider
      */
     public function testGetCommandsToTransformTo($useTube, $watchTubes, $otherUseTube, $otherWatchTubes, $mode, $expectedCommands)
@@ -121,13 +121,13 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
 
 
         $expectedCommandLines = array_map(
-            function (Command $command) { return $command->getCommandLine(); },
+            function (CommandInterface $command) { return $command->getCommandLine(); },
             $expectedCommands
         );
         sort($expectedCommandLines);
 
         $actualCommandLines = array_map(
-            function (Command $command) { return $command->getCommandLine(); },
+            function (CommandInterface $command) { return $command->getCommandLine(); },
             $actualCommands
         );
         sort($actualCommandLines);
@@ -155,11 +155,11 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['2only1', 'shared1', 'shared2', '2only2'],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only1']),
-                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only2']),
-                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only3']),
-                    $commandFactory->create(Command::COMMAND_WATCH, ['2only1']),
-                    $commandFactory->create(Command::COMMAND_WATCH, ['2only2'])
+                    $commandFactory->create(CommandInterface::COMMAND_IGNORE, ['1only1']),
+                    $commandFactory->create(CommandInterface::COMMAND_IGNORE, ['1only2']),
+                    $commandFactory->create(CommandInterface::COMMAND_IGNORE, ['1only3']),
+                    $commandFactory->create(CommandInterface::COMMAND_WATCH, ['2only1']),
+                    $commandFactory->create(CommandInterface::COMMAND_WATCH, ['2only2'])
                 ]
             ],
             'only-additions' => [
@@ -169,8 +169,8 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['2only1', 'shared1', 'shared2', '2only2'],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    $commandFactory->create(Command::COMMAND_WATCH, ['2only1']),
-                    $commandFactory->create(Command::COMMAND_WATCH, ['2only2'])
+                    $commandFactory->create(CommandInterface::COMMAND_WATCH, ['2only1']),
+                    $commandFactory->create(CommandInterface::COMMAND_WATCH, ['2only2'])
                 ]
             ],
             'only-removals' => [
@@ -180,9 +180,9 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['shared1', 'shared2'],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only1']),
-                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only2']),
-                    $commandFactory->create(Command::COMMAND_IGNORE, ['1only3'])
+                    $commandFactory->create(CommandInterface::COMMAND_IGNORE, ['1only1']),
+                    $commandFactory->create(CommandInterface::COMMAND_IGNORE, ['1only2']),
+                    $commandFactory->create(CommandInterface::COMMAND_IGNORE, ['1only3'])
                 ]
             ],
             'different-use' => [
@@ -192,7 +192,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 [Beanie::DEFAULT_TUBE],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    $commandFactory->create(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE])
+                    $commandFactory->create(CommandInterface::COMMAND_USE, [Beanie::DEFAULT_TUBE])
                 ]
             ],
             'different-use-ignored' => [
@@ -218,9 +218,9 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['2only1', 'shared1', 'shared2', '2only2'],
                 TubeStatus::TRANSFORM_BOTH,
                 [
-                    $commandFactory->create(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE]),
-                    $commandFactory->create(Command::COMMAND_WATCH, ['2only1']),
-                    $commandFactory->create(Command::COMMAND_WATCH, ['2only2'])
+                    $commandFactory->create(CommandInterface::COMMAND_USE, [Beanie::DEFAULT_TUBE]),
+                    $commandFactory->create(CommandInterface::COMMAND_WATCH, ['2only1']),
+                    $commandFactory->create(CommandInterface::COMMAND_WATCH, ['2only2'])
                 ]
             ],
             'all-different-only-use' => [
@@ -230,7 +230,7 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['2only1', 'shared1', 'shared2', '2only2'],
                 TubeStatus::TRANSFORM_USE,
                 [
-                    $commandFactory->create(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE])
+                    $commandFactory->create(CommandInterface::COMMAND_USE, [Beanie::DEFAULT_TUBE])
                 ]
             ],
             'all-different-only-watched' => [
@@ -240,8 +240,8 @@ class TubeStatusTest extends \PHPUnit_Framework_TestCase
                 ['2only1', 'shared1', 'shared2', '2only2'],
                 TubeStatus::TRANSFORM_WATCHED,
                 [
-                    $commandFactory->create(Command::COMMAND_WATCH, ['2only1']),
-                    $commandFactory->create(Command::COMMAND_WATCH, ['2only2'])
+                    $commandFactory->create(CommandInterface::COMMAND_WATCH, ['2only1']),
+                    $commandFactory->create(CommandInterface::COMMAND_WATCH, ['2only2'])
                 ]
             ]
         ];

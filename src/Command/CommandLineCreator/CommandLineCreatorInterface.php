@@ -4,7 +4,7 @@
 namespace Beanie\Command\CommandLineCreator;
 
 
-interface CommandLineCreator
+interface CommandLineCreatorInterface
 {
     /**
      * @return string

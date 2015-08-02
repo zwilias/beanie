@@ -4,8 +4,8 @@
 require_once __DIR__  . '/../Beanie/WithServerMock_TestCase.php';
 
 use Beanie\Beanie;
-use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
+use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\Exception\DrainingException;
 use Beanie\Exception\ExpectedCRLFException;
@@ -36,9 +36,9 @@ class AllCommandsTest extends WithServerMock_TestCase
 
     public function testBuryCommand_GetCommandLine_noArgs_usesDefault()
     {
-        $buryCommand = $this->commandFactory->create(Command::COMMAND_BURY, [self::TEST_ID]);
+        $buryCommand = $this->commandFactory->create(CommandInterface::COMMAND_BURY, [self::TEST_ID]);
         $expected = join(' ', [
-            Command::COMMAND_BURY,
+            CommandInterface::COMMAND_BURY,
             self::TEST_ID,
             Beanie::DEFAULT_PRIORITY
         ]);
@@ -51,13 +51,13 @@ class AllCommandsTest extends WithServerMock_TestCase
     {
         $priority = 8888;
         $expected = join(' ', [
-            Command::COMMAND_BURY,
+            CommandInterface::COMMAND_BURY,
             self::TEST_ID,
             $priority
         ]);
 
 
-        $buryCommand = $this->commandFactory->create(Command::COMMAND_BURY, [self::TEST_ID, $priority]);
+        $buryCommand = $this->commandFactory->create(CommandInterface::COMMAND_BURY, [self::TEST_ID, $priority]);
 
 
         $this->assertEquals($expected, $buryCommand->getCommandLine());
@@ -70,7 +70,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testBuryCommand_ParseResponse_notFoundFailure_throwsException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_BURY, [self::TEST_ID])
+            ->create(CommandInterface::COMMAND_BURY, [self::TEST_ID])
             ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
@@ -81,14 +81,14 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testBuryCommand_ParseResponse_unexpectedResponse_throwsException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_BURY, [self::TEST_ID])
+            ->create(CommandInterface::COMMAND_BURY, [self::TEST_ID])
             ->parseResponse('WTF', $this->getServerMock());
     }
 
     public function testBuryCommand_ParseResponse_buriedResponse_returnsResponse()
     {
         $response = $this->commandFactory
-            ->create(Command::COMMAND_BURY, [self::TEST_ID])
+            ->create(CommandInterface::COMMAND_BURY, [self::TEST_ID])
             ->parseResponse(Response::RESPONSE_BURIED, $this->getServerMock());
 
 
@@ -102,10 +102,10 @@ class AllCommandsTest extends WithServerMock_TestCase
 
     public function testDeleteCommand_GetCommandLine_correctFormat()
     {
-        $expected = sprintf('%s %s', Command::COMMAND_DELETE, self::TEST_ID);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_DELETE, self::TEST_ID);
 
 
-        $deleteCommand = $this->commandFactory->create(Command::COMMAND_DELETE, [self::TEST_ID]);
+        $deleteCommand = $this->commandFactory->create(CommandInterface::COMMAND_DELETE, [self::TEST_ID]);
 
 
         $this->assertEquals($expected, $deleteCommand->getCommandLine());
@@ -113,7 +113,7 @@ class AllCommandsTest extends WithServerMock_TestCase
 
     public function testDeleteCommand_ParseResponse_deleted_returnsResponseWithoutData()
     {
-        $deleteCommand = $this->commandFactory->create(Command::COMMAND_DELETE, [self::TEST_ID]);
+        $deleteCommand = $this->commandFactory->create(CommandInterface::COMMAND_DELETE, [self::TEST_ID]);
 
 
         $response = $deleteCommand->parseResponse(Response::RESPONSE_DELETED, $this->getServerMock());
@@ -132,7 +132,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testDeleteCommand_ParseResponse_unexpectedResponse_throwsException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_DELETE, [self::TEST_ID])
+            ->create(CommandInterface::COMMAND_DELETE, [self::TEST_ID])
             ->parseResponse('what', $this->getServerMock());
     }
 
@@ -143,7 +143,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testDeleteCommand_ParseResponse_notFoundFailure_throwsNotFoundException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_DELETE, [self::TEST_ID])
+            ->create(CommandInterface::COMMAND_DELETE, [self::TEST_ID])
             ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
@@ -152,11 +152,11 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testIgnoreCommand_GetCommandLine_matchesExpectedFormat()
     {
         $tubeName = Beanie::DEFAULT_TUBE;
-        $expected = sprintf('%s %s', Command::COMMAND_IGNORE, $tubeName);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_IGNORE, $tubeName);
 
 
         $commandLine = $this->commandFactory
-            ->create(Command::COMMAND_IGNORE, [$tubeName])
+            ->create(CommandInterface::COMMAND_IGNORE, [$tubeName])
             ->getCommandLine();
 
 
@@ -166,7 +166,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testIgnoreCommand_ParseResponse_returnsResponse()
     {
         $responseLine = sprintf('%s %s', Response::RESPONSE_WATCHING, Beanie::DEFAULT_TUBE);
-        $ignoreCommand = $this->commandFactory->create(Command::COMMAND_IGNORE, [Beanie::DEFAULT_TUBE]);
+        $ignoreCommand = $this->commandFactory->create(CommandInterface::COMMAND_IGNORE, [Beanie::DEFAULT_TUBE]);
 
 
         $response = $ignoreCommand->parseResponse($responseLine, $this->getServerMock());
@@ -183,7 +183,7 @@ class AllCommandsTest extends WithServerMock_TestCase
      */
     public function testIgnoreCommand_ParseResponse_notIgnore_throwsNotIgnoreException()
     {
-        $ignoreCommand = $this->commandFactory->create(Command::COMMAND_IGNORE, [Beanie::DEFAULT_TUBE]);
+        $ignoreCommand = $this->commandFactory->create(CommandInterface::COMMAND_IGNORE, [Beanie::DEFAULT_TUBE]);
 
 
         $ignoreCommand->parseResponse(Response::FAILURE_NOT_IGNORED, $this->getServerMock());
@@ -192,10 +192,10 @@ class AllCommandsTest extends WithServerMock_TestCase
     // KICK COMMAND //
     public function testKickCommand_GetCommandLine_noArgs_usesDefaults()
     {
-        $expected = sprintf('%s %s', Command::COMMAND_KICK, Beanie::DEFAULT_MAX_TO_KICK);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_KICK, Beanie::DEFAULT_MAX_TO_KICK);
 
 
-        $command = $this->commandFactory->create(Command::COMMAND_KICK);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_KICK);
 
 
         $this->assertEquals($expected, $command->getCommandLine());
@@ -204,10 +204,10 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testKickCommand_GetCommandLine_withArgs_usesArgs()
     {
         $maxToKick = 10;
-        $expected = sprintf('%s %s', Command::COMMAND_KICK, $maxToKick);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_KICK, $maxToKick);
 
 
-        $command = $this->commandFactory->create(Command::COMMAND_KICK, [$maxToKick]);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_KICK, [$maxToKick]);
 
 
         $this->assertEquals($expected, $command->getCommandLine());
@@ -219,7 +219,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $responseLine = sprintf('%s %s', Response::RESPONSE_KICKED, $kicked);
 
 
-        $command = $this->commandFactory->create(Command::COMMAND_KICK);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_KICK);
         $response = $command->parseResponse($responseLine, $this->getServerMock());
 
 
@@ -232,10 +232,10 @@ class AllCommandsTest extends WithServerMock_TestCase
     // KICK-JOB COMMAND //
     public function testKickJobCommand_GetCommandLine_correctFormat()
     {
-        $expected = sprintf('%s %s', Command::COMMAND_KICK_JOB, self::TEST_ID);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_KICK_JOB, self::TEST_ID);
 
 
-        $kickCommand = $this->commandFactory->create(Command::COMMAND_KICK_JOB, [self::TEST_ID]);
+        $kickCommand = $this->commandFactory->create(CommandInterface::COMMAND_KICK_JOB, [self::TEST_ID]);
 
 
         $this->assertEquals($expected, $kickCommand->getCommandLine());
@@ -243,7 +243,7 @@ class AllCommandsTest extends WithServerMock_TestCase
 
     public function testKickJobCommand_ParseResponse_deleted_returnsResponseWithoutData()
     {
-        $kickCommand = $this->commandFactory->create(Command::COMMAND_KICK_JOB, [self::TEST_ID]);
+        $kickCommand = $this->commandFactory->create(CommandInterface::COMMAND_KICK_JOB, [self::TEST_ID]);
 
 
         $response = $kickCommand->parseResponse(Response::RESPONSE_KICKED, $this->getServerMock());
@@ -262,7 +262,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testKickJobCommand_ParseResponse_unexpectedResponse_throwsException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_KICK_JOB, [self::TEST_ID])
+            ->create(CommandInterface::COMMAND_KICK_JOB, [self::TEST_ID])
             ->parseResponse('what', $this->getServerMock());
     }
 
@@ -273,7 +273,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testKickJobCommand_ParseResponse_notFoundFailure_throwsNotFoundException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_KICK_JOB, [self::TEST_ID])
+            ->create(CommandInterface::COMMAND_KICK_JOB, [self::TEST_ID])
             ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
@@ -281,8 +281,8 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testListTubesCommand_GetCommandLine_correctFormat()
     {
         $this->assertEquals(
-            Command::COMMAND_LIST_TUBES,
-            $this->commandFactory->create(Command::COMMAND_LIST_TUBES)->getCommandLine()
+            CommandInterface::COMMAND_LIST_TUBES,
+            $this->commandFactory->create(CommandInterface::COMMAND_LIST_TUBES)->getCommandLine()
         );
     }
 
@@ -290,8 +290,8 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testListTubesWatchedCommand_GetCommandLine_correctFormat()
     {
         $this->assertEquals(
-            Command::COMMAND_LIST_TUBES_WATCHED,
-            $this->commandFactory->create(Command::COMMAND_LIST_TUBES_WATCHED)->getCommandLine()
+            CommandInterface::COMMAND_LIST_TUBES_WATCHED,
+            $this->commandFactory->create(CommandInterface::COMMAND_LIST_TUBES_WATCHED)->getCommandLine()
         );
     }
 
@@ -299,8 +299,8 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testListTubeUsedCommand_GetCommandLine_correctCommandLine()
     {
         $this->assertEquals(
-            Command::COMMAND_LIST_TUBE_USED,
-            $this->commandFactory->create(Command::COMMAND_LIST_TUBE_USED)->getCommandLine()
+            CommandInterface::COMMAND_LIST_TUBE_USED,
+            $this->commandFactory->create(CommandInterface::COMMAND_LIST_TUBE_USED)->getCommandLine()
         );
     }
 
@@ -310,7 +310,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $responseLine = sprintf('%s %s', Response::RESPONSE_USING, $tubeUsed);
 
 
-        $command = $this->commandFactory->create(Command::COMMAND_LIST_TUBE_USED);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_LIST_TUBE_USED);
         $response = $command->parseResponse($responseLine, $this->getServerMock());
 
 
@@ -331,7 +331,7 @@ class AllCommandsTest extends WithServerMock_TestCase
      */
     public function testPauseTubeCommand_Construct_invalidTubeName_ThrowsInvalidNameException($tubeName)
     {
-        $this->commandFactory->create(Command::COMMAND_PAUSE_TUBE, [$tubeName]);
+        $this->commandFactory->create(CommandInterface::COMMAND_PAUSE_TUBE, [$tubeName]);
     }
 
     /**
@@ -340,10 +340,10 @@ class AllCommandsTest extends WithServerMock_TestCase
      */
     public function testPauseTubeCommand_Construct_validTubeName_noException($tubeName)
     {
-        $command = $this->commandFactory->create(Command::COMMAND_PAUSE_TUBE, [$tubeName]);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_PAUSE_TUBE, [$tubeName]);
 
 
-        $this->assertInstanceOf(Command::class, $command);
+        $this->assertInstanceOf(CommandInterface::class, $command);
     }
 
     /**
@@ -352,8 +352,8 @@ class AllCommandsTest extends WithServerMock_TestCase
      */
     public function testPauseTubeCommand_GetCommandLine_noArgs_usesDefaults($tubeName)
     {
-        $expected = join(' ', [Command::COMMAND_PAUSE_TUBE, $tubeName, Beanie::DEFAULT_DELAY]);
-        $command = $this->commandFactory->create(Command::COMMAND_PAUSE_TUBE, [$tubeName]);
+        $expected = join(' ', [CommandInterface::COMMAND_PAUSE_TUBE, $tubeName, Beanie::DEFAULT_DELAY]);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_PAUSE_TUBE, [$tubeName]);
 
 
         $this->assertEquals($expected, $command->getCommandLine());
@@ -362,10 +362,10 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testPauseTubeCommand_GetCommandLine_args_usesArgs()
     {
         $delay = 123;
-        $expected = join(' ', [Command::COMMAND_PAUSE_TUBE, self::TEST_TUBE, $delay]);
+        $expected = join(' ', [CommandInterface::COMMAND_PAUSE_TUBE, self::TEST_TUBE, $delay]);
 
 
-        $command = $this->commandFactory->create(Command::COMMAND_PAUSE_TUBE, [self::TEST_TUBE, $delay]);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_PAUSE_TUBE, [self::TEST_TUBE, $delay]);
 
 
         $this->assertEquals($expected, $command->getCommandLine());
@@ -378,7 +378,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testPauseTubeCommand_ParseResponse_notFoundFailure_throwsNotFoundException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_PAUSE_TUBE, [self::TEST_TUBE])
+            ->create(CommandInterface::COMMAND_PAUSE_TUBE, [self::TEST_TUBE])
             ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
@@ -389,14 +389,14 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testPauseTubeCommand_ParseResponse_unexpectedResponse_throwsUnexpectedResponseException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_PAUSE_TUBE, [self::TEST_TUBE])
+            ->create(CommandInterface::COMMAND_PAUSE_TUBE, [self::TEST_TUBE])
             ->parseResponse('something', $this->getServerMock());
     }
 
     public function testPauseTubeCommand_ParseResponse_pausedResponse_returnsResponse()
     {
         $response = $this->commandFactory
-            ->create(Command::COMMAND_PAUSE_TUBE, [self::TEST_TUBE])
+            ->create(CommandInterface::COMMAND_PAUSE_TUBE, [self::TEST_TUBE])
             ->parseResponse(Response::RESPONSE_PAUSED, $this->getServerMock());
 
 
@@ -414,8 +414,8 @@ class AllCommandsTest extends WithServerMock_TestCase
      */
     public function testPeekCommand_ParseResponse_notFoundFailure_throwsNotFoundException()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\Command $command */
-        $command = $this->commandFactory->create(Command::COMMAND_PEEK, [self::TEST_TUBE]);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\CommandInterface $command */
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_PEEK, [self::TEST_TUBE]);
         $command->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
@@ -435,8 +435,8 @@ class AllCommandsTest extends WithServerMock_TestCase
             strlen($data)
         ]);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\Command $command */
-        $command = $this->commandFactory->create(Command::COMMAND_PEEK, [self::TEST_ID]);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\CommandInterface $command */
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_PEEK, [self::TEST_ID]);
 
 
         $response = $command->parseResponse($responseLine, $serverMock);
@@ -453,12 +453,12 @@ class AllCommandsTest extends WithServerMock_TestCase
 
     public function testPeekCommand_GetCommandLine_correctFormat()
     {
-        $expected = sprintf('%s %s', Command::COMMAND_PEEK, self::TEST_ID);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_PEEK, self::TEST_ID);
 
 
         $this->assertEquals(
             $expected,
-            $this->commandFactory->create(Command::COMMAND_PEEK, [self::TEST_ID])->getCommandLine()
+            $this->commandFactory->create(CommandInterface::COMMAND_PEEK, [self::TEST_ID])->getCommandLine()
         );
     }
 
@@ -466,8 +466,8 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testPeekBuriedCommand_GetCommandLine_correctFormat()
     {
         $this->assertEquals(
-            Command::COMMAND_PEEK_BURIED,
-            $this->commandFactory->create(Command::COMMAND_PEEK_BURIED)->getCommandLine()
+            CommandInterface::COMMAND_PEEK_BURIED,
+            $this->commandFactory->create(CommandInterface::COMMAND_PEEK_BURIED)->getCommandLine()
         );
     }
 
@@ -475,8 +475,8 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testPeekDelayedCommand_GetCommandLine_correctFormat()
     {
         $this->assertEquals(
-            Command::COMMAND_PEEK_DELAYED,
-            $this->commandFactory->create(Command::COMMAND_PEEK_DELAYED)->getCommandLine()
+            CommandInterface::COMMAND_PEEK_DELAYED,
+            $this->commandFactory->create(CommandInterface::COMMAND_PEEK_DELAYED)->getCommandLine()
         );
     }
 
@@ -484,8 +484,8 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testPeekReadyCommand_GetCommandLine_correctFormat()
     {
         $this->assertEquals(
-            Command::COMMAND_PEEK_READY,
-            $this->commandFactory->create(Command::COMMAND_PEEK_READY)->getCommandLine()
+            CommandInterface::COMMAND_PEEK_READY,
+            $this->commandFactory->create(CommandInterface::COMMAND_PEEK_READY)->getCommandLine()
         );
     }
 
@@ -494,7 +494,7 @@ class AllCommandsTest extends WithServerMock_TestCase
 
     public function testPutCommand_Construct_withData_containsData()
     {
-        $putCommand = $this->commandFactory->create(Command::COMMAND_PUT, [self::TEST_DATA]);
+        $putCommand = $this->commandFactory->create(CommandInterface::COMMAND_PUT, [self::TEST_DATA]);
 
 
         $this->assertTrue($putCommand->hasData());
@@ -504,7 +504,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testPutCommand_GetCommandLine_noArgs_defaultValues()
     {
         $expected = join(' ', [
-            Command::COMMAND_PUT,
+            CommandInterface::COMMAND_PUT,
             Beanie::DEFAULT_PRIORITY,
             Beanie::DEFAULT_DELAY,
             Beanie::DEFAULT_TIME_TO_RUN,
@@ -512,7 +512,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         ]);
 
 
-        $putCommand = $this->commandFactory->create(Command::COMMAND_PUT, [self::TEST_DATA]);
+        $putCommand = $this->commandFactory->create(CommandInterface::COMMAND_PUT, [self::TEST_DATA]);
 
 
         $this->assertEquals($expected, $putCommand->getCommandLine());
@@ -525,7 +525,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $timeToRun = 7;
 
         $expected = join(' ', [
-            Command::COMMAND_PUT,
+            CommandInterface::COMMAND_PUT,
             $priority,
             $delay,
             $timeToRun,
@@ -534,7 +534,7 @@ class AllCommandsTest extends WithServerMock_TestCase
 
 
         $putCommand = $this->commandFactory
-            ->create(Command::COMMAND_PUT, [self::TEST_DATA, $priority, $delay, $timeToRun]);
+            ->create(CommandInterface::COMMAND_PUT, [self::TEST_DATA, $priority, $delay, $timeToRun]);
 
 
         $this->assertEquals($expected, $putCommand->getCommandLine());
@@ -554,7 +554,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $exceptionCode
     )
     {
-        $putCommand = $this->commandFactory->create(Command::COMMAND_PUT, [self::TEST_DATA]);
+        $putCommand = $this->commandFactory->create(CommandInterface::COMMAND_PUT, [self::TEST_DATA]);
         $caughtException = false;
 
         try {
@@ -580,7 +580,7 @@ class AllCommandsTest extends WithServerMock_TestCase
      */
     public function testPutCommand_ParseResponse_responseSuccess($response, $type, $data)
     {
-        $putCommand = $this->commandFactory->create(Command::COMMAND_PUT, [self::TEST_DATA]);
+        $putCommand = $this->commandFactory->create(CommandInterface::COMMAND_PUT, [self::TEST_DATA]);
 
 
         $response = $putCommand->parseResponse($response, $this->getServerMock());
@@ -596,8 +596,8 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testQuitCommand_GetCommandLine_correctCommand()
     {
         $this->assertEquals(
-            Command::COMMAND_QUIT,
-            $this->commandFactory->create(Command::COMMAND_QUIT)->getCommandLine()
+            CommandInterface::COMMAND_QUIT,
+            $this->commandFactory->create(CommandInterface::COMMAND_QUIT)->getCommandLine()
         );
     }
 
@@ -608,7 +608,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testQuitCommand_ParseResponse_noResponseExpected_throwsUnexpectedResponse()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_QUIT)
+            ->create(CommandInterface::COMMAND_QUIT)
             ->parseResponse('something', $this->getServerMock());
     }
 
@@ -616,14 +616,14 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testReleaseCommand_GetCommandLine_noArgs_defaultValues()
     {
         $expected = join(' ', [
-            Command::COMMAND_RELEASE,
+            CommandInterface::COMMAND_RELEASE,
             self::TEST_ID,
             Beanie::DEFAULT_PRIORITY,
             Beanie::DEFAULT_DELAY
         ]);
 
 
-        $releaseCommand = $this->commandFactory->create(Command::COMMAND_RELEASE, [self::TEST_ID]);
+        $releaseCommand = $this->commandFactory->create(CommandInterface::COMMAND_RELEASE, [self::TEST_ID]);
 
 
         $this->assertEquals($expected, $releaseCommand->getCommandLine());
@@ -635,7 +635,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $delay = 6;
 
         $expected = join(' ', [
-            Command::COMMAND_RELEASE,
+            CommandInterface::COMMAND_RELEASE,
             self::TEST_ID,
             $priority,
             $delay
@@ -643,7 +643,7 @@ class AllCommandsTest extends WithServerMock_TestCase
 
 
         $releaseCommand =$this->commandFactory
-            ->create(Command::COMMAND_RELEASE, [self::TEST_ID, $priority, $delay]);
+            ->create(CommandInterface::COMMAND_RELEASE, [self::TEST_ID, $priority, $delay]);
 
 
         $this->assertEquals($expected, $releaseCommand->getCommandLine());
@@ -663,7 +663,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $exceptionCode
     )
     {
-        $releaseCommand = $this->commandFactory->create(Command::COMMAND_RELEASE, [self::TEST_ID]);
+        $releaseCommand = $this->commandFactory->create(CommandInterface::COMMAND_RELEASE, [self::TEST_ID]);
         $caughtException = false;
 
         try {
@@ -687,7 +687,7 @@ class AllCommandsTest extends WithServerMock_TestCase
      */
     public function testReleaseCommand_ParseResponse_responseSuccess($responseName)
     {
-        $releaseCommand = $this->commandFactory->create(Command::COMMAND_RELEASE, [self::TEST_ID]);
+        $releaseCommand = $this->commandFactory->create(CommandInterface::COMMAND_RELEASE, [self::TEST_ID]);
 
 
         $response = $releaseCommand->parseResponse($responseName, $this->getServerMock());
@@ -730,12 +730,12 @@ class AllCommandsTest extends WithServerMock_TestCase
     // RESERVE COMMAND //
     public function testReserveCommand_GetCommandLine_noArgs_usesDefaults()
     {
-        $expected = Command::COMMAND_RESERVE;
+        $expected = CommandInterface::COMMAND_RESERVE;
 
 
         $this->assertEquals(
             $expected,
-            $this->commandFactory->create(Command::COMMAND_RESERVE)->getCommandLine()
+            $this->commandFactory->create(CommandInterface::COMMAND_RESERVE)->getCommandLine()
         );
     }
 
@@ -746,7 +746,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testReserveCommand_ParseResponse_deadlineSoonFailure_throwsDeadlineSoonException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_RESERVE)
+            ->create(CommandInterface::COMMAND_RESERVE)
             ->parseResponse(Response::FAILURE_DEADLINE_SOON, $this->getServerMock());
     }
 
@@ -767,7 +767,7 @@ class AllCommandsTest extends WithServerMock_TestCase
             ->with(strlen($data))
             ->willReturn($data);
 
-        $command = $this->commandFactory->create(Command::COMMAND_RESERVE);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_RESERVE);
 
 
         $response = $command->parseResponse($responseLine, $serverMock);
@@ -785,13 +785,13 @@ class AllCommandsTest extends WithServerMock_TestCase
     const TEST_TIMEOUT = 50;
     public function testReserveCommandWithTimeout_GetCommandLine_noArgs_usesDefaults()
     {
-        $expected = sprintf('%s %s', Command::COMMAND_RESERVE_WITH_TIMEOUT, self::TEST_TIMEOUT);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_RESERVE_WITH_TIMEOUT, self::TEST_TIMEOUT);
 
 
         $this->assertEquals(
             $expected,
             $this->commandFactory
-                ->create(Command::COMMAND_RESERVE_WITH_TIMEOUT, [self::TEST_TIMEOUT])
+                ->create(CommandInterface::COMMAND_RESERVE_WITH_TIMEOUT, [self::TEST_TIMEOUT])
                 ->getCommandLine()
         );
     }
@@ -803,7 +803,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testReserveCommandWithTimeout_ParseResponse_deadlineSoonFailure_throwsDeadlineSoonException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_RESERVE_WITH_TIMEOUT, [self::TEST_TIMEOUT])
+            ->create(CommandInterface::COMMAND_RESERVE_WITH_TIMEOUT, [self::TEST_TIMEOUT])
             ->parseResponse(Response::FAILURE_DEADLINE_SOON, $this->getServerMock());
     }
 
@@ -814,7 +814,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testReserveCommandWithTimeout_ParseResponse_timedOutFailure_throwsTimedOutException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_RESERVE_WITH_TIMEOUT, [self::TEST_TIMEOUT])
+            ->create(CommandInterface::COMMAND_RESERVE_WITH_TIMEOUT, [self::TEST_TIMEOUT])
             ->parseResponse(Response::FAILURE_TIMED_OUT, $this->getServerMock());
     }
 
@@ -835,7 +835,7 @@ class AllCommandsTest extends WithServerMock_TestCase
             ->with(strlen($data))
             ->willReturn($data);
 
-        $command = $this->commandFactory->create(Command::COMMAND_RESERVE_WITH_TIMEOUT, [self::TEST_TIMEOUT]);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_RESERVE_WITH_TIMEOUT, [self::TEST_TIMEOUT]);
 
 
         $response = $command->parseResponse($responseLine, $serverMock);
@@ -853,8 +853,8 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testStatsCommand_GetCommandLine_correctFormat()
     {
         $this->assertEquals(
-            Command::COMMAND_STATS,
-            $this->commandFactory->create(Command::COMMAND_STATS)->getCommandLine()
+            CommandInterface::COMMAND_STATS,
+            $this->commandFactory->create(CommandInterface::COMMAND_STATS)->getCommandLine()
         );
     }
 
@@ -862,10 +862,10 @@ class AllCommandsTest extends WithServerMock_TestCase
 
     public function testStatsJobCommand_GetCommandLine_correctFormat()
     {
-        $expected = sprintf('%s %s', Command::COMMAND_STATS_JOB, self::TEST_ID);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_STATS_JOB, self::TEST_ID);
 
 
-        $command = $this->commandFactory->create(Command::COMMAND_STATS_JOB, [self::TEST_ID]);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_STATS_JOB, [self::TEST_ID]);
 
 
         $this->assertEquals($expected, $command->getCommandLine());
@@ -878,7 +878,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testStatsJobCommand_ParseResponse_notFoundFailure_throwsNotFoundException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_STATS_JOB, [self::TEST_ID])
+            ->create(CommandInterface::COMMAND_STATS_JOB, [self::TEST_ID])
             ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
@@ -890,7 +890,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $responseLine = sprintf('%s %s', Response::RESPONSE_OK, strlen($testDataYAML));
 
 
-        $command = $this->commandFactory->create(Command::COMMAND_STATS_JOB, [self::TEST_ID]);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_STATS_JOB, [self::TEST_ID]);
         $response = $command->parseResponse($responseLine, $serverMock);
 
 
@@ -907,7 +907,7 @@ class AllCommandsTest extends WithServerMock_TestCase
      */
     public function testStatsTubeCommand_Construct_invalidTubeName_ThrowsInvalidNameException($tubeName)
     {
-        $this->commandFactory->create(Command::COMMAND_STATS_TUBE, [$tubeName]);
+        $this->commandFactory->create(CommandInterface::COMMAND_STATS_TUBE, [$tubeName]);
     }
 
     /**
@@ -916,18 +916,18 @@ class AllCommandsTest extends WithServerMock_TestCase
      */
     public function testStatsTubeCommand_Construct_validTubeName_noException($tubeName)
     {
-        $command = $this->commandFactory->create(Command::COMMAND_STATS_TUBE, [$tubeName]);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_STATS_TUBE, [$tubeName]);
 
 
-        $this->assertInstanceOf(Command::class, $command);
+        $this->assertInstanceOf(CommandInterface::class, $command);
     }
 
     public function testStatsTubeCommand_GetCommandLine_correctFormat()
     {
-        $expected = sprintf('%s %s', Command::COMMAND_STATS_TUBE, self::TEST_TUBE);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_STATS_TUBE, self::TEST_TUBE);
 
 
-        $command = $this->commandFactory->create(Command::COMMAND_STATS_TUBE, [self::TEST_TUBE]);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_STATS_TUBE, [self::TEST_TUBE]);
 
 
         $this->assertEquals($expected, $command->getCommandLine());
@@ -940,7 +940,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testStatsTubeCommand_ParseResponse_notFoundFailure_throwsNotFoundException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_STATS_TUBE, [self::TEST_TUBE])
+            ->create(CommandInterface::COMMAND_STATS_TUBE, [self::TEST_TUBE])
             ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
@@ -952,7 +952,7 @@ class AllCommandsTest extends WithServerMock_TestCase
         $responseLine = sprintf('%s %s', Response::RESPONSE_OK, strlen($testDataYAML));
 
 
-        $command = $this->commandFactory->create(Command::COMMAND_STATS_TUBE, [self::TEST_TUBE]);
+        $command = $this->commandFactory->create(CommandInterface::COMMAND_STATS_TUBE, [self::TEST_TUBE]);
         $response = $command->parseResponse($responseLine, $serverMock);
 
 
@@ -963,10 +963,10 @@ class AllCommandsTest extends WithServerMock_TestCase
     // TOUCH COMMAND //
     public function testTouchCommand_GetCommandLine_correctFormat()
     {
-        $expected = sprintf('%s %s', Command::COMMAND_TOUCH, self::TEST_ID);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_TOUCH, self::TEST_ID);
 
 
-        $touchCommand = $this->commandFactory->create(Command::COMMAND_TOUCH, [self::TEST_ID]);
+        $touchCommand = $this->commandFactory->create(CommandInterface::COMMAND_TOUCH, [self::TEST_ID]);
 
 
         $this->assertEquals($expected, $touchCommand->getCommandLine());
@@ -974,7 +974,7 @@ class AllCommandsTest extends WithServerMock_TestCase
 
     public function testTouchCommand_ParseResponse_touched_returnsResponseWithoutData()
     {
-        $touchCommand = $this->commandFactory->create(Command::COMMAND_TOUCH, [self::TEST_ID]);
+        $touchCommand = $this->commandFactory->create(CommandInterface::COMMAND_TOUCH, [self::TEST_ID]);
 
 
         $response = $touchCommand->parseResponse(Response::RESPONSE_TOUCHED, $this->getServerMock());
@@ -993,7 +993,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testTouchCommand_ParseResponse_unexpectedResponse_throwsException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_TOUCH, [self::TEST_ID])
+            ->create(CommandInterface::COMMAND_TOUCH, [self::TEST_ID])
             ->parseResponse('what', $this->getServerMock());
     }
 
@@ -1004,7 +1004,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testTouchCommand_ParseResponse_notFoundFailure_throwsNotFoundException()
     {
         $this->commandFactory
-            ->create(Command::COMMAND_TOUCH, [self::TEST_ID])
+            ->create(CommandInterface::COMMAND_TOUCH, [self::TEST_ID])
             ->parseResponse(Response::FAILURE_NOT_FOUND, $this->getServerMock());
     }
 
@@ -1012,11 +1012,11 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testUseCommand_GetCommandLine_matchesExpectedFormat()
     {
         $tubeName = Beanie::DEFAULT_TUBE;
-        $expected = sprintf('%s %s', Command::COMMAND_USE, $tubeName);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_USE, $tubeName);
 
 
         $commandLine = $this->commandFactory
-            ->create(Command::COMMAND_USE, [$tubeName])
+            ->create(CommandInterface::COMMAND_USE, [$tubeName])
             ->getCommandLine();
 
 
@@ -1026,7 +1026,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testUseCommand_ParseResponse_returnsResponse()
     {
         $responseLine = sprintf('%s %s', Response::RESPONSE_USING, Beanie::DEFAULT_TUBE);
-        $useCommand = $this->commandFactory->create(Command::COMMAND_USE, [Beanie::DEFAULT_TUBE]);
+        $useCommand = $this->commandFactory->create(CommandInterface::COMMAND_USE, [Beanie::DEFAULT_TUBE]);
 
 
         $response = $useCommand->parseResponse($responseLine, $this->getServerMock());
@@ -1041,11 +1041,11 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testWatchCommand_GetCommandLine_matchesExpectedFormat()
     {
         $tubeName = Beanie::DEFAULT_TUBE;
-        $expected = sprintf('%s %s', Command::COMMAND_WATCH, $tubeName);
+        $expected = sprintf('%s %s', CommandInterface::COMMAND_WATCH, $tubeName);
 
 
         $commandLine = $this->commandFactory
-            ->create(Command::COMMAND_WATCH, [$tubeName])
+            ->create(CommandInterface::COMMAND_WATCH, [$tubeName])
             ->getCommandLine();
 
 
@@ -1055,7 +1055,7 @@ class AllCommandsTest extends WithServerMock_TestCase
     public function testWatchCommand_ParseResponse_returnsResponse()
     {
         $responseLine = sprintf('%s %s', Response::RESPONSE_WATCHING, 1);
-        $watchCommand = $this->commandFactory->create(Command::COMMAND_WATCH, [Beanie::DEFAULT_TUBE]);
+        $watchCommand = $this->commandFactory->create(CommandInterface::COMMAND_WATCH, [Beanie::DEFAULT_TUBE]);
 
 
         $response = $watchCommand->parseResponse($responseLine, $this->getServerMock());

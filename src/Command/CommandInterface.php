@@ -4,10 +4,10 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command\CommandLineCreator\CommandLineCreator;
-use Beanie\Command\ResponseParser\ResponseParser;
+use Beanie\Command\CommandLineCreator\CommandLineCreatorInterface;
+use Beanie\Command\ResponseParser\ResponseParserInterface;
 
-interface Command extends CommandLineCreator, ResponseParser
+interface CommandInterface extends CommandLineCreatorInterface, ResponseParserInterface
 {
     const VALID_NAME_REGEX = '/^[A-Za-z0-9+\/;.$_()][A-Za-z0-9+\/;.$_()\-]*$/';
 

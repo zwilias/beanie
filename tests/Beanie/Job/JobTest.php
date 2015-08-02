@@ -4,7 +4,7 @@
 namespace Beanie\Job;
 
 use Beanie\Beanie;
-use Beanie\Command\Command;
+use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\WithServerMock_TestCase;
 
@@ -21,8 +21,8 @@ class JobTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() === sprintf('%s %s', Command::COMMAND_KICK_JOB, self::TEST_ID);
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() === sprintf('%s %s', CommandInterface::COMMAND_KICK_JOB, self::TEST_ID);
             }))
             ->willReturn($this->_getResponseOathMock());
 
@@ -39,8 +39,8 @@ class JobTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() === sprintf('%s %s', Command::COMMAND_TOUCH, self::TEST_ID);
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() === sprintf('%s %s', CommandInterface::COMMAND_TOUCH, self::TEST_ID);
             }))
             ->willReturn($this->_getResponseOathMock());
 
@@ -57,8 +57,8 @@ class JobTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() === sprintf('%s %s', Command::COMMAND_DELETE, self::TEST_ID);
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() === sprintf('%s %s', CommandInterface::COMMAND_DELETE, self::TEST_ID);
             }))
             ->willReturn($this->_getResponseOathMock());
 
@@ -86,8 +86,8 @@ class JobTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() === sprintf('%s %s', Command::COMMAND_STATS_JOB, self::TEST_ID);
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() === sprintf('%s %s', CommandInterface::COMMAND_STATS_JOB, self::TEST_ID);
             }))
             ->willReturn($responseOath);
 
@@ -107,8 +107,8 @@ class JobTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() === sprintf('%s %s %s', Command::COMMAND_BURY, self::TEST_ID, Beanie::DEFAULT_PRIORITY);
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() === sprintf('%s %s %s', CommandInterface::COMMAND_BURY, self::TEST_ID, Beanie::DEFAULT_PRIORITY);
             }))
             ->willReturn($this->_getResponseOathMock());
 
@@ -129,8 +129,8 @@ class JobTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) use ($priority) {
-                return $command->getCommandLine() === sprintf('%s %s %s', Command::COMMAND_BURY, self::TEST_ID, $priority);
+            ->with($this->callback(function (CommandInterface $command) use ($priority) {
+                return $command->getCommandLine() === sprintf('%s %s %s', CommandInterface::COMMAND_BURY, self::TEST_ID, $priority);
             }))
             ->willReturn($this->_getResponseOathMock());
 
@@ -166,8 +166,8 @@ class JobTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) use ($actualArgs) {
-                return $command->getCommandLine() === sprintf('%s %s %s', Command::COMMAND_RELEASE, self::TEST_ID, join(' ', $actualArgs));
+            ->with($this->callback(function (CommandInterface $command) use ($actualArgs) {
+                return $command->getCommandLine() === sprintf('%s %s %s', CommandInterface::COMMAND_RELEASE, self::TEST_ID, join(' ', $actualArgs));
             }))
             ->willReturn($oath);
 

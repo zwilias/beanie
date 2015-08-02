@@ -5,8 +5,8 @@ namespace Beanie\Job;
 
 
 use Beanie\Beanie;
-use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
+use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\Server\Server;
 
@@ -77,7 +77,7 @@ class Job
      */
     public function kick()
     {
-        $this->executeCommand(Command::COMMAND_KICK_JOB);
+        $this->executeCommand(CommandInterface::COMMAND_KICK_JOB);
         return $this;
     }
 
@@ -88,7 +88,7 @@ class Job
      */
     public function release($priority = Beanie::DEFAULT_PRIORITY, $delay = Beanie::DEFAULT_DELAY)
     {
-        $response = $this->executeCommand(Command::COMMAND_RELEASE, [$priority, $delay]);
+        $response = $this->executeCommand(CommandInterface::COMMAND_RELEASE, [$priority, $delay]);
         $this->state = $response->getName() === Response::RESPONSE_RELEASED
             ? self::STATE_RELEASED
             : self::STATE_BURIED;
@@ -101,7 +101,7 @@ class Job
      */
     public function touch()
     {
-        $this->executeCommand(Command::COMMAND_TOUCH);
+        $this->executeCommand(CommandInterface::COMMAND_TOUCH);
         return $this;
     }
 
@@ -111,7 +111,7 @@ class Job
      */
     public function bury($priority = Beanie::DEFAULT_PRIORITY)
     {
-        $this->executeCommand(Command::COMMAND_BURY, [$priority]);
+        $this->executeCommand(CommandInterface::COMMAND_BURY, [$priority]);
         $this->state = self::STATE_BURIED;
         return $this;
     }
@@ -121,7 +121,7 @@ class Job
      */
     public function delete()
     {
-        $this->executeCommand(Command::COMMAND_DELETE);
+        $this->executeCommand(CommandInterface::COMMAND_DELETE);
         $this->state = self::STATE_DELETED;
         return $this;
     }
@@ -131,7 +131,7 @@ class Job
      */
     public function stats()
     {
-        return $this->executeCommand(Command::COMMAND_STATS_JOB)->getData();
+        return $this->executeCommand(CommandInterface::COMMAND_STATS_JOB)->getData();
     }
 
     /**

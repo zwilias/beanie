@@ -6,8 +6,8 @@ namespace Beanie\Job;
 require_once __DIR__ . '/../WithServerMock_TestCase.php';
 
 
-use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
+use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\WithServerMock_TestCase;
 
@@ -52,7 +52,7 @@ class JobFactoryTest extends WithServerMock_TestCase
     {
         $serverMock = $this->getServerMock(['dispatchCommand']);
 
-        $command = CommandFactory::instance()->create(Command::COMMAND_PEEK, [self::TEST_ID]);
+        $command = CommandFactory::instance()->create(CommandInterface::COMMAND_PEEK, [self::TEST_ID]);
 
         $response = new Response(Response::RESPONSE_FOUND, [
             'id' => self::TEST_ID,
@@ -62,8 +62,8 @@ class JobFactoryTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() == sprintf('%s %s', Command::COMMAND_PEEK, self::TEST_ID);
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() == sprintf('%s %s', CommandInterface::COMMAND_PEEK, self::TEST_ID);
             }))
             ->willReturn($this->oath($response));
 

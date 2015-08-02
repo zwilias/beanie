@@ -6,7 +6,7 @@ namespace Beanie\Tube;
 
 
 
-interface TubeAware
+interface TubeAwareInterface
 {
     /**
      * @return TubeStatus

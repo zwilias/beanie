@@ -5,8 +5,8 @@ namespace Beanie\Tube;
 
 
 use Beanie\Beanie;
-use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
+use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\Exception;
 use Beanie\Exception\InvalidArgumentException;
@@ -16,7 +16,7 @@ use Beanie\Job\JobFactory;
 use Beanie\Server\Server;
 
 
-class Tube implements TubeAware
+class Tube implements TubeAwareInterface
 {
     /** @var TubeStatus */
     protected $tubeStatus;
@@ -66,7 +66,7 @@ class Tube implements TubeAware
      */
     public function peekReady()
     {
-        return $this->peek($this->commandFactory->create(Command::COMMAND_PEEK_READY));
+        return $this->peek($this->commandFactory->create(CommandInterface::COMMAND_PEEK_READY));
     }
 
     /**
@@ -74,7 +74,7 @@ class Tube implements TubeAware
      */
     public function peekDelayed()
     {
-        return $this->peek($this->commandFactory->create(Command::COMMAND_PEEK_DELAYED));
+        return $this->peek($this->commandFactory->create(CommandInterface::COMMAND_PEEK_DELAYED));
     }
 
     /**
@@ -82,15 +82,15 @@ class Tube implements TubeAware
      */
     public function peekBuried()
     {
-        return $this->peek($this->commandFactory->create(Command::COMMAND_PEEK_BURIED));
+        return $this->peek($this->commandFactory->create(CommandInterface::COMMAND_PEEK_BURIED));
     }
 
     /**
-     * @param Command $command
+     * @param CommandInterface $command
      * @return Job|null
      * @throws Exception\InvalidArgumentException
      */
-    protected function peek(Command $command)
+    protected function peek(CommandInterface $command)
     {
         $this->sync();
 
@@ -115,7 +115,7 @@ class Tube implements TubeAware
         $this->checkConstraints($howMany, 1, 'Kick requires a strictly positive number of jobs to kick');
         $this->sync();
 
-        return (int) $this->executeCommand(Command::COMMAND_KICK, [$howMany])->getData();
+        return (int) $this->executeCommand(CommandInterface::COMMAND_KICK, [$howMany])->getData();
     }
 
     /**
@@ -127,7 +127,7 @@ class Tube implements TubeAware
         $this->sync();
 
         return (array) $this
-            ->executeCommand(Command::COMMAND_STATS_TUBE, [$this->getTubeStatus()->getCurrentTube()])
+            ->executeCommand(CommandInterface::COMMAND_STATS_TUBE, [$this->getTubeStatus()->getCurrentTube()])
             ->getData();
     }
 
@@ -151,7 +151,7 @@ class Tube implements TubeAware
         $this->sync();
 
         return $this
-            ->executeCommand(Command::COMMAND_PAUSE_TUBE, [$this->getTubeStatus()->getCurrentTube(), $howLong])
+            ->executeCommand(CommandInterface::COMMAND_PAUSE_TUBE, [$this->getTubeStatus()->getCurrentTube(), $howLong])
             ->getName() == Response::RESPONSE_PAUSED;
     }
 

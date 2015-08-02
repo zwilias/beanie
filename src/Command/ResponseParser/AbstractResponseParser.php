@@ -12,7 +12,7 @@ use Beanie\Exception\UnexpectedResponseException;
 use Beanie\Exception\UnknownCommandException;
 use Beanie\Server\Server;
 
-abstract class AbstractResponseParser implements ResponseParser
+abstract class AbstractResponseParser implements ResponseParserInterface
 {
     protected static $generalErrorResponses = [
         Response::ERROR_BAD_FORMAT => BadFormatException::class,

@@ -4,10 +4,10 @@
 namespace Beanie\Server;
 
 
-use Beanie\Util\Factory;
+use Beanie\Util\FactoryInterface;
 use Beanie\Util\FactoryTrait;
 
-class PoolFactory implements Factory
+class PoolFactory implements FactoryInterface
 {
     use FactoryTrait;
 

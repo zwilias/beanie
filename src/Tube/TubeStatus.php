@@ -5,8 +5,8 @@ namespace Beanie\Tube;
 
 
 use Beanie\Beanie;
-use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
+use Beanie\Command\CommandInterface;
 
 /**
  * Class TubeStatus
@@ -99,7 +99,7 @@ class TubeStatus
     /**
      * @param TubeStatus $goal
      * @param int $mode
-     * @return \Beanie\Command\Command[]
+     * @return \Beanie\Command\CommandInterface[]
      */
     public function transformTo(TubeStatus $goal, $mode = self::TRANSFORM_BOTH)
     {
@@ -119,7 +119,7 @@ class TubeStatus
     /**
      * @param TubeStatus $goal
      * @param int $mode
-     * @return \Beanie\Command\Command[]
+     * @return \Beanie\Command\CommandInterface[]
      */
     public function calculateTransformationTo(TubeStatus $goal, $mode = self::TRANSFORM_BOTH)
     {
@@ -133,7 +133,7 @@ class TubeStatus
             $mode & self::TRANSFORM_USE &&
             $goal->getCurrentTube() !== $this->currentTube
         ) {
-            $commands[] = $this->commandFactory->create(Command::COMMAND_USE, [$goal->getCurrentTube()]);
+            $commands[] = $this->commandFactory->create(CommandInterface::COMMAND_USE, [$goal->getCurrentTube()]);
         }
 
         return $commands;
@@ -141,13 +141,13 @@ class TubeStatus
 
     /**
      * @param string[] $otherWatchedTubes
-     * @return \Beanie\Command\Command[]
+     * @return \Beanie\Command\CommandInterface[]
      */
     protected function calculateTransformWatched(array $otherWatchedTubes = [])
     {
         return array_merge(
-            $this->calculateDiffTubes($otherWatchedTubes, $this->getWatchedTubes(), Command::COMMAND_WATCH),
-            $this->calculateDiffTubes($this->getWatchedTubes(), $otherWatchedTubes, Command::COMMAND_IGNORE)
+            $this->calculateDiffTubes($otherWatchedTubes, $this->getWatchedTubes(), CommandInterface::COMMAND_WATCH),
+            $this->calculateDiffTubes($this->getWatchedTubes(), $otherWatchedTubes, CommandInterface::COMMAND_IGNORE)
         );
     }
 
@@ -155,7 +155,7 @@ class TubeStatus
      * @param string[] $tubes
      * @param string[] $otherTubes
      * @param string $command
-     * @return Command[]
+     * @return CommandInterface[]
      * @throws \Beanie\Exception\InvalidArgumentException
      */
     protected function calculateDiffTubes($tubes, $otherTubes, $command)

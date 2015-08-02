@@ -4,14 +4,14 @@
 namespace Beanie\Job;
 
 
-use Beanie\Command\Command;
+use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\Exception\InvalidArgumentException;
 use Beanie\Server\Server;
-use Beanie\Util\Factory;
+use Beanie\Util\FactoryInterface;
 use Beanie\Util\FactoryTrait;
 
-class JobFactory implements Factory
+class JobFactory implements FactoryInterface
 {
     use FactoryTrait;
 
@@ -39,11 +39,11 @@ class JobFactory implements Factory
     }
 
     /**
-     * @param Command $command
+     * @param CommandInterface $command
      * @param Server $server
      * @return JobOath
      */
-    public function createFromCommand(Command $command, Server $server)
+    public function createFromCommand(CommandInterface $command, Server $server)
     {
         return new JobOath(
             $server->dispatchCommand($command),

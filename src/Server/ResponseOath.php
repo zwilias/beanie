@@ -4,10 +4,10 @@
 namespace Beanie\Server;
 
 
-use Beanie\Command\ResponseParser\ResponseParser;
-use Beanie\Oath;
+use Beanie\Command\ResponseParser\ResponseParserInterface;
+use Beanie\OathInterface;
 
-class ResponseOath implements Oath
+class ResponseOath implements OathInterface
 {
     /** @var Socket */
     protected $socket;
@@ -15,15 +15,15 @@ class ResponseOath implements Oath
     /** @var Server */
     protected $server;
 
-    /** @var ResponseParser */
+    /** @var ResponseParserInterface */
     protected $responseParser;
 
     /**
      * @param Socket $socket
      * @param Server $server
-     * @param ResponseParser $responseParser
+     * @param ResponseParserInterface $responseParser
      */
-    public function __construct(Socket $socket, Server $server, ResponseParser $responseParser)
+    public function __construct(Socket $socket, Server $server, ResponseParserInterface $responseParser)
     {
         $this->socket = $socket;
         $this->server = $server;

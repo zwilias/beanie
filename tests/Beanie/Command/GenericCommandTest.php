@@ -5,8 +5,8 @@ namespace Beanie\Command;
 
 require_once __DIR__ . '/../WithServerMock_TestCase.php';
 
-use Beanie\Command\CommandLineCreator\CommandLineCreator;
-use Beanie\Command\ResponseParser\ResponseParser;
+use Beanie\Command\CommandLineCreator\CommandLineCreatorInterface;
+use Beanie\Command\ResponseParser\ResponseParserInterface;
 use Beanie\WithServerMock_TestCase;
 
 class GenericCommandTest extends WithServerMock_TestCase
@@ -16,9 +16,9 @@ class GenericCommandTest extends WithServerMock_TestCase
         $serverMock = $this->getServerMock();
         $response = new Response('test', null, $serverMock);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|CommandLineCreator $commandLineCreatorMock */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|CommandLineCreatorInterface $commandLineCreatorMock */
         $commandLineCreatorMock = $this
-            ->getMockBuilder(CommandLineCreator::class)
+            ->getMockBuilder(CommandLineCreatorInterface::class)
             ->setMethods(['getCommandLine', 'hasData', 'getData'])
             ->getMockForAbstractClass()
         ;
@@ -41,9 +41,9 @@ class GenericCommandTest extends WithServerMock_TestCase
             ->willReturn('data')
         ;
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ResponseParser $responseParserMock */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ResponseParserInterface $responseParserMock */
         $responseParserMock = $this
-            ->getMockBuilder(ResponseParser::class)
+            ->getMockBuilder(ResponseParserInterface::class)
             ->setMethods(['parseResponse'])
             ->getMockForAbstractClass()
         ;

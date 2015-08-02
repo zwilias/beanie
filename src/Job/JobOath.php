@@ -5,10 +5,10 @@ namespace Beanie\Job;
 
 
 use Beanie\Exception\NotFoundException;
-use Beanie\Oath;
+use Beanie\OathInterface;
 use Beanie\Server\ResponseOath;
 
-class JobOath implements Oath
+class JobOath implements OathInterface
 {
     /** @var ResponseOath */
     protected $responseOath;

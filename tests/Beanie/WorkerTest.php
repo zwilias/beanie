@@ -3,7 +3,7 @@
 
 namespace Beanie;
 
-use Beanie\Command\Command;
+use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\Exception\TimedOutException;
 use Beanie\Job\Job;
@@ -90,8 +90,8 @@ class WorkerTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() === Command::COMMAND_QUIT;
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() === CommandInterface::COMMAND_QUIT;
             }))
             ->willReturnSelf();
 
@@ -119,8 +119,8 @@ class WorkerTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() === Command::COMMAND_RESERVE;
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() === CommandInterface::COMMAND_RESERVE;
             }))
             ->willReturn($this->oath($response));
 
@@ -148,8 +148,8 @@ class WorkerTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() === Command::COMMAND_RESERVE;
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() === CommandInterface::COMMAND_RESERVE;
             }))
             ->willReturn($this->_getResponseOathMock());
 
@@ -179,8 +179,8 @@ class WorkerTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() === Command::COMMAND_RESERVE_WITH_TIMEOUT . ' 12';
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() === CommandInterface::COMMAND_RESERVE_WITH_TIMEOUT . ' 12';
             }))
             ->willReturn($this->oath($response));
 
@@ -208,8 +208,8 @@ class WorkerTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() === Command::COMMAND_RESERVE_WITH_TIMEOUT . ' 12';
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() === CommandInterface::COMMAND_RESERVE_WITH_TIMEOUT . ' 12';
             }))
             ->willThrowException(new TimedOutException($serverMock));
 

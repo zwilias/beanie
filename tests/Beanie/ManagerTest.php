@@ -3,7 +3,7 @@
 
 namespace Beanie;
 
-use Beanie\Command\Command;
+use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\Exception\NotFoundException;
 use Beanie\Job\Job;
@@ -23,8 +23,8 @@ class ManagerTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() == Command::COMMAND_STATS;
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() == CommandInterface::COMMAND_STATS;
             }))
             ->willReturn($this->oath($response))
         ;
@@ -48,8 +48,8 @@ class ManagerTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) use ($jobId) {
-                return $command->getCommandLine() == sprintf('%s %s', Command::COMMAND_PEEK, $jobId);
+            ->with($this->callback(function (CommandInterface $command) use ($jobId) {
+                return $command->getCommandLine() == sprintf('%s %s', CommandInterface::COMMAND_PEEK, $jobId);
             }))
             ->willReturn($this->oath($response))
         ;
@@ -81,8 +81,8 @@ class ManagerTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) use ($jobId) {
-                return $command->getCommandLine() == sprintf('%s %s', Command::COMMAND_PEEK, $jobId);
+            ->with($this->callback(function (CommandInterface $command) use ($jobId) {
+                return $command->getCommandLine() == sprintf('%s %s', CommandInterface::COMMAND_PEEK, $jobId);
             }))
             ->willReturn($responseOathMock)
         ;
@@ -105,8 +105,8 @@ class ManagerTest extends WithServerMock_TestCase
         $serverMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) {
-                return $command->getCommandLine() == Command::COMMAND_LIST_TUBES;
+            ->with($this->callback(function (CommandInterface $command) {
+                return $command->getCommandLine() == CommandInterface::COMMAND_LIST_TUBES;
             }))
             ->willReturn($this->oath($response))
         ;

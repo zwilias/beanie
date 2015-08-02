@@ -6,7 +6,7 @@ namespace Beanie\Command\CommandLineCreator;
 
 use Beanie\Exception\InvalidArgumentException;
 
-class GenericCommandLineCreator implements CommandLineCreator
+class GenericCommandLineCreator implements CommandLineCreatorInterface
 {
     /** @var string */
     private $commandName;

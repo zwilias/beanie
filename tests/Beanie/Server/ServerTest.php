@@ -166,7 +166,7 @@ class ServerTest extends MockNative_TestCase
         $server = new Server();
         $expectedResponse = new Response(null, null, $server);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\Command $command */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\CommandInterface $command */
         $command = $this
             ->getMockBuilder(GenericCommand::class)
             ->disableOriginalConstructor()
@@ -238,7 +238,7 @@ class ServerTest extends MockNative_TestCase
         $server = new Server();
         $expectedResponse = new Response(null, null, $server);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\Command $command */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Beanie\Command\CommandInterface $command */
         $command = $this
             ->getMockBuilder(GenericCommand::class)
             ->disableOriginalConstructor()

@@ -4,23 +4,23 @@
 namespace Beanie\Command;
 
 
-use Beanie\Command\CommandLineCreator\CommandLineCreator;
-use Beanie\Command\ResponseParser\ResponseParser;
+use Beanie\Command\CommandLineCreator\CommandLineCreatorInterface;
+use Beanie\Command\ResponseParser\ResponseParserInterface;
 use Beanie\Server\Server;
 
-class GenericCommand implements Command
+class GenericCommand implements CommandInterface
 {
-    /** @var CommandLineCreator */
+    /** @var CommandLineCreatorInterface */
     protected $commandLineCreator;
 
-    /** @var ResponseParser */
+    /** @var ResponseParserInterface */
     protected $responseParser;
 
     /**
-     * @param CommandLineCreator $commandLineCreator
-     * @param ResponseParser $responseParser
+     * @param CommandLineCreatorInterface $commandLineCreator
+     * @param ResponseParserInterface $responseParser
      */
-    public function __construct(CommandLineCreator $commandLineCreator, ResponseParser $responseParser)
+    public function __construct(CommandLineCreatorInterface $commandLineCreator, ResponseParserInterface $responseParser)
     {
         $this->commandLineCreator = $commandLineCreator;
         $this->responseParser = $responseParser;

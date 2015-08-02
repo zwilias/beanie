@@ -6,7 +6,7 @@ namespace Beanie\Command\ResponseParser;
 
 use Beanie\Server\Server;
 
-interface ResponseParser
+interface ResponseParserInterface
 {
     /**
      * @param string $responseLine

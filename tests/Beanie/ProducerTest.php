@@ -5,7 +5,7 @@ namespace Beanie;
 
 require_once 'WithServerMock_TestCase.php';
 
-use Beanie\Command\Command;
+use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\Job\Job;
 use Beanie\Server\Pool;
@@ -101,7 +101,7 @@ class ProducerTest extends WithServerMock_TestCase
         $finalArguments = $arguments + $argumentDefaults;
 
         $expectedCommandLine = join(' ', [
-            Command::COMMAND_PUT,
+            CommandInterface::COMMAND_PUT,
             $finalArguments[1],
             $finalArguments[2],
             $finalArguments[3],
@@ -131,7 +131,7 @@ class ProducerTest extends WithServerMock_TestCase
         $poolMock
             ->expects($this->once())
             ->method('dispatchCommand')
-            ->with($this->callback(function (Command $command) use ($expectedCommandLine, $jobData) {
+            ->with($this->callback(function (CommandInterface $command) use ($expectedCommandLine, $jobData) {
                 return
                     $command->getCommandLine() == $expectedCommandLine &&
                     $command->hasData() === true &&

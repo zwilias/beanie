@@ -4,13 +4,13 @@
 namespace Beanie\Server;
 
 
-use Beanie\Command\Command;
+use Beanie\Command\CommandInterface;
 use Beanie\Exception\SocketException;
 use Beanie\Manager;
-use Beanie\Tube\TubeAware;
+use Beanie\Tube\TubeAwareInterface;
 use Beanie\Tube\TubeStatus;
 
-class Server implements TubeAware
+class Server implements TubeAwareInterface
 {
     const DEFAULT_PORT = 11300;
     const DEFAULT_HOST = '127.0.0.1';
@@ -62,7 +62,7 @@ class Server implements TubeAware
     }
 
     /**
-     * @param \Beanie\Command\Command $command
+     * @param \Beanie\Command\CommandInterface $command
      * @return \Beanie\Server\ResponseOath
      * @throws SocketException
      * @throws \Beanie\Exception\BadFormatException
@@ -70,7 +70,7 @@ class Server implements TubeAware
      * @throws \Beanie\Exception\OutOfMemoryException
      * @throws \Beanie\Exception\UnknownCommandException
      */
-    public function dispatchCommand(Command $command)
+    public function dispatchCommand(CommandInterface $command)
     {
         $this->ensureConnected();
         $this->socket->write($command->getCommandLine() . self::EOL);

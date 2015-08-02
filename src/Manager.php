@@ -4,8 +4,8 @@
 namespace Beanie;
 
 
-use Beanie\Command\Command;
 use Beanie\Command\CommandFactory;
+use Beanie\Command\CommandInterface;
 use Beanie\Job\JobFactory;
 use Beanie\Server\Server;
 use Beanie\Tube\Tube;
@@ -38,7 +38,7 @@ class Manager
     public function stats()
     {
         return $this->server
-            ->dispatchCommand($this->commandFactory->create(Command::COMMAND_STATS))
+            ->dispatchCommand($this->commandFactory->create(CommandInterface::COMMAND_STATS))
             ->invoke()
             ->getData();
     }
@@ -51,7 +51,7 @@ class Manager
     public function peek($jobId)
     {
         return $this->jobFactory->createFromCommand(
-            $this->commandFactory->create(Command::COMMAND_PEEK, [$jobId]),
+            $this->commandFactory->create(CommandInterface::COMMAND_PEEK, [$jobId]),
             $this->server
         )->invoke();
     }
@@ -66,7 +66,7 @@ class Manager
 
         foreach (
             $this->server->dispatchCommand(
-                $this->commandFactory->create(Command::COMMAND_LIST_TUBES)
+                $this->commandFactory->create(CommandInterface::COMMAND_LIST_TUBES)
             )->invoke()->getData() as $tubeName
         ) {
             $tubes[] = new Tube($tubeName, $this->server);

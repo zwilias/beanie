@@ -3,7 +3,7 @@
 
 namespace Beanie\Server;
 
-use Beanie\Command\ResponseParser\ResponseParser;
+use Beanie\Command\ResponseParser\ResponseParserInterface;
 use Beanie\WithServerMock_TestCase;
 
 require_once __DIR__ . '/../WithServerMock_TestCase.php';
@@ -28,9 +28,9 @@ class ResponseOathTest extends WithServerMock_TestCase
 
         $serverMock = $this->getServerMock();
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ResponseParser $responseParserMock */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ResponseParserInterface $responseParserMock */
         $responseParserMock = $this
-            ->getMockBuilder(ResponseParser::class)
+            ->getMockBuilder(ResponseParserInterface::class)
             ->getMockForAbstractClass();
 
         $responseOath = new ResponseOath($socketMock, $serverMock, $responseParserMock);
