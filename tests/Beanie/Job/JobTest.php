@@ -7,6 +7,7 @@ use Beanie\Beanie;
 use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\WithServerMock_TestCase;
+use JsonSerializable;
 
 require_once __DIR__ . '/../WithServerMock_TestCase.php';
 
@@ -30,6 +31,38 @@ class JobTest extends WithServerMock_TestCase
 
 
         $job->kick();
+    }
+
+    public function testIsJsonSerializable()
+    {
+        $serverMock = $this->getServerMock(['dispatchCommand']);
+        $job = new Job(self::TEST_ID, null, $serverMock);
+
+
+        $this->assertInstanceOf(JsonSerializable::class, $job);
+    }
+
+    public function testJsonEncode_ContainsExpectedData()
+    {
+        $testServerName = 'test:123';
+
+        $expected = json_encode([
+            'id' => self::TEST_ID,
+            'state' => Job::STATE_UNKNOWN,
+            'server' => $testServerName
+        ]);
+
+        $serverMock = $this->getServerMock();
+
+        $serverMock
+            ->expects($this->once())
+            ->method('__toString')
+            ->willReturn($testServerName);
+
+        $job = new Job(self::TEST_ID, null, $serverMock);
+
+
+        $this->assertJsonStringEqualsJsonString($expected, json_encode($job));
     }
 
     public function testTouch_dispatchesTouchCommand()

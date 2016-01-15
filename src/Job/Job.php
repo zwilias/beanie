@@ -10,7 +10,7 @@ use Beanie\Command\CommandInterface;
 use Beanie\Command\Response;
 use Beanie\Server\Server;
 
-class Job
+class Job implements \JsonSerializable
 {
     const STATE_UNKNOWN = null;
     const STATE_RELEASED = 'RELEASED';
@@ -144,5 +144,17 @@ class Job
         return $this->server
             ->dispatchCommand($this->commandFactory->create($command, array_merge([$this->id], $arguments)))
             ->invoke();
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'server' => (string)$this->server,
+            'state' => $this->state
+        ];
     }
 }
