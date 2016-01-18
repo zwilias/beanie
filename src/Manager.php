@@ -74,4 +74,12 @@ class Manager
 
         return $tubes;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->server;
+    }
 }

@@ -123,4 +123,20 @@ class ManagerTest extends WithServerMock_TestCase
             $this->assertContains($tube->getName(), $tubeNames);
         }
     }
+
+    public function testToString_returnsToStringOfServer()
+    {
+        $testServerName = 'test:123';
+
+        $serverMock = $this->getServerMock();
+        $serverMock
+            ->expects($this->once())
+            ->method('__toString')
+            ->willReturn($testServerName);
+
+        $manager = new Manager($serverMock);
+
+
+        $this->assertThat((string)$manager, $this->equalTo($testServerName));
+    }
 }
