@@ -37,7 +37,7 @@ use Beanie\Beanie;
 $producer = Beanie::pool(['localhost:11300', 'otherhost:11301'])->producer();
 
 // tell the producer all jobs created should go to a certain tube
-$producer->use('some-tube');
+$producer->useTube('some-tube');
 
 // put the job on a random connection in the pool
 $job = $producer->put('some job data');
